@@ -15,12 +15,12 @@ namespace Hotel_Restaurant_Reservation.Domain.Entities
 
         public LastName LastName { get; set; }
 
-        public string Password { get; set; }
+        public Email Email { get; set; }
+
+        public Password Password { get; set; }
 
         public DateOnly DateOfBirth { get; set; }
 
-        // value object later
-        public Email Email { get; set; }
-
+        public string Preferences { get; set; }
     }
 }
