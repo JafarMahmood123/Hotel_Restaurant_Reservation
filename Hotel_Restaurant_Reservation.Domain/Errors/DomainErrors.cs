@@ -15,5 +15,10 @@ namespace Hotel_Restaurant_Reservation.Domain.Errors
 
             public static readonly Error InvalidFormat = new("Email.InvalidFormat", "The email format is invalid.");
         }
+
+        public static class FirstName
+        {
+            public static readonly Error Empty = new("FirstName.Empty","First name is empty.");
+        }
     }
 }

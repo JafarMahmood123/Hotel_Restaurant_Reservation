@@ -15,7 +15,7 @@ namespace Hotel_Restaurant_Reservation.Domain.ValueObjects
     {
         public string Value { get; }
 
-        public Email(string email) 
+        private Email(string email) 
         {
             Value = email;
         }
