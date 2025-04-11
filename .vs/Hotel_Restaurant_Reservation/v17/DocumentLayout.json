@@ -3,6 +3,18 @@
   "WorkspaceRootPath": "D:\\Hotel_Restaurant_Reservation\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\valueobjects\\firstname.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\valueobjects\\firstname.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\errors\\domainerrors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\errors\\domainerrors.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\resultt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\shared\\resultt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,10 +25,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\shared\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -31,6 +39,32 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "FirstName.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\FirstName.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\FirstName.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\FirstName.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\FirstName.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAAACEAAAAsAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T22:06:12.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DomainErrors.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Errors\\DomainErrors.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Errors\\DomainErrors.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Errors\\DomainErrors.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Errors\\DomainErrors.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAABfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T21:55:18.096Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ResultT.cs",
               "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
@@ -43,41 +77,42 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Result.cs",
               "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
               "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAjAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAA3wA4AAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-11T21:29:07.26Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "Error.cs",
               "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
               "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAAAowAwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABMAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-11T16:15:10.873Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "Email.cs",
               "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBEAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T16:09:26.11Z"
+              "WhenOpened": "2025-04-11T16:09:26.11Z",
+              "EditorCaption": ""
             }
           ]
         }
