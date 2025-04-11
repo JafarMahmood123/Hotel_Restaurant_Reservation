@@ -1,13 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\Jafar Mahmood\\source\\repos\\Hotel_Restaurant_Reservation\\",
+  "WorkspaceRootPath": "D:\\Hotel_Restaurant_Reservation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|c:\\users\\jafar mahmood\\source\\repos\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\resultt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\shared\\resultt.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\shared\\result.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\shared\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\shared\\error.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|c:\\users\\jafar mahmood\\source\\repos\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|d:\\hotel_restaurant_reservation\\hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1B781D75-DB12-40C1-8A93-75E0D7B47060}|Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj|solutionrelative:hotel_restaurant_reservation.domain\\valueobjects\\email.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -23,28 +31,53 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "ResultT.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Shared\\ResultT.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAnAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T21:35:33.603Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Result.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Shared\\Result.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-11T21:29:07.26Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
               "Title": "Error.cs",
-              "DocumentMoniker": "C:\\Users\\Jafar Mahmood\\source\\repos\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
-              "ToolTip": "C:\\Users\\Jafar Mahmood\\source\\repos\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\Shared\\Error.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAADAAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAACEAAAAAAAAAAAAowAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-11T16:15:10.873Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "Email.cs",
-              "DocumentMoniker": "C:\\Users\\Jafar Mahmood\\source\\repos\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
+              "DocumentMoniker": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
-              "ToolTip": "C:\\Users\\Jafar Mahmood\\source\\repos\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
+              "ToolTip": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Domain\\ValueObjects\\Email.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-11T16:09:26.11Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-11T16:09:26.11Z"
             }
           ]
         }
