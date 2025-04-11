@@ -29,5 +29,12 @@ namespace Hotel_Restaurant_Reservation.Domain.Errors
 
             public static readonly Error TooLong = new("LastName.TooLong", "Last name is too long");
         }
+
+        public static class Password
+        {
+            public static readonly Error Empty = new("Password.Empty", "Password is empty.");
+
+            public static readonly Error TooShort = new("Password.TooShort","Password is too short.");
+        }
     }
 }

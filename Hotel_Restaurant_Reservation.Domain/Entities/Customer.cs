@@ -11,9 +11,9 @@ namespace Hotel_Restaurant_Reservation.Domain.Entities
     {
         public Guid Id { get; set; }
 
-        public string FirstName { get; set; }
+        public FirstName FirstName { get; set; }
 
-        public string LastName { get; set; }
+        public LastName LastName { get; set; }
 
         public string Password { get; set; }
 
