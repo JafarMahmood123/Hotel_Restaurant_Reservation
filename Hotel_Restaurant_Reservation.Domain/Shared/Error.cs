@@ -15,10 +15,10 @@ namespace Hotel_Restaurant_Reservation.Domain.Shared
 
         public string  Code { get; }
 
-        public Error(string message, string code)
+        public Error(string code, string message)
         {
-            Message = message;
             Code = code;
+            Message = message;
         }
 
         public static implicit operator string(Error error) => error.Code;
