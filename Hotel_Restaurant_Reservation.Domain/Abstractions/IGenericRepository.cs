@@ -2,20 +2,19 @@
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
-    Task<TEntity> GetByIdAsync(int id);
+    Task<TEntity?> GetByIdAsync(int id);
 
-    Task<IEnumerable<TEntity>> GetAllAsync();
+    Task<IEnumerable<TEntity>?> GetAllAsync();
 
     Task<TEntity> AddAsync(TEntity entity);
 
     Task<TEntity> UpdateAsync(TEntity entity);
 
-    Task<TEntity> RemoveAsync(TEntity entity);
 
 
-    TEntity GetById(int id);
+    TEntity? GetById(int id);
 
-    IEnumerable<TEntity> GetAll();
+    IEnumerable<TEntity>? GetAll();
 
     TEntity Add(TEntity entity);
 
