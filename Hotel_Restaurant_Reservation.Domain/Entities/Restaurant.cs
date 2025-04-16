@@ -41,7 +41,7 @@ public class Restaurant
 
     // Navigation Properties
 
-    public virtual ICollection<RangePrices> RangePrices { get; set; }
+    public virtual ICollection<RestaurantRangePrices> RangePrices { get; set; }
 
     public virtual ICollection<PriceLevel> PriceLevels { get; set; }
 
@@ -61,7 +61,7 @@ public class Restaurant
 
     public Restaurant()
     {
-        RangePrices = new HashSet<RangePrices>();
+        RangePrices = new HashSet<RestaurantRangePrices>();
         PriceLevels = new HashSet<PriceLevel>();
         WorkTimes = new HashSet<WorkTime>();
         Features = new HashSet<Feature>();

@@ -11,6 +11,8 @@ public class RestaurantOrder
 
     public int NumberOfPeople { get; set; }
 
+    public int TableNumber { get; set; }
+
     // Foreign Keys
 
     public Guid RestaurantId { get; set; }

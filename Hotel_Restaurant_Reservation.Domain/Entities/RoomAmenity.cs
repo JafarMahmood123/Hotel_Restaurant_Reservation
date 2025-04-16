@@ -1,6 +1,6 @@
 ﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-public class PropertyType
+public class RoomAmenity
 {
     // Key Properties
     public Guid Id { get; set; }
@@ -9,14 +9,14 @@ public class PropertyType
 
     // Foreign Keys
 
-    public Guid HotelId { get; set; }
+    public Guid RoomId { get; set; }
 
     // Navigation Properties
 
-    public ICollection<Hotel> Hotels { get; set; }
+    public virtual ICollection<Room> Rooms { get; set; }
 
-    public PropertyType()
+    public RoomAmenity()
     {
-        Hotels = new HashSet<Hotel>();
+        Rooms = new HashSet<Room>();
     }
 }

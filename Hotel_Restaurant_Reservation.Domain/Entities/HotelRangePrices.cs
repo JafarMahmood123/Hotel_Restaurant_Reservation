@@ -1,8 +1,7 @@
 ﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-public class RangePrices
+public class HotelRangePrices
 {
-
     // Key Properties
     public Guid Id { get; set; }
 
@@ -12,14 +11,14 @@ public class RangePrices
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
+    public Guid HotelId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual ICollection<Hotel> Hotels { get; set; }
 
-    public RangePrices()
+    public HotelRangePrices()
     {
-        Restaurants = new List<Restaurant>();
+        Hotels = new HashSet<Hotel>();
     }
 }

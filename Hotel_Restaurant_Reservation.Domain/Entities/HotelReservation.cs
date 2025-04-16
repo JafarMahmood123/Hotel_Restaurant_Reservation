@@ -2,6 +2,8 @@
 
 public class HotelReservation
 {
+
+    // Key Properties
     public Guid Id { get; set; }
 
     public int RoomNumber { get; set; }
@@ -11,4 +13,20 @@ public class HotelReservation
     public DateOnly ReceiveDate { get; set; }
 
     public int NumberOfPeople { get; set; }
+
+    // Foreign Keys
+
+    public Guid HotelId { get; set; }
+
+    public Guid CustomerId { get; set; }
+
+    public Guid RoomId { get; set; }    
+
+    // Navigation Properties
+
+    public virtual Hotel Hotel { get; set; }
+
+    public virtual Customer Customer { get; set; }
+
+    public virtual Room Room { get; set; }
 }
