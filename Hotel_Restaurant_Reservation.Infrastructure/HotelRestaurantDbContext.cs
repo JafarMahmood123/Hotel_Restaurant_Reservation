@@ -5,6 +5,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure;
 
 public class HotelRestaurantDbContext : DbContext
 {
+    public HotelRestaurantDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+    {
+        
+    }
     public DbSet<Hotel> Hotels { get; set; }
 
     public DbSet<Room> Rooms { get; set; }
