@@ -11,11 +11,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Hotels\Commands\" />
+    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
+    <Folder Include="Abstractions\Hotels\Commands\" />
   </ItemGroup>
 
 </Project>
