@@ -45,12 +45,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await _dbSet.ToListAsync();
     }
 
-    public virtual TEntity? GetById(int id)
+    public virtual TEntity? GetById(Guid id)
     {
         return _dbSet.Find(id);
     }
 
-    public async Task<TEntity?> GetByIdAsync(int id)
+    public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
     }

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj": {}
+    "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj": {}
   },
   "projects": {
-    "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj": {
+    "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj",
+        "projectUniqueName": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj",
         "projectName": "Hotel_Restaurant_Reservation.API",
-        "projectPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj",
+        "projectPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj",
         "packagesPath": "C:\\Users\\Jafar Mahmood\\.nuget\\packages\\",
-        "outputPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\obj\\",
+        "outputPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

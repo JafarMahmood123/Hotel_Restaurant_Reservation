@@ -2,7 +2,7 @@
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
-    Task<TEntity?> GetByIdAsync(int id);
+    Task<TEntity?> GetByIdAsync(Guid id);
 
     Task<IEnumerable<TEntity>?> GetAllAsync();
 
@@ -12,7 +12,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
 
 
-    TEntity? GetById(int id);
+    TEntity? GetById(Guid id);
 
     IEnumerable<TEntity>? GetAll();
 

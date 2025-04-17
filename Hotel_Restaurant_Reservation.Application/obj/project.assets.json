@@ -47,6 +47,16 @@
         "build": {
           "buildTransitive/net6.0/_._": {}
         }
+      },
+      "Hotel_Restaurant_Reservation.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/Hotel_Restaurant_Reservation.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Hotel_Restaurant_Reservation.Domain.dll": {}
+        }
       }
     }
   },
@@ -113,10 +123,16 @@
         "microsoft.extensions.dependencyinjection.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Hotel_Restaurant_Reservation.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Hotel_Restaurant_Reservation.Domain/Hotel_Restaurant_Reservation.Domain.csproj",
+      "msbuildProject": "../Hotel_Restaurant_Reservation.Domain/Hotel_Restaurant_Reservation.Domain.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Hotel_Restaurant_Reservation.Domain >= 1.0.0",
       "MediatR >= 12.5.0"
     ]
   },
@@ -127,11 +143,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj",
+      "projectUniqueName": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj",
       "projectName": "Hotel_Restaurant_Reservation.Application",
-      "projectPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj",
+      "projectPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj",
       "packagesPath": "C:\\Users\\Jafar Mahmood\\.nuget\\packages\\",
-      "outputPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\obj\\",
+      "outputPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -151,7 +167,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj": {
+              "projectPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
