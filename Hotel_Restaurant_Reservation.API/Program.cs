@@ -1,4 +1,17 @@
+using Hotel_Restaurant_Reservation.Domain.Abstractions;
+using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Infrastructure;
+using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews();
+
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
+});
 
 // Add services to the container.
 
@@ -6,6 +19,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HotelRestaurantReservation"));
+});
+
+builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 
 var app = builder.Build();
 

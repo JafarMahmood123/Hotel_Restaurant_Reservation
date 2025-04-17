@@ -1,23 +1,18 @@
 [
   {
-    "ContainingType": "Hotel_Restaurant_Reservation.API.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
+    "ContainingType": "Hotel_Restaurant_Reservation.Presentation.Controllers.HotelsController",
+    "Method": "GetHotelById",
+    "RelativePath": "Hotels/{hotelId}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
+    "Parameters": [
       {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[Hotel_Restaurant_Reservation.API.WeatherForecast, Hotel_Restaurant_Reservation.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
+        "Name": "hotelId",
+        "Type": "System.Guid",
+        "IsRequired": true
       }
     ],
-    "EndpointName": "GetWeatherForecast"
+    "ReturnTypes": []
   }
 ]

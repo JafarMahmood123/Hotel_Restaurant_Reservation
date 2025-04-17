@@ -1,0 +1,12 @@
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\bin\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.deps.json
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\bin\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.dll
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\bin\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.pdb
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.AssemblyInfoInputs.cache
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.AssemblyInfo.cs
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.csproj.CoreCompileInputs.cache
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.sourcelink.json
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.dll
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\refint\Hotel_Restaurant_Reservation.Domain.dll
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\Hotel_Restaurant_Reservation.Domain.pdb
+C:\Development\Hotel_Restaurant_Reservation\Hotel_Restaurant_Reservation.Domain\obj\Debug\net8.0\ref\Hotel_Restaurant_Reservation.Domain.dll

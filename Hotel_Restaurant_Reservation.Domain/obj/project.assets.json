@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj",
+      "projectUniqueName": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj",
       "projectName": "Hotel_Restaurant_Reservation.Domain",
-      "projectPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj",
+      "projectPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\Hotel_Restaurant_Reservation.Domain.csproj",
       "packagesPath": "C:\\Users\\Jafar Mahmood\\.nuget\\packages\\",
-      "outputPath": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\obj\\",
+      "outputPath": "D:\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Domain\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

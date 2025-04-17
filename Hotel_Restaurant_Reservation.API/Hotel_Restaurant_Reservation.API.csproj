@@ -7,7 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Infrastructure\Hotel_Restaurant_Reservation.Infrastructure.csproj" />
+    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Presentation\Hotel_Restaurant_Reservation.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

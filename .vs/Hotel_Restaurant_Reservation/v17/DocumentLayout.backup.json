@@ -3,12 +3,24 @@
   "WorkspaceRootPath": "C:\\Development\\Hotel_Restaurant_Reservation\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.presentation\\controllers\\hotelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|solutionrelative:hotel_restaurant_reservation.presentation\\controllers\\hotelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA1E2E21-68E1-4E94-9CD9-472BC2A79F9C}|Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EA1E2E21-68E1-4E94-9CD9-472BC2A79F9C}|Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj|solutionrelative:hotel_restaurant_reservation.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EA1E2E21-68E1-4E94-9CD9-472BC2A79F9C}|Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{EA1E2E21-68E1-4E94-9CD9-472BC2A79F9C}|Hotel_Restaurant_Reservation.API\\Hotel_Restaurant_Reservation.API.csproj|solutionrelative:hotel_restaurant_reservation.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.presentation\\abstractions\\apicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|solutionrelative:hotel_restaurant_reservation.presentation\\abstractions\\apicontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.presentation\\controllers\\hotelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0CC1CF64-4B2A-401F-A6B1-CEBBB38218B1}|Hotel_Restaurant_Reservation.Presentation\\Hotel_Restaurant_Reservation.Presentation.csproj|solutionrelative:hotel_restaurant_reservation.presentation\\controllers\\hotelscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{6A9A0AA5-5535-4D46-9BE4-1CC61F6B0CA0}|Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.application\\abstractions\\hotels\\queries\\gethotelbyid\\gethotelbyidquery.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -21,6 +33,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{6A9A0AA5-5535-4D46-9BE4-1CC61F6B0CA0}|Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj|c:\\development\\hotel_restaurant_reservation\\hotel_restaurant_reservation.application\\dtos\\hotel\\hotelresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{6A9A0AA5-5535-4D46-9BE4-1CC61F6B0CA0}|Hotel_Restaurant_Reservation.Application\\Hotel_Restaurant_Reservation.Application.csproj|solutionrelative:hotel_restaurant_reservation.application\\dtos\\hotel\\hotelresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -30,7 +46,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -38,33 +54,68 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs",
+              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Infrastructure\\Repositories\\GenericRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T21:42:19.946Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\appsettings.json",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.API\\appsettings.json",
+              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\appsettings.json",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAYAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-17T21:29:31.994Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Program.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.API\\Program.cs",
+              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.API\\Program.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.API\\Program.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAUwBYAAABCAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T20:21:30.993Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "HotelRestaurantDbContext.cs",
+              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs",
+              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Infrastructure\\HotelRestaurantDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T21:10:13.311Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "ApiController.cs",
               "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Presentation\\Abstractions\\ApiController.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Presentation\\Abstractions\\ApiController.cs",
               "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Presentation\\Abstractions\\ApiController.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Presentation\\Abstractions\\ApiController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T20:07:41.203Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T20:07:41.203Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "GetHotelByIdQueryHandler.cs",
-              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
-              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
-              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
-              "RelativeToolTip": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T19:45:53.86Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 7,
               "Title": "HotelResponse.cs",
               "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\DTOs\\Hotel\\HotelResponse.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Application\\DTOs\\Hotel\\HotelResponse.cs",
@@ -72,12 +123,11 @@
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Application\\DTOs\\Hotel\\HotelResponse.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T19:44:07.075Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T19:44:07.075Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "GetHotelByIdQuery.cs",
               "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQuery.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQuery.cs",
@@ -85,21 +135,31 @@
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQuery.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-17T19:41:31.768Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-17T19:41:31.768Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "HotelsController.cs",
               "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Presentation\\Controllers\\HotelsController.cs",
               "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Presentation\\Controllers\\HotelsController.cs",
               "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Presentation\\Controllers\\HotelsController.cs",
               "RelativeToolTip": "Hotel_Restaurant_Reservation.Presentation\\Controllers\\HotelsController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAABAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T23:48:23.067Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T23:48:23.067Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "GetHotelByIdQueryHandler.cs",
+              "DocumentMoniker": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
+              "RelativeDocumentMoniker": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
+              "ToolTip": "C:\\Development\\Hotel_Restaurant_Reservation\\Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
+              "RelativeToolTip": "Hotel_Restaurant_Reservation.Application\\Abstractions\\Hotels\\Queries\\GetHotelById\\GetHotelByIdQueryHandler.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-17T19:45:53.86Z"
             }
           ]
         }
