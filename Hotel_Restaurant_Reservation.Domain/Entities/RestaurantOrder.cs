@@ -23,12 +23,10 @@ public class RestaurantOrder
 
     public virtual ICollection<Restaurant> Restaurants { get; set; }
 
-    public virtual ICollection<Customer> Customers { get; set; }
+    public virtual Customer Customers { get; set; }
 
     public RestaurantOrder()
     {
         Restaurants = new HashSet<Restaurant>();
-
-        Customers = new HashSet<Customer>();
     }
 }
