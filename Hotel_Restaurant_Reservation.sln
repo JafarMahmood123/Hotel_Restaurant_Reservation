@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel_Restaurant_Reservatio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel_Restaurant_Reservation.Infrastructure", "Hotel_Restaurant_Reservation.Infrastructure\Hotel_Restaurant_Reservation.Infrastructure.csproj", "{6F69B3C9-AED7-4390-B43E-ADF4745DDB34}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hotel_Restaurant_Reservation.Seed", "Hotel_Restaurant_Reservation.Seed\Hotel_Restaurant_Reservation.Seed.csproj", "{6FD36F7A-F428-4B64-B875-65D482B4296A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{6F69B3C9-AED7-4390-B43E-ADF4745DDB34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6F69B3C9-AED7-4390-B43E-ADF4745DDB34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6F69B3C9-AED7-4390-B43E-ADF4745DDB34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FD36F7A-F428-4B64-B875-65D482B4296A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FD36F7A-F428-4B64-B875-65D482B4296A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FD36F7A-F428-4B64-B875-65D482B4296A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FD36F7A-F428-4B64-B875-65D482B4296A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

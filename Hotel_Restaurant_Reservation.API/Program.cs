@@ -30,8 +30,7 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelRestaurantReservation"));
 });
 
-builder.Services.AddScoped<IRequestHandler<GetHotelByIdQuery, Hotel?>, GetHotelByIdQueryHandler>();
-builder.Services.AddScoped<IRequestHandler<GetAllHotelsQuery, IEnumerable<Hotel>?>, GetAllHotelsQueryHandler>();
+
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 
 var app = builder.Build();

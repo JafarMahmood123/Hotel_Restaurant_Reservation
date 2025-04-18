@@ -7,15 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Implementation\Hotels\Commands\" />
   </ItemGroup>
 
 </Project>

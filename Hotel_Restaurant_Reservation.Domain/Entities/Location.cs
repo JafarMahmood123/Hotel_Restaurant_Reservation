@@ -13,14 +13,6 @@ public class Location
 
     public Guid LocalLocationId { get; set; }
 
-    public Guid CustomerId { get; set; }
-
-    public Guid HotelId { get; set; }
-
-    public Guid RestaurantId { get; set; }
-
-    public Guid EventId { get; set; }
-
     // Navigation Properties
 
     public virtual Country? Country { get; set; }

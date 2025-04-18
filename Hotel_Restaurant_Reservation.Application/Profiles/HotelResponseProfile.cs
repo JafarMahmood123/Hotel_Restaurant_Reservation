@@ -4,12 +4,10 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;
 
-public class HotelProfile : Profile
+public class HotelResponseProfile : Profile
 {
-    public HotelProfile()
+    public HotelResponseProfile()
     {
-        CreateMap<Hotel, HotelResponse>();
-
-        CreateMap<HotelResponse, Hotel>().ReverseMap();
+        CreateMap<Hotel, HotelResponse>().ReverseMap();
     }
 }

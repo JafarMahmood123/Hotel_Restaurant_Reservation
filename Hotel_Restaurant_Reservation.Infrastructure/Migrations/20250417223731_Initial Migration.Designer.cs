@@ -271,7 +271,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.ToTable("Feature");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", b =>
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -856,7 +856,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", null)
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", null)
                         .WithMany()
                         .HasForeignKey("HotelsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -907,7 +907,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .HasForeignKey("CurrencyTypeId");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", b =>
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelRangePrices", "HotelRangePrices")
                         .WithMany("Hotels")
@@ -942,7 +942,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", "Hotel")
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", "HotelAddRequest")
                         .WithMany("HotelReservations")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -956,7 +956,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Hotel");
+                    b.Navigation("HotelAddRequest");
 
                     b.Navigation("Room");
                 });
@@ -996,7 +996,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", "Hotel")
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", "HotelAddRequest")
                         .WithMany("Reviews")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1010,14 +1010,14 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
                     b.Navigation("Customer");
 
-                    b.Navigation("Hotel");
+                    b.Navigation("HotelAddRequest");
 
                     b.Navigation("Restaurant");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>
                 {
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", "Hotel")
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", "HotelAddRequest")
                         .WithMany("Rooms")
                         .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1031,7 +1031,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId");
 
-                    b.Navigation("Hotel");
+                    b.Navigation("HotelAddRequest");
                 });
 
             modelBuilder.Entity("MealTypeRestaurant", b =>
@@ -1139,7 +1139,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("Events");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", b =>
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.HotelAddRequest", b =>
                 {
                     b.Navigation("HotelReservations");
 

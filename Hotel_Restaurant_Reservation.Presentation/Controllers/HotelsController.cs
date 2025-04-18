@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -19,13 +21,17 @@ public class HotelsController : ApiController
     }
 
     [HttpGet("{hotelId:guid}")]
+    [ActionName("GetHotelById")]
     public async Task<IActionResult> GetHotelById(Guid hotelId, CancellationToken cancellationToken)
     {
         var query = new GetHotelByIdQuery(hotelId);
 
         var hotel = await Sender.Send(query, cancellationToken);
 
-        var hotelResponse = _mapper.Map<HotelProfile>(hotel);
+        if(hotel is null)
+            return NotFound();
+
+        var hotelResponse = _mapper.Map<HotelResponseProfile>(hotel);
 
         return Ok(hotelResponse);
     }
@@ -37,16 +43,26 @@ public class HotelsController : ApiController
 
         var hotels = await Sender.Send(query, cancellationToken);
 
-        IEnumerable<HotelProfile> hotelResponses = new List<HotelProfile>();
+        IEnumerable<HotelResponseProfile> hotelResponses = new List<HotelResponseProfile>();
 
         if (hotels != null)
         {
             foreach (Hotel hotel in hotels)
             {
-                hotelResponses.Append(_mapper.Map<HotelProfile>(hotel));
+                hotelResponses.Append(_mapper.Map<HotelResponseProfile>(hotel));
             }
         }
 
         return Ok(hotelResponses);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddHotel(HotelAddRequest hotelAddRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddHotelCommand(hotelAddRequest);
+
+        var hotel = await Sender.Send(command, cancellationToken);
+
+        return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, hotel);
     }
 }
