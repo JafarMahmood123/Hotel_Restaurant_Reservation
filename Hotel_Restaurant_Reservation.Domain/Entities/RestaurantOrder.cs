@@ -5,9 +5,9 @@ public class RestaurantOrder
     // Key Properties
     public Guid Id { get; set; }
 
-    public DateTime BookingDateTime{ get; set; }
+    public DateTime OrderDateTime{ get; set; }
 
-    public DateTime ReceiveDate { get; set; }
+    public DateTime ReceiveDateTime { get; set; }
 
     public int NumberOfPeople { get; set; }
 
@@ -21,12 +21,12 @@ public class RestaurantOrder
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual Restaurant Restaurant { get; set; }
 
     public virtual Customer Customers { get; set; }
 
     public RestaurantOrder()
     {
-        Restaurants = new HashSet<Restaurant>();
+        
     }
 }

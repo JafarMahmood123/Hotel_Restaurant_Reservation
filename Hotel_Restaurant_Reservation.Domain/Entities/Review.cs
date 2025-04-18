@@ -7,6 +7,10 @@ public class Review
 
     public string Description { get; set; }
 
+    public bool IsLiked { get; set; }
+
+    public double CustomerStarRating { get; set; }
+
     // Foreign Keys
 
     public Guid HotelId { get; set; }

@@ -39,11 +39,17 @@ public class Restaurant
     
     public Guid MealTypeId { get; set; }
 
+    public Guid RestaurantOrderId { get; set; }
+
+    public Guid ReviewId { get; set; }
+
+    public Guid LocationId { get; set; }
+
     // Navigation Properties
 
-    public virtual ICollection<RestaurantRangePrices> RangePrices { get; set; }
+    public virtual RestaurantRangePrices RangePrice { get; set; }
 
-    public virtual ICollection<PriceLevel> PriceLevels { get; set; }
+    public virtual PriceLevel PriceLevel { get; set; }
 
     public virtual ICollection<WorkTime> WorkTimes { get; set; }
 
@@ -59,10 +65,12 @@ public class Restaurant
 
     public virtual ICollection<RestaurantOrder> RestaurantOrders { get; set; }
 
+    public virtual ICollection<Review> Reviews { get; set; }
+
+    public virtual Location Location { get; set; }
+
     public Restaurant()
     {
-        RangePrices = new HashSet<RestaurantRangePrices>();
-        PriceLevels = new HashSet<PriceLevel>();
         WorkTimes = new HashSet<WorkTime>();
         Features = new HashSet<Feature>();
         Tags = new HashSet<Tag>();

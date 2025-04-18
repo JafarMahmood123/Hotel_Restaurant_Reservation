@@ -18,8 +18,8 @@ public class EventRegistration
 
     // Navigation Properties
 
-    public Customer Customer { get; set; }
+    public virtual Customer Customer { get; set; }
 
-    public Event Event { get; set; }
+    public virtual Event Event { get; set; }
 
 }

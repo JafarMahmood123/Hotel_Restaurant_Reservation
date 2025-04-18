@@ -10,7 +10,9 @@ public class HotelReservation
 
     public DateTime ReservationDateTime { get; set; }
 
-    public DateOnly ReceiveDate { get; set; }
+    public DateOnly ReceivationStartDate { get; set; }
+
+    public DateOnly ReceivationEndDate { get; set; }
 
     public int NumberOfPeople { get; set; }
 

@@ -15,6 +15,8 @@ public class Customer
 
     public DateOnly BirthDate { get; set; }
 
+    public int Age { get; set; }
+
     public string Preferences { get; set; }
 
     // Foreign Keys

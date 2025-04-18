@@ -5,7 +5,9 @@ public class PriceLevel
     // Key Properties
     public Guid Id { get; set; }
 
-    public int Level { get; set; }
+    public int MinLevel { get; set; }
+
+    public int MaxLevel { get; set; }
 
     // Foreign Keys
 
