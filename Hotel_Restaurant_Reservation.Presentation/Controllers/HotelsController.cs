@@ -1,6 +1,9 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
+using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
+using Hotel_Restaurant_Reservation.Presentation.Profiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +11,11 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
 
 public class HotelsController : ApiController
 {
-    public HotelsController(ISender sender) : base(sender)
+    private readonly IMapper _mapper;
+
+    public HotelsController(ISender sender, IMapper mapper) : base(sender)
     {
-        
+        _mapper = mapper;
     }
 
     [HttpGet("{hotelId:guid}")]
@@ -20,7 +25,9 @@ public class HotelsController : ApiController
 
         var hotel = await Sender.Send(query, cancellationToken);
 
-        return Ok(hotel);
+        var hotelResponse = _mapper.Map<HotelProfile>(hotel);
+
+        return Ok(hotelResponse);
     }
 
     [HttpGet]
@@ -30,6 +37,16 @@ public class HotelsController : ApiController
 
         var hotels = await Sender.Send(query, cancellationToken);
 
-        return Ok(hotels);
+        IEnumerable<HotelProfile> hotelResponses = new List<HotelProfile>();
+
+        if (hotels != null)
+        {
+            foreach (Hotel hotel in hotels)
+            {
+                hotelResponses.Append(_mapper.Map<HotelProfile>(hotel));
+            }
+        }
+
+        return Ok(hotelResponses);
     }
 }
