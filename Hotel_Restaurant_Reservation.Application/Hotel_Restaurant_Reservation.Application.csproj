@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Abstractions\Hotels\Commands\" />
+    <Folder Include="Implementation\Hotels\Commands\" />
   </ItemGroup>
 
 </Project>

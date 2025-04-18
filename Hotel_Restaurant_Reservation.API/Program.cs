@@ -1,4 +1,5 @@
-using Hotel_Restaurant_Reservation.Application.Abstractions.Hotels.Queries.GetHotelById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
@@ -28,6 +29,7 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 });
 
 builder.Services.AddScoped<IRequestHandler<GetHotelByIdQuery, Hotel?>, GetHotelByIdQueryHandler>();
+builder.Services.AddScoped<IRequestHandler<GetAllHotelsQuery, IEnumerable<Hotel>?>, GetAllHotelsQueryHandler>();
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 
 var app = builder.Build();

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.15">
       <PrivateAssets>all</PrivateAssets>
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Application\Hotel_Restaurant_Reservation.Application.csproj" />
     <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
   </ItemGroup>
 
