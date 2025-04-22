@@ -13,7 +13,7 @@ public class HotelAddRequest
 
     public string Name { get; set; }
 
-    public string Description { get; set; }
+    //public string Description { get; set; }
 
     public double Latitude { get; set; }
 
@@ -27,13 +27,13 @@ public class HotelAddRequest
 
     // Additional Keys
 
-    //public PropertyTypeRequest PropertyType { get; set; }
+    public PropertyTypeRequest PropertyType { get; set; }
 
-    //public IEnumerable<RoomRequest> Rooms { get; set; }
+    public IEnumerable<RoomRequest> Rooms { get; set; }
 
-    //public HotelRangePricesRequest HotelRangePrices { get; set; }
+    public HotelRangePricesRequest HotelRangePrices { get; set; }
 
-    //public CurrencyTypeRequest CurrencyType { get; set; }
+    public CurrencyTypeRequest CurrencyType { get; set; }
 
-    //public LocationRequest Location { get; set; }
+    public LocationRequest Location { get; set; }
 }

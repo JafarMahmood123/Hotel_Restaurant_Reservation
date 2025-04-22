@@ -9,14 +9,14 @@ public class Feature
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
+    public int RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual Restaurant Restaurants { get; set; }
 
     public Feature()
     {
-        Restaurants = new HashSet<Restaurant>();
+        
     }
 }

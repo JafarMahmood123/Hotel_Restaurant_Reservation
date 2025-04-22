@@ -11,14 +11,14 @@ public class PriceLevel
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
+    public int RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual Restaurant Restaurants { get; set; }
 
     public PriceLevel()
     {
-        Restaurants = new HashSet<Restaurant>();
+        
     }
 }

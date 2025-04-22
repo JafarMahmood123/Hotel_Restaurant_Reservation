@@ -20,11 +20,11 @@ public class Event
 
     // Foreign Keys
 
-    public Guid EventRegistrationId { get; set; }
+    public int EventRegistrationId { get; set; }
 
-    public Guid LocationId { get; set; }
+    public int LocationId { get; set; }
 
-    public Guid CurrencyTypeId { get; set; }
+    public int CurrencyTypeId { get; set; }
 
     // Navigation Properties
 

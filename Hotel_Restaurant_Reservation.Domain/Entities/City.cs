@@ -9,7 +9,7 @@ public class City
 
     // Foreign Keys
 
-    public Guid LocationId { get; set; }
+    public int LocationId { get; set; }
 
     // Navigation Properties
 

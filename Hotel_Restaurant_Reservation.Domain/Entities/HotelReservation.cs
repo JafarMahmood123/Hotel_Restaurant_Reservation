@@ -18,11 +18,11 @@ public class HotelReservation
 
     // Foreign Keys
 
-    public Guid HotelId { get; set; }
+    public int HotelId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public int CustomerId { get; set; }
 
-    public Guid RoomId { get; set; }    
+    public int RoomId { get; set; }    
 
     // Navigation Properties
 

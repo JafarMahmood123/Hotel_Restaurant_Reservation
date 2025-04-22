@@ -9,14 +9,14 @@ public class Cuisine
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
+    public int RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual Restaurant Restaurants { get; set; }
 
     public Cuisine()
     {
-        Restaurants = new HashSet<Restaurant>();
+        
     }
 }

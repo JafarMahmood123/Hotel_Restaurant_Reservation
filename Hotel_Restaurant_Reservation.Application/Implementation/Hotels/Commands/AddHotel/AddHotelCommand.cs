@@ -6,10 +6,10 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 
 public class AddHotelCommand : ICommand<Hotel>
 {
-    public HotelAddRequest HotelAddRequest { get; set; }
+    public Hotel Hotel { get; set; }
 
-    public AddHotelCommand(HotelAddRequest hotelAddRequest)
+    public AddHotelCommand(Hotel hotel)
     {
-        HotelAddRequest = hotelAddRequest;
+        Hotel = hotel;
     }
 }

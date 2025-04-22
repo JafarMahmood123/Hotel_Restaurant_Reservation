@@ -11,7 +11,7 @@ public class HotelRangePrices
 
     // Foreign Keys
 
-    public Guid HotelId { get; set; }
+    public int HotelId { get; set; }
 
     // Navigation Properties
 

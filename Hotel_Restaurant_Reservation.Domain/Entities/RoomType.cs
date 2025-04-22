@@ -9,7 +9,7 @@ public class RoomType
 
     // Foreign Keys
 
-    public Guid RoomId { get; set; }
+    public int RoomId { get; set; }
 
     // Navigation Properties
 

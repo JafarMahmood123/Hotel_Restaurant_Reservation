@@ -7,11 +7,19 @@ public class Location
 
     // Foreign Keys
 
-    public Guid CountryId { get; set; }
+    public int CountryId { get; set; }
 
-    public Guid CityId { get; set; }
+    public int CityId { get; set; }
 
-    public Guid LocalLocationId { get; set; }
+    public int LocalLocationId { get; set; }
+
+    public Guid RestaurantId  { get; set; }
+
+    public Guid HotelId  { get; set; }
+
+    public Guid EventId  { get; set; }
+
+    public Guid CustomerId  { get; set; }
 
     // Navigation Properties
 

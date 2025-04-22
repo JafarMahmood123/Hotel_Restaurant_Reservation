@@ -9,19 +9,15 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Hotel>
 {
     private readonly IGenericRepository<Hotel> _genericRepository;
-    private readonly IMapper _mapper;
 
-    public AddHotelCommandHandler(IGenericRepository<Hotel> genericRepository, IMapper mapper)
+    public AddHotelCommandHandler(IGenericRepository<Hotel> genericRepository)
     {
         _genericRepository = genericRepository;
-        _mapper = mapper;
     }
 
     public async Task<Hotel> Handle(AddHotelCommand request, CancellationToken cancellationToken)
     {
-        HotelAddRequest hotelAddRequest = request.HotelAddRequest;
-
-        Hotel hotel = _mapper.Map<Hotel>(hotelAddRequest);
+        var hotel = request.Hotel;
 
         hotel.Id = Guid.NewGuid();
 

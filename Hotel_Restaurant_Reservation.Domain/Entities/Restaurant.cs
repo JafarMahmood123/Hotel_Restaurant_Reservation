@@ -21,29 +21,11 @@ public class Restaurant
 
     public double Longitude { get; set; }
 
+    public int NumberOfTables { get; set; }
+
     // Foreign Keys
 
-    public Guid RangePricesId { get; set; }
-    
-    public Guid PriceLevelId { get; set; }
-    
-    public Guid WorkTimeId { get; set; }
-    
-    public Guid FeatureId { get; set; }
-    
-    public Guid TagId { get; set; }
-    
-    public Guid CuisineId { get; set; }
-    
-    public Guid DishId { get; set; }
-    
-    public Guid MealTypeId { get; set; }
 
-    public Guid RestaurantOrderId { get; set; }
-
-    public Guid ReviewId { get; set; }
-
-    public Guid LocationId { get; set; }
 
     // Navigation Properties
 

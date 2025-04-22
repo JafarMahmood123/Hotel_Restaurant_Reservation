@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
+using Hotel_Restaurant_Reservation.Application.Profiles;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using Hotel_Restaurant_Reservation.Presentation.Profiles;
@@ -31,7 +32,7 @@ public class HotelsController : ApiController
         if(hotel is null)
             return NotFound();
 
-        var hotelResponse = _mapper.Map<HotelResponseProfile>(hotel);
+        var hotelResponse = _mapper.Map<HotelProfile>(hotel);
 
         return Ok(hotelResponse);
     }
@@ -43,13 +44,13 @@ public class HotelsController : ApiController
 
         var hotels = await Sender.Send(query, cancellationToken);
 
-        IEnumerable<HotelResponseProfile> hotelResponses = new List<HotelResponseProfile>();
+        IEnumerable<HotelResponse> hotelResponses = new List<HotelResponse>();
 
         if (hotels != null)
         {
             foreach (Hotel hotel in hotels)
             {
-                hotelResponses.Append(_mapper.Map<HotelResponseProfile>(hotel));
+                hotelResponses.Append(_mapper.Map<HotelResponse>(hotel));
             }
         }
 
@@ -59,7 +60,9 @@ public class HotelsController : ApiController
     [HttpPost]
     public async Task<IActionResult> AddHotel(HotelAddRequest hotelAddRequest, CancellationToken cancellationToken)
     {
-        var command = new AddHotelCommand(hotelAddRequest);
+        Hotel requestedHotel = _mapper.Map<Hotel>(hotelAddRequest);
+
+        var command = new AddHotelCommand(requestedHotel);
 
         var hotel = await Sender.Send(command, cancellationToken);
 

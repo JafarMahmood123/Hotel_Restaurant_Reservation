@@ -7,16 +7,18 @@ public class Dish
 
     public string Name { get; set; }
 
+    public double Price { get; set; }
+
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
+    public int RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Restaurant> Restaurants { get; set; }
+    public virtual Restaurant Restaurants { get; set; }
 
     public Dish()
     {
-        Restaurants = new HashSet<Restaurant>();
+        
     }
 }
