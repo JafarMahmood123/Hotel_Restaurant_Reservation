@@ -9,7 +9,7 @@ public class Feature
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
@@ -18,5 +18,10 @@ public class Feature
     public Feature()
     {
         
+    }
+
+    public override string ToString()
+    {
+        return "Feature = " + Name;
     }
 }

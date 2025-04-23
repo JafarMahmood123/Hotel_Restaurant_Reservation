@@ -11,7 +11,7 @@ public class Dish
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
@@ -20,5 +20,10 @@ public class Dish
     public Dish()
     {
         
+    }
+
+    public override string ToString()
+    {
+        return "Name = " + Name + ", Price = " + Price;
     }
 }

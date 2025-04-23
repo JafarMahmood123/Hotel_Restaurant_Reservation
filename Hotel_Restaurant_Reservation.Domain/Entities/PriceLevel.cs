@@ -5,13 +5,11 @@ public class PriceLevel
     // Key Properties
     public Guid Id { get; set; }
 
-    public int MinLevel { get; set; }
-
-    public int MaxLevel { get; set; }
+    public string Level { get; set; }
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 

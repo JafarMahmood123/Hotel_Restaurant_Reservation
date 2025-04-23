@@ -13,7 +13,7 @@ public class WorkTime
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
@@ -24,4 +24,8 @@ public class WorkTime
         
     }
 
+    public override string ToString()
+    {
+        return "Day = " + Day + ", Open Hour = " + OpenHour + ", Close Hour = " + CloseHour;
+    }
 }

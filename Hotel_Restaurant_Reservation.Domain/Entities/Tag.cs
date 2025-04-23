@@ -9,7 +9,7 @@ public class Tag
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
@@ -18,5 +18,10 @@ public class Tag
     public Tag()
     {
         
+    }
+
+    public override string ToString()
+    {
+        return "Tag = " + Name;
     }
 }

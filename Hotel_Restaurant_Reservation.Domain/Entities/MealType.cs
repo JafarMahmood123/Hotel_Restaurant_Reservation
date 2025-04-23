@@ -9,7 +9,7 @@ public class MealType
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
@@ -18,5 +18,10 @@ public class MealType
     public MealType()
     {
         
+    }
+
+    public override string ToString()
+    {
+        return "Name = " + Name;
     }
 }

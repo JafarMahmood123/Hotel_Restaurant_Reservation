@@ -25,7 +25,7 @@ public class Restaurant
 
     // Foreign Keys
 
-
+    public Guid LocationId { get; set; }
 
     // Navigation Properties
 
