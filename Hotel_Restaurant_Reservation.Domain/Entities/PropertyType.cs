@@ -9,7 +9,7 @@ public class PropertyType
 
     // Foreign Keys
 
-    public int HotelId { get; set; }
+    public Guid HotelId { get; set; }
 
     // Navigation Properties
 

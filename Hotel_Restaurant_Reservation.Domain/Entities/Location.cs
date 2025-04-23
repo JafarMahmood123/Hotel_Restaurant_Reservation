@@ -21,13 +21,13 @@ public class Location
 
     public virtual LocalLocation? LocalLocation { get; set; }
 
-    public virtual Customer? Customer { get; set; }
+    public virtual ICollection<Customer?> Customer { get; set; }
 
-    public virtual Hotel Hotel { get; set; }
+    public virtual ICollection<Hotel?> Hotel { get; set; }
 
-    public virtual Restaurant Restaurant { get; set; }
+    public virtual ICollection<Restaurant?> Restaurant { get; set; }
 
-    public virtual Event Event { get; set; }
+    public virtual ICollection<Event?> Event { get; set; }
 
     public Location()
     {

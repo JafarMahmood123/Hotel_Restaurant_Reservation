@@ -15,9 +15,9 @@ public class RestaurantOrder
 
     // Foreign Keys
 
-    public int RestaurantId { get; set; }
+    public Guid RestaurantId { get; set; }
 
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
 
     // Navigation Properties
 

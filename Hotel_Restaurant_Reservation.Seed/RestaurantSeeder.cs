@@ -19,12 +19,8 @@ internal static class RestaurantSeeder
 {
     public static string Path;
 
-    private static DbContextOptions DbContextOptions = new DbContextOptionsBuilder<HotelRestaurantDbContext>()
-    .UseSqlServer("Data Source=DESKTOP-NK8UNAQ;Initial Catalog=HotelRestaurantReservation;Integrated Security=True;Trust Server Certificate=True")
-    .Options;
-
-    private static HotelRestaurantDbContext hotelRestaurantDbContext = new HotelRestaurantDbContext(DbContextOptions);
-
+    private static HotelRestaurantDbContext hotelRestaurantDbContext = new DesignTimeDbContextFactory().
+        CreateDbContext([]);
 
     public async static void Insert()
     {

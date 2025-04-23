@@ -21,17 +21,17 @@ public class Customer
 
     // Foreign Keys
 
-    public int RestaurantOrderId { get; set; }
+    public Guid RestaurantOrderId { get; set; }
 
-    public int HotelReservationId { get; set; }
+    public Guid HotelReservationId { get; set; }
 
-    public int RoleId { get; set; }
+    public Guid RoleId { get; set; }
 
-    public int ReviewId { get; set; }
+    public Guid ReviewId { get; set; }
 
-    public int EventRegistrationId { get; set; }
+    public Guid EventRegistrationId { get; set; }
 
-    public int LocationId { get; set; }
+    public Guid LocationId { get; set; }
 
     // Navigation Properties
 

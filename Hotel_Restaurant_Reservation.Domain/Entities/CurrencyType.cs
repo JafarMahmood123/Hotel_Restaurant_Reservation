@@ -9,9 +9,9 @@ public class CurrencyType
 
     // Foreign Keys
 
-    public int HotelId { get; set; }
+    public Guid HotelId { get; set; }
 
-    public int EventId { get; set; }
+    public Guid EventId { get; set; }
 
     // Key Properties
 

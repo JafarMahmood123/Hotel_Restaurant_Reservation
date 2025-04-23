@@ -15,25 +15,23 @@ public class Hotel
 
     public double StarRate { get; set; }
 
-
-    // Check later after adding
     public int NumberOfRooms { get; set; }
 
     // Foreign Keys
 
-    public int PropertyTypeId { get; set; }
+    public Guid PropertyTypeId { get; set; }
 
-    public int RoomId { get; set; }
+    public Guid RoomId { get; set; }
 
-    public int HotelRangePricesId { get; set; }
+    public Guid HotelRangePricesId { get; set; }
 
-    public int CurrencyTypeId { get; set; }
+    public Guid CurrencyTypeId { get; set; }
 
-    public int HotelReservationId { get; set; }
+    public Guid HotelReservationId { get; set; }
 
-    public int ReviewId { get; set; }
+    public Guid ReviewId { get; set; }
 
-    public int LocationId { get; set; }
+    public Guid LocationId { get; set; }
 
     // Navigation Properties
 

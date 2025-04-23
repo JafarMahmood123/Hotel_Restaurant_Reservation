@@ -9,7 +9,7 @@ public class Role
 
     // Foreign Keys
 
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
 
     // Navigation Properties
 

@@ -13,13 +13,13 @@ public class Room
 
     // Foreign Keys
 
-    public int HotelId { get; set; }
+    public Guid HotelId { get; set; }
 
-    public int HotelReservationId { get; set; }
+    public Guid HotelReservationId { get; set; }
 
-    public int RoomAmenitiesId { get; set; }
+    public Guid RoomAmenitiesId { get; set; }
 
-    public int RoomTypeId { get; set; }
+    public Guid RoomTypeId { get; set; }
 
 
 

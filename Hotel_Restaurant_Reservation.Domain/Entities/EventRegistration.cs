@@ -12,9 +12,9 @@ public class EventRegistration
 
     // Foreign Keys
 
-    public int CustomerId { get; set; }
+    public Guid CustomerId { get; set; }
 
-    public int EventId { get; set; }
+    public Guid EventId { get; set; }
 
     // Navigation Properties
 
