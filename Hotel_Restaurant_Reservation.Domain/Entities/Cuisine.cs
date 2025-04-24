@@ -9,19 +9,13 @@ public class Cuisine
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual Restaurant Restaurants { get; set; }
+    public virtual ICollection<RestaurantCuisine> RestaurantCuisines { get; set; }
 
     public Cuisine()
     {
-        
-    }
-
-    public override string ToString()
-    {
-        return "Name = " + Name;
+        RestaurantCuisines = new HashSet<RestaurantCuisine>();
     }
 }

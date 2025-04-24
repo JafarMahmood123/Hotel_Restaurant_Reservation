@@ -13,19 +13,13 @@ public class WorkTime
 
     // Foreign Keys
 
-    public Guid RestaurantId { get; set; }
 
     // Navigation Properties
 
-    public virtual Restaurant Restaurants { get; set; }
+    public virtual ICollection<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
 
     public WorkTime()
     {
-        
-    }
-
-    public override string ToString()
-    {
-        return "Day = " + Day + ", Open Hour = " + OpenHour + ", Close Hour = " + CloseHour;
+        RestaurantWorkTimes = new HashSet<RestaurantWorkTime>();
     }
 }

@@ -1,17 +1,9 @@
-﻿using AutoMapper;
-using AutoMapper.Features;
-using Azure;
-using CsvHelper;
+﻿using CsvHelper;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Seed.Fields;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Specialized;
-using System.Diagnostics;
 using System.Globalization;
-using System.Numerics;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Hotel_Restaurant_Reservation.Seed;
 
@@ -42,22 +34,6 @@ internal static class RestaurantSeeder
                 Location location = new Location();
                 LocalLocation localLocation = new LocalLocation();
 
-                RestaurantRangePrices restaurantRangePrices = new RestaurantRangePrices();
-
-                PriceLevel priceLevel = new PriceLevel();
-
-                List<WorkTime> workTimes = new List<WorkTime>();
-
-                List<Feature> features = new List<Feature>();
-
-                List<Tag> tags = new List<Tag>();
-
-                List<Cuisine> cuisines = new List<Cuisine>();
-
-                List<Dish> dishes = new List<Dish>();
-
-                List<MealType> mealsTypes = new List<MealType>();
-
 
 
                 try
@@ -67,20 +43,18 @@ internal static class RestaurantSeeder
                     GenerateLocalLocation(record, localLocation);
                     await GenerateLocation(country, city, location, localLocation);
                     GenerateRestaurant(record, restaurant, location);
-                    GenerateRestaurantRangePrices(record, restaurant, restaurantRangePrices);
-                    GenerateRestaurantPriceLevel(record, restaurant, priceLevel);
 
                     var options = new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
                     };
 
-                    GenerateWorkTimes(record, restaurant, workTimes, options);
-                    GenerateFeatures(record, restaurant, features);
-                    GenerateTags(record, restaurant, tags);
-                    GenerateCuisines(record, restaurant, cuisines);
-                    GenerateMealTypes(record, restaurant, mealsTypes);
-                    GenerateDishes(record, restaurant, dishes);
+                    GenerateWorkTimes(record, restaurant, options);
+                    GenerateFeatures(record, restaurant);
+                    GenerateTags(record, restaurant);
+                    GenerateCuisines(record, restaurant);
+                    GenerateMealTypes(record, restaurant);
+                    GenerateDishes(record, restaurant);
 
                 }
                 catch (Exception ex)
@@ -92,7 +66,7 @@ internal static class RestaurantSeeder
 
     }
 
-    private static async Task GenerateDishes(dynamic record, Restaurant restaurant, List<Dish> dishes)
+    private static async Task GenerateDishes(dynamic record, Restaurant restaurant)
     {
         string dishesInJson = record.DISHS_WITH_PRICES;
         dishesInJson = dishesInJson.Replace("'", "\"");
@@ -110,25 +84,34 @@ internal static class RestaurantSeeder
         {
             string name = item.Key;
             double price = double.Parse(item.Value.Replace("$", ""));
-
-            if (hotelRestaurantDbContext.Dishes.FirstOrDefault(x => x.Name == name && x.Price == price &&
-            x.RestaurantId == restaurant.Id) is not null)
-                return;
-
             Dish dish = new Dish()
             {
                 Id = Guid.NewGuid(),
                 Name = item.Key,
-                Price = double.Parse(item.Value.Replace("$", "")),
-                RestaurantId = restaurant.Id
             };
 
-            //dishes.Add(dish);
-            await hotelRestaurantDbContext.Dishes.AddAsync(dish);
+            if (hotelRestaurantDbContext.Dishes.FirstOrDefault(x => x.Name == name) is null)
+                await hotelRestaurantDbContext.Dishes.AddAsync(dish);
+
+
+            else
+            {
+                dish = hotelRestaurantDbContext.Dishes.FirstOrDefault(dish => dish.Name == name);
+            }
+
+            RestaurantDishPrice restaurantDishPrice = new RestaurantDishPrice()
+            {
+                Price = price,
+                RestaurantId = restaurant.Id,
+                DishId = dish.Id
+            };
+
+
+            await hotelRestaurantDbContext.RestaurantDishPrices.AddAsync(restaurantDishPrice);
         }
     }
 
-    private static async Task GenerateMealTypes(dynamic record, Restaurant restaurant, List<MealType> mealsTypes)
+    private static async Task GenerateMealTypes(dynamic record, Restaurant restaurant)
     {
         string mealTypesInJson = record.MEAL_TYPES;
         mealTypesInJson = mealTypesInJson.Replace("'", "\"");
@@ -143,22 +126,33 @@ internal static class RestaurantSeeder
         for (int i = 0; i < meatTypeFeilds.Count; i++)
         {
             string name = meatTypeFeilds[i].Name;
-            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name && x.RestaurantId == restaurant.Id) is not null)
-                return;
 
             MealType mealType = new MealType()
             {
                 Id = Guid.NewGuid(),
                 Name = meatTypeFeilds[i].Name,
+            };
+
+            if (hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name) is null)
+                await hotelRestaurantDbContext.MealTypes.AddAsync(mealType);
+
+            else
+            {
+                mealType = hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name);
+            }
+
+            RestaurantMealType restaurantMealType = new RestaurantMealType()
+            {
+                Id= Guid.NewGuid(),
+                MealTypeId = mealType.Id,
                 RestaurantId = restaurant.Id
             };
 
-            //mealsTypes.Append(mealType);
-            await hotelRestaurantDbContext.MealTypes.AddAsync(mealType);
+            await hotelRestaurantDbContext.RestaurantMealTypes.AddAsync(restaurantMealType);
         }
     }
 
-    private static async Task GenerateCuisines(dynamic record, Restaurant restaurant, List<Cuisine> cuisines)
+    private static async Task GenerateCuisines(dynamic record, Restaurant restaurant)
     {
         string cuisinesInJson = record.CUISINES;
         cuisinesInJson = cuisinesInJson.Replace("'", "\"");
@@ -172,23 +166,32 @@ internal static class RestaurantSeeder
 
         for (int i = 0; i < cuisineFeilds.Count; i++)
         {
-            string name = cuisineFeilds[i].Name;
-            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name && x.RestaurantId == restaurant.Id) is not null)
-                return;
-
             Cuisine cuisine = new Cuisine()
             {
                 Id = Guid.NewGuid(),
                 Name = cuisineFeilds[i].Name,
+            };
+
+            string name = cuisineFeilds[i].Name;
+            if (hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name) is null)
+                await hotelRestaurantDbContext.AddAsync(cuisine);
+            else
+            {
+                cuisine = hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name);
+            }
+
+            RestaurantCuisine restaurantCuisine = new RestaurantCuisine()
+            {
+                Id = Guid.NewGuid(),
+                CuisineId = cuisine.Id,
                 RestaurantId = restaurant.Id
             };
 
-            //cuisines.Append(cuisine);
-            await hotelRestaurantDbContext.Cuisines.AddAsync(cuisine);
+            await hotelRestaurantDbContext.RestaurantCuisines.AddAsync(restaurantCuisine);
         }
     }
 
-    private static async Task GenerateTags(dynamic record, Restaurant restaurant, List<Tag> tags)
+    private static async Task GenerateTags(dynamic record, Restaurant restaurant)
     {
         string tagsInJson = record.REVIEW_TAGS;
         tagsInJson = tagsInJson.Replace("'", "\"");
@@ -202,23 +205,33 @@ internal static class RestaurantSeeder
 
         for (int i = 0; i < tagFeilds.Count; i++)
         {
-            string name = tagFeilds[i].Name;
-            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name && x.RestaurantId == restaurant.Id) is not null)
-                return;
-
             Tag tag = new Tag()
             {
                 Id = Guid.NewGuid(),
                 Name = tagFeilds[i].Name,
+            };
+
+            string name = tagFeilds[i].Name;
+            if (hotelRestaurantDbContext.Tags.FirstOrDefault(x => x.Name == name) is null)
+                await hotelRestaurantDbContext.Tags.AddAsync(tag);
+
+            else
+            {
+                tag = hotelRestaurantDbContext.Tags.FirstOrDefault(tag => tag.Name == name);
+            }
+
+            RestaurantTag restaurantTag = new RestaurantTag()
+            {
+                Id = Guid.NewGuid(),
+                TagId = tag.Id,
                 RestaurantId = restaurant.Id
             };
 
-            //tags.Append(tag);
-            await hotelRestaurantDbContext.Tags.AddAsync(tag);
+            await hotelRestaurantDbContext.RestaurantTags.AddAsync(restaurantTag);
         }
     }
 
-    private static async Task GenerateFeatures(dynamic record, Restaurant restaurant, List<Feature> features)
+    private static async Task GenerateFeatures(dynamic record, Restaurant restaurant)
     {
         string FeaturesInJson = record.FEATURES;
         FeaturesInJson = FeaturesInJson.Replace("'", "\"");
@@ -232,23 +245,34 @@ internal static class RestaurantSeeder
 
         for (int i = 0; i < featureFeilds.Count; i++)
         {
-            string name = featureFeilds[i].Name;
-            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name && x.RestaurantId == restaurant.Id) is not null)
-                return;
 
+            string name = featureFeilds[i].Name;
             Feature feature = new Feature()
             {
                 Id = Guid.NewGuid(),
                 Name = name,
+            };
+
+            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name) is null)
+                await hotelRestaurantDbContext.Features.AddAsync(feature);
+
+            else
+            {
+                feature = hotelRestaurantDbContext.Features.FirstOrDefault(feature => feature.Name == name);
+            }
+
+            RestaurantFeature restaurantFeature = new RestaurantFeature()
+            {
+                Id = Guid.NewGuid(),
+                FeatureId = feature.Id,
                 RestaurantId = restaurant.Id
             };
 
-            //features.Append(feature);
-            await hotelRestaurantDbContext.Features.AddAsync(feature);
+            await hotelRestaurantDbContext.RestaurantFeatures.AddAsync(restaurantFeature);
         }
     }
 
-    private static async Task GenerateWorkTimes(dynamic record, Restaurant restaurant, List<WorkTime> workTimes, JsonSerializerOptions options)
+    private static async Task GenerateWorkTimes(dynamic record, Restaurant restaurant, JsonSerializerOptions options)
     {
         string workTimesInJson = record.HOURS;
         workTimesInJson = workTimesInJson.Replace("'", "\"");
@@ -268,48 +292,34 @@ internal static class RestaurantSeeder
                 TimeOnly closeHour = TimeOnly.Parse(workTimeField.CloseHours);
                 DayOfWeek day = (DayOfWeek)i;
 
-                if (hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
-                && x.CloseHour == closeHour && x.RestaurantId == restaurant.Id) is not null)
-                    return;
-
                 WorkTime workTime = new WorkTime()
                 {
                     Id = Guid.NewGuid(),
                     Day = day,
                     OpenHour = openHour,
                     CloseHour = closeHour,
+                };
+
+                if (hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
+                && x.CloseHour == closeHour) is null)
+                    await hotelRestaurantDbContext.WorkTimes.AddAsync(workTime);
+
+                else
+                {
+                    workTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
+                    && x.CloseHour == closeHour);
+                }
+
+                RestaurantWorkTime restaurantWorkTime = new RestaurantWorkTime()
+                {
+                    Id = Guid.NewGuid(),
+                    WorkTimeId = workTime.Id,
                     RestaurantId = restaurant.Id
                 };
 
-                //workTimes.Append(workTime);
-                await hotelRestaurantDbContext.WorkTimes.AddAsync(workTime);
+                await hotelRestaurantDbContext.RestaurantWorkTimes.AddAsync(restaurantWorkTime);
             }
         }
-    }
-
-    private static async Task GenerateRestaurantPriceLevel(dynamic record, Restaurant restaurant, PriceLevel priceLevel)
-    {
-        if (hotelRestaurantDbContext.PriceLevels.FirstOrDefault(x => x.RestaurantId == restaurant.Id) is not null)
-            return;
-
-        priceLevel.Id = Guid.NewGuid();
-        priceLevel.Level = record.PRICE_LEVEL;
-        priceLevel.RestaurantId = restaurant.Id;
-
-        await hotelRestaurantDbContext.PriceLevels.AddAsync(priceLevel);
-    }
-
-    private static async Task GenerateRestaurantRangePrices(dynamic record, Restaurant restaurant, RestaurantRangePrices restaurantRangePrices)
-    {
-        if (hotelRestaurantDbContext.RestaurantRangePrices.FirstOrDefault(x => x.RestaurantId == restaurant.Id) is not null)
-            return;
-
-        restaurantRangePrices.Id = Guid.NewGuid();
-        restaurantRangePrices.MinPrice = Double.Parse(record.MIN_PRICE);
-        restaurantRangePrices.MaxPrice = Double.Parse(record.MAX_PRICE);
-        restaurantRangePrices.RestaurantId = restaurant.Id;
-
-        await hotelRestaurantDbContext.RestaurantRangePrices.AddAsync(restaurantRangePrices);
     }
 
     private static async Task GenerateRestaurant(dynamic record, Restaurant restaurant, Location location)
@@ -322,6 +332,9 @@ internal static class RestaurantSeeder
         double latitude = Double.Parse(record.LATITUDE);
         double longitude = Double.Parse(record.LONGITUDE);
         int numberOfTables = int.Parse(record.TABLES_NUMBER);
+        string priceLevel = record.PRICE_LEVEL;
+        double minPrice = Double.Parse(record.MIN_PRICE);
+        double maxPrice = Double.Parse(record.MAX_PRICE);
         Guid locationId = location.Id;
 
         if (hotelRestaurantDbContext.Restaurants.FirstOrDefault(x => x.Name == name && x.Url == url
@@ -339,6 +352,9 @@ internal static class RestaurantSeeder
         restaurant.Latitude = latitude;
         restaurant.Longitude = longitude;
         restaurant.NumberOfTables = numberOfTables;
+        restaurant.PriceLevel = priceLevel;
+        restaurant.MinPrice = minPrice;
+        restaurant.MaxPrice = maxPrice;
         restaurant.LocationId = locationId;
 
         await hotelRestaurantDbContext.Restaurants.AddAsync(restaurant);
@@ -346,8 +362,8 @@ internal static class RestaurantSeeder
 
     private static async Task GenerateLocation(Country country, City city, Location location, LocalLocation localLocation)
     {
-        if(hotelRestaurantDbContext.Locations.FirstOrDefault(x=>x.CountryId==country.Id
-        && x.CityId==city.Id && x.LocalLocationId==localLocation.Id) is not null)
+        if (hotelRestaurantDbContext.Locations.FirstOrDefault(x => x.CountryId == country.Id
+        && x.CityId == city.Id && x.LocalLocationId == localLocation.Id) is not null)
             return;
 
         location.Id = Guid.NewGuid();

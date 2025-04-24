@@ -23,27 +23,30 @@ public class Restaurant
 
     public int NumberOfTables { get; set; }
 
+    public string PriceLevel { get; set; }
+
+    public double MinPrice { get; set; }
+
+    public double MaxPrice { get; set; }
+
     // Foreign Keys
 
     public Guid LocationId { get; set; }
 
+
     // Navigation Properties
 
-    public virtual RestaurantRangePrices RangePrice { get; set; }
+    public virtual ICollection<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
 
-    public virtual PriceLevel PriceLevel { get; set; }
+    public virtual ICollection<RestaurantFeature> RestaurantFeatures { get; set; }
 
-    public virtual ICollection<WorkTime> WorkTimes { get; set; }
+    public virtual ICollection<RestaurantTag> RestaurantTags { get; set; }
 
-    public virtual ICollection<Feature> Features { get; set; }
+    public virtual ICollection<RestaurantCuisine> RestaurantCuisines { get; set; }
 
-    public virtual ICollection<Tag> Tags { get; set; }
+    public virtual ICollection<RestaurantDishPrice> RestaurantDishPrices { get; set; }
 
-    public virtual ICollection<Cuisine> Cuisines { get; set; }
-
-    public virtual ICollection<Dish> Dishes { get; set; }
-
-    public virtual ICollection<MealType> MealTypes { get; set; }
+    public virtual ICollection<RestaurantMealType> RestaurantMealTypes { get; set; }
 
     public virtual ICollection<RestaurantOrder> RestaurantOrders { get; set; }
 
@@ -53,12 +56,12 @@ public class Restaurant
 
     public Restaurant()
     {
-        WorkTimes = new HashSet<WorkTime>();
-        Features = new HashSet<Feature>();
-        Tags = new HashSet<Tag>();
-        Cuisines = new HashSet<Cuisine>();
-        Dishes = new HashSet<Dish>();
-        MealTypes = new HashSet<MealType>();
+        RestaurantWorkTimes = new HashSet<RestaurantWorkTime>();
+        RestaurantFeatures = new HashSet<RestaurantFeature>();
+        RestaurantTags = new HashSet<RestaurantTag>();
+        RestaurantCuisines = new HashSet<RestaurantCuisine>();
+        RestaurantDishPrices = new HashSet<RestaurantDishPrice>();
+        RestaurantMealTypes = new HashSet<RestaurantMealType>();
         RestaurantOrders = new HashSet<RestaurantOrder>();
     }
 }

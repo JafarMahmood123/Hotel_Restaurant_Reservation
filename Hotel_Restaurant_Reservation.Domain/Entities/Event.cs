@@ -20,8 +20,6 @@ public class Event
 
     // Foreign Keys
 
-    public Guid EventRegistrationId { get; set; }
-
     public Guid LocationId { get; set; }
 
     public Guid CurrencyTypeId { get; set; }
