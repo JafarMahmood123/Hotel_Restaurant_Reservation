@@ -2,6 +2,8 @@
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Seed.Fields;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 using System.Text.Json;
 
@@ -14,18 +16,22 @@ internal static class RestaurantSeeder
     private static HotelRestaurantDbContext hotelRestaurantDbContext = new DesignTimeDbContextFactory().
         CreateDbContext([]);
 
+    private static int recordNumber = 0;
     public async static void Insert()
     {
+
         if (Path is null)
             throw new Exception("Path to the files is null.");
 
         using (var reader = new StreamReader(Path))
         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
+
             var records = csv.GetRecords<dynamic>();
 
             foreach (var record in records)
             {
+                recordNumber++;
 
                 Restaurant restaurant = new Restaurant();
 
@@ -38,10 +44,10 @@ internal static class RestaurantSeeder
 
                 try
                 {
-                    await GenerateCountry(country);
+                    GenerateCountry(country);
                     GenerateCity(record, city);
                     GenerateLocalLocation(record, localLocation);
-                    await GenerateLocation(country, city, location, localLocation);
+                    GenerateLocation(country, city, location, localLocation);
                     GenerateRestaurant(record, restaurant, location);
 
                     var options = new JsonSerializerOptions
@@ -59,6 +65,8 @@ internal static class RestaurantSeeder
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
                     Console.WriteLine(ex.Message);
                 }
             }
@@ -66,7 +74,7 @@ internal static class RestaurantSeeder
 
     }
 
-    private static async Task GenerateDishes(dynamic record, Restaurant restaurant)
+    private static void GenerateDishes(dynamic record, Restaurant restaurant)
     {
         string dishesInJson = record.DISHS_WITH_PRICES;
         dishesInJson = dishesInJson.Replace("'", "\"");
@@ -90,13 +98,28 @@ internal static class RestaurantSeeder
                 Name = item.Key,
             };
 
-            if (hotelRestaurantDbContext.Dishes.FirstOrDefault(x => x.Name == name) is null)
-                await hotelRestaurantDbContext.Dishes.AddAsync(dish);
-
+            var existingDish = hotelRestaurantDbContext.Dishes.FirstOrDefault(x => x.Name == name);
+            if (existingDish is not null)
+            {
+                dish.Id = existingDish.Id;
+                dish.Name = existingDish.Name;
+            }
 
             else
             {
-                dish = hotelRestaurantDbContext.Dishes.FirstOrDefault(dish => dish.Name == name);
+                hotelRestaurantDbContext.Dishes.Add(dish);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
 
             RestaurantDishPrice restaurantDishPrice = new RestaurantDishPrice()
@@ -107,11 +130,24 @@ internal static class RestaurantSeeder
             };
 
 
-            await hotelRestaurantDbContext.RestaurantDishPrices.AddAsync(restaurantDishPrice);
+            hotelRestaurantDbContext.RestaurantDishPrices.Add(restaurantDishPrice);
+
+            try
+            {
+                hotelRestaurantDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                Console.WriteLine("##################################################################");
+                Console.WriteLine("Error at record " + recordNumber);
+                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                Console.WriteLine($"Error Message: {sqlEx.Message}");
+                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+            }
         }
     }
 
-    private static async Task GenerateMealTypes(dynamic record, Restaurant restaurant)
+    private static void GenerateMealTypes(dynamic record, Restaurant restaurant)
     {
         string mealTypesInJson = record.MEAL_TYPES;
         mealTypesInJson = mealTypesInJson.Replace("'", "\"");
@@ -133,12 +169,28 @@ internal static class RestaurantSeeder
                 Name = meatTypeFeilds[i].Name,
             };
 
-            if (hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name) is null)
-                await hotelRestaurantDbContext.MealTypes.AddAsync(mealType);
+            var existingMealType = hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name);
+            if (existingMealType is not null)
+            {
+                mealType.Id = existingMealType.Id;
+                mealType.Name = existingMealType.Name;
+            }
 
             else
             {
-                mealType = hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name);
+                hotelRestaurantDbContext.MealTypes.Add(mealType);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
 
             RestaurantMealType restaurantMealType = new RestaurantMealType()
@@ -148,11 +200,24 @@ internal static class RestaurantSeeder
                 RestaurantId = restaurant.Id
             };
 
-            await hotelRestaurantDbContext.RestaurantMealTypes.AddAsync(restaurantMealType);
+            hotelRestaurantDbContext.RestaurantMealTypes.Add(restaurantMealType);
+
+            try
+            {
+                hotelRestaurantDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                Console.WriteLine("##################################################################");
+                Console.WriteLine("Error at record " + recordNumber);
+                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                Console.WriteLine($"Error Message: {sqlEx.Message}");
+                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+            }
         }
     }
 
-    private static async Task GenerateCuisines(dynamic record, Restaurant restaurant)
+    private static void GenerateCuisines(dynamic record, Restaurant restaurant)
     {
         string cuisinesInJson = record.CUISINES;
         cuisinesInJson = cuisinesInJson.Replace("'", "\"");
@@ -173,11 +238,28 @@ internal static class RestaurantSeeder
             };
 
             string name = cuisineFeilds[i].Name;
-            if (hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name) is null)
-                await hotelRestaurantDbContext.AddAsync(cuisine);
+
+            var existingCuisine = hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name);
+            if (existingCuisine is not null)
+            {
+                cuisine.Id  = existingCuisine.Id;
+                cuisine.Name = existingCuisine.Name;
+            }
             else
             {
-                cuisine = hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name);
+                hotelRestaurantDbContext.Add(cuisine);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
 
             RestaurantCuisine restaurantCuisine = new RestaurantCuisine()
@@ -187,11 +269,23 @@ internal static class RestaurantSeeder
                 RestaurantId = restaurant.Id
             };
 
-            await hotelRestaurantDbContext.RestaurantCuisines.AddAsync(restaurantCuisine);
+            hotelRestaurantDbContext.RestaurantCuisines.Add(restaurantCuisine);
+            try
+            {
+                hotelRestaurantDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                Console.WriteLine("##################################################################");
+                Console.WriteLine("Error at record " + recordNumber);
+                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                Console.WriteLine($"Error Message: {sqlEx.Message}");
+                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+            }
         }
     }
 
-    private static async Task GenerateTags(dynamic record, Restaurant restaurant)
+    private static void GenerateTags(dynamic record, Restaurant restaurant)
     {
         string tagsInJson = record.REVIEW_TAGS;
         tagsInJson = tagsInJson.Replace("'", "\"");
@@ -212,12 +306,29 @@ internal static class RestaurantSeeder
             };
 
             string name = tagFeilds[i].Name;
-            if (hotelRestaurantDbContext.Tags.FirstOrDefault(x => x.Name == name) is null)
-                await hotelRestaurantDbContext.Tags.AddAsync(tag);
+
+            var existingTag = hotelRestaurantDbContext.Tags.FirstOrDefault(x => x.Name == name);
+            if (existingTag is not null)
+            {
+                tag.Id = existingTag.Id;
+                tag.Name = existingTag.Name;
+            }
 
             else
             {
-                tag = hotelRestaurantDbContext.Tags.FirstOrDefault(tag => tag.Name == name);
+                hotelRestaurantDbContext.Tags.Add(tag);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
 
             RestaurantTag restaurantTag = new RestaurantTag()
@@ -227,11 +338,24 @@ internal static class RestaurantSeeder
                 RestaurantId = restaurant.Id
             };
 
-            await hotelRestaurantDbContext.RestaurantTags.AddAsync(restaurantTag);
+            hotelRestaurantDbContext.RestaurantTags.Add(restaurantTag);
+
+            try
+            {
+                hotelRestaurantDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                Console.WriteLine("##################################################################");
+                Console.WriteLine("Error at record " + recordNumber);
+                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                Console.WriteLine($"Error Message: {sqlEx.Message}");
+                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+            }
         }
     }
 
-    private static async Task GenerateFeatures(dynamic record, Restaurant restaurant)
+    private static void GenerateFeatures(dynamic record, Restaurant restaurant)
     {
         string FeaturesInJson = record.FEATURES;
         FeaturesInJson = FeaturesInJson.Replace("'", "\"");
@@ -253,12 +377,28 @@ internal static class RestaurantSeeder
                 Name = name,
             };
 
-            if (hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name) is null)
-                await hotelRestaurantDbContext.Features.AddAsync(feature);
+            var existingFeature = hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name);
+            if (existingFeature is not null)
+            {
+                feature.Id = existingFeature.Id;
+                feature.Name = existingFeature.Name;
+            }
 
             else
             {
-                feature = hotelRestaurantDbContext.Features.FirstOrDefault(feature => feature.Name == name);
+                hotelRestaurantDbContext.Features.Add(feature);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
 
             RestaurantFeature restaurantFeature = new RestaurantFeature()
@@ -268,11 +408,23 @@ internal static class RestaurantSeeder
                 RestaurantId = restaurant.Id
             };
 
-            await hotelRestaurantDbContext.RestaurantFeatures.AddAsync(restaurantFeature);
+            hotelRestaurantDbContext.RestaurantFeatures.Add(restaurantFeature);
+            try
+            {
+                hotelRestaurantDbContext.SaveChanges();
+            }
+            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+            {
+                Console.WriteLine("##################################################################");
+                Console.WriteLine("Error at record " + recordNumber);
+                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                Console.WriteLine($"Error Message: {sqlEx.Message}");
+                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+            }
         }
     }
 
-    private static async Task GenerateWorkTimes(dynamic record, Restaurant restaurant, JsonSerializerOptions options)
+    private static void GenerateWorkTimes(dynamic record, Restaurant restaurant, JsonSerializerOptions options)
     {
         string workTimesInJson = record.HOURS;
         workTimesInJson = workTimesInJson.Replace("'", "\"");
@@ -292,6 +444,7 @@ internal static class RestaurantSeeder
                 TimeOnly closeHour = TimeOnly.Parse(workTimeField.CloseHours);
                 DayOfWeek day = (DayOfWeek)i;
 
+
                 WorkTime workTime = new WorkTime()
                 {
                     Id = Guid.NewGuid(),
@@ -300,14 +453,32 @@ internal static class RestaurantSeeder
                     CloseHour = closeHour,
                 };
 
-                if (hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
-                && x.CloseHour == closeHour) is null)
-                    await hotelRestaurantDbContext.WorkTimes.AddAsync(workTime);
+                var existingWorkTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
+                && x.CloseHour == closeHour);
+
+                if (existingWorkTime is not null)
+                {
+                    workTime.Id = existingWorkTime.Id;
+                    workTime.Day = existingWorkTime.Day;
+                    workTime.OpenHour = existingWorkTime.OpenHour;
+                    workTime.CloseHour = existingWorkTime.CloseHour;
+                }
 
                 else
                 {
-                    workTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
-                    && x.CloseHour == closeHour);
+                    hotelRestaurantDbContext.WorkTimes.Add(workTime);
+                    try
+                    {
+                        hotelRestaurantDbContext.SaveChanges();
+                    }
+                    catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                    {
+                        Console.WriteLine("##################################################################");
+                        Console.WriteLine("Error at record " + recordNumber);
+                        Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                        Console.WriteLine($"Error Message: {sqlEx.Message}");
+                        Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                    }
                 }
 
                 RestaurantWorkTime restaurantWorkTime = new RestaurantWorkTime()
@@ -317,12 +488,24 @@ internal static class RestaurantSeeder
                     RestaurantId = restaurant.Id
                 };
 
-                await hotelRestaurantDbContext.RestaurantWorkTimes.AddAsync(restaurantWorkTime);
+                hotelRestaurantDbContext.RestaurantWorkTimes.Add(restaurantWorkTime);
+                try
+                {
+                    hotelRestaurantDbContext.SaveChanges();
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+                {
+                    Console.WriteLine("##################################################################");
+                    Console.WriteLine("Error at record " + recordNumber);
+                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+                    Console.WriteLine($"Error Message: {sqlEx.Message}");
+                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+                }
             }
         }
     }
 
-    private static async Task GenerateRestaurant(dynamic record, Restaurant restaurant, Location location)
+    private static void GenerateRestaurant(dynamic record, Restaurant restaurant, Location location)
     {
         string name = record.NAME;
         string url = record.RESTAURANT_URL;
@@ -337,11 +520,27 @@ internal static class RestaurantSeeder
         double maxPrice = Double.Parse(record.MAX_PRICE);
         Guid locationId = location.Id;
 
-        if (hotelRestaurantDbContext.Restaurants.FirstOrDefault(x => x.Name == name && x.Url == url
+
+        var existingHotel = hotelRestaurantDbContext.Restaurants.FirstOrDefault(x => x.Name == name && x.Url == url
         && x.PictureUrl == pictureUrl && x.StarRating == starRating && x.Description == description
         && x.Latitude == latitude && x.Longitude == longitude
-        && x.NumberOfTables == numberOfTables && x.LocationId == location.Id) is not null)
-            return;
+        && x.NumberOfTables == numberOfTables && x.LocationId == location.Id);
+        if (existingHotel is not null)
+        {
+            restaurant.Id = existingHotel.Id;
+            restaurant.Name = existingHotel.Name;
+            restaurant.Url = existingHotel.Url;
+            restaurant.PictureUrl = existingHotel.PictureUrl;
+            restaurant.StarRating = existingHotel.StarRating;
+            restaurant.Description = existingHotel.Description;
+            restaurant.Latitude = existingHotel.Latitude;
+            restaurant.Longitude = existingHotel.Longitude;
+            restaurant.NumberOfTables = existingHotel.NumberOfTables;
+            restaurant.PriceLevel = existingHotel.PriceLevel;
+            restaurant.MinPrice = existingHotel.MinPrice;
+            restaurant.MaxPrice = existingHotel.MaxPrice;
+            restaurant.LocationId = existingHotel.LocationId;
+        }
 
         restaurant.Id = Guid.NewGuid();
         restaurant.Name = name;
@@ -357,59 +556,143 @@ internal static class RestaurantSeeder
         restaurant.MaxPrice = maxPrice;
         restaurant.LocationId = locationId;
 
-        await hotelRestaurantDbContext.Restaurants.AddAsync(restaurant);
+        hotelRestaurantDbContext.Restaurants.Add(restaurant);
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 
-    private static async Task GenerateLocation(Country country, City city, Location location, LocalLocation localLocation)
+    private static void GenerateLocation(Country country, City city, Location location, LocalLocation localLocation)
     {
-        if (hotelRestaurantDbContext.Locations.FirstOrDefault(x => x.CountryId == country.Id
-        && x.CityId == city.Id && x.LocalLocationId == localLocation.Id) is not null)
+        var existingLocation = hotelRestaurantDbContext.Locations.FirstOrDefault(x => x.CountryId == country.Id
+        && x.CityId == city.Id && x.LocalLocationId == localLocation.Id);
+
+        if (existingLocation is not null)
+        {
+            location.Id = existingLocation.Id;
+            location.CountryId = existingLocation.CountryId;
+            location.CityId = existingLocation.CityId;
+            location.LocalLocationId = existingLocation.LocalLocationId;
             return;
+        }
 
         location.Id = Guid.NewGuid();
         location.CountryId = country.Id;
         location.CityId = city.Id;
         location.LocalLocationId = localLocation.Id;
 
-        await hotelRestaurantDbContext.AddAsync(location);
+        hotelRestaurantDbContext.Add(location);
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 
-    private static async Task GenerateLocalLocation(dynamic record, LocalLocation localLocation)
+    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation)
     {
         string name = record.GENERAL_LOCATION;
-        if (hotelRestaurantDbContext.LocalLocations.FirstOrDefault(x => x.Name == name) is not null)
+
+        var existingLocalLocation = hotelRestaurantDbContext.LocalLocations.FirstOrDefault(x => x.Name == name);
+        if (existingLocalLocation is not null)
+        {
+            localLocation.Id = existingLocalLocation.Id;
+            localLocation.Name = existingLocalLocation.Name;
             return;
+        }
 
 
         localLocation.Id = Guid.NewGuid();
         localLocation.Name = record.GENERAL_LOCATION;
 
-        await hotelRestaurantDbContext.AddAsync(localLocation);
+        hotelRestaurantDbContext.Add(localLocation);
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 
-    private static async Task GenerateCity(dynamic record, City city)
+    private static void GenerateCity(dynamic record, City city)
     {
         string name = record.DESTINATION;
 
-        if (hotelRestaurantDbContext.Cities.FirstOrDefault(x => x.Name == name) is not null)
+        var existingCity = hotelRestaurantDbContext.Cities.FirstOrDefault(x => x.Name == name);
+        if (existingCity is not null)
+        {
+            city.Id = existingCity.Id;
+            city.Name = existingCity.Name;
             return;
+        }
 
         city.Id = Guid.NewGuid();
         city.Name = record.DESTINATION;
 
-        await hotelRestaurantDbContext.Cities.AddAsync(city);
+        hotelRestaurantDbContext.Cities.Add(city);
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 
-    private static async Task GenerateCountry(Country country)
+    private static void GenerateCountry(Country country)
     {
         string countryName = string.Empty;
 
-        if (hotelRestaurantDbContext.Countries.FirstOrDefault(x => x.Name == countryName) is not null)
+        var existingCountry = hotelRestaurantDbContext.Countries.FirstOrDefault(x => x.Name == countryName);
+        if (existingCountry is not null)
+        {
+            country.Id = existingCountry.Id;
+            countryName = existingCountry.Name;
             return;
+        }
 
         country.Id = Guid.NewGuid();
         country.Name = string.Empty;
 
-        await hotelRestaurantDbContext.Countries.AddAsync(country);
+        hotelRestaurantDbContext.Countries.Add(country);
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 }

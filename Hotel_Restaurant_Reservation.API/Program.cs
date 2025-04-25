@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddAutoMapper(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
+builder.Services.AddAutoMapper(typeof(Hotel_Restaurant_Reservation.Application.AssemplyReference).Assembly);
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -32,6 +32,7 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 
 
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
+builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
 
 var app = builder.Build();
 
