@@ -1,4 +1,6 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Abstractions;
+﻿using System.Linq.Expressions;
+
+namespace Hotel_Restaurant_Reservation.Domain.Abstractions;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
@@ -8,7 +10,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     Task<TEntity> AddAsync(TEntity entity);
 
-    Task<TEntity> UpdateAsync(TEntity entity);
+    Task<TEntity?> UpdateAsync(Guid id, TEntity entity);
 
 
 
@@ -18,8 +20,12 @@ public interface IGenericRepository<TEntity> where TEntity : class
 
     TEntity Add(TEntity entity);
 
-    TEntity Update(TEntity entity);
+    TEntity? Update(Guid id, TEntity entity);
+
 
     TEntity Remove(TEntity entity);
 
+    Task SaveChangesAsync();
+
+    Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
 }

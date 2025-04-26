@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 
@@ -20,16 +21,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         _dbSet.Add(entity);
 
-        _hotelRestaurantDbContext.SaveChanges();
-
         return entity;
     }
 
     public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
          await _dbSet.AddAsync(entity);
-
-        _hotelRestaurantDbContext.SaveChanges();
 
         return entity;
     }
@@ -54,40 +51,65 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await _dbSet.FindAsync(id);
     }
 
+    public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        return await _dbSet.FirstOrDefaultAsync(predicate);
+    }
+
     public TEntity Remove(TEntity entity)
     {
         _dbSet.Remove(entity);
 
-        _hotelRestaurantDbContext.SaveChanges();
-
         return entity;
     }
 
-    public TEntity Update(TEntity entity)
+   
+
+    public async Task SaveChangesAsync()
     {
-        var oldEntity = _dbSet.Find(entity);
-
-        if (oldEntity != null)
-        {
-            oldEntity = entity;
-
-            _hotelRestaurantDbContext.SaveChanges();
-        }
-
-        return entity;
+        await _hotelRestaurantDbContext.SaveChangesAsync();
     }
 
-    public async Task<TEntity> UpdateAsync(TEntity entity)
+    public TEntity? Update(Guid id, TEntity entity)
     {
-        var oldEntity = await _dbSet.FindAsync(entity);
+        // 1. Get existing entity
+        var existingEntity = _dbSet.Find(id);
+        if (existingEntity == null) return null;
 
-        if (oldEntity != null)
+        // 2. Get all properties EXCEPT the primary key
+        var properties = _hotelRestaurantDbContext.Entry(existingEntity).Properties
+            .Where(p => !p.Metadata.IsPrimaryKey());
+
+        // 3. Update only non-key properties
+        foreach (var property in properties)
         {
-            oldEntity = entity;
-
-            _hotelRestaurantDbContext.SaveChanges();
+            var newValue = _hotelRestaurantDbContext.Entry(entity).Property(property.Metadata.Name).CurrentValue;
+            property.CurrentValue = newValue;
         }
 
-        return entity;
+        //await _hotelRestaurantDbContext.SaveChangesAsync();
+        return existingEntity;
+    }
+
+    public async Task<TEntity?> UpdateAsync(Guid id, TEntity entity)
+    {
+
+        // 1. Get existing entity
+        var existingEntity = await _dbSet.FindAsync(id);
+        if (existingEntity == null) return null;
+
+        // 2. Get all properties EXCEPT the primary key
+        var properties = _hotelRestaurantDbContext.Entry(existingEntity).Properties
+            .Where(p => !p.Metadata.IsPrimaryKey());
+
+        // 3. Update only non-key properties
+        foreach (var property in properties)
+        {
+            var newValue = _hotelRestaurantDbContext.Entry(entity).Property(property.Metadata.Name).CurrentValue;
+            property.CurrentValue = newValue;
+        }
+
+        //await _hotelRestaurantDbContext.SaveChangesAsync();
+        return existingEntity;
     }
 }

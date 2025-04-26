@@ -33,6 +33,17 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
+builder.Services.AddScoped<IGenericRepository<WorkTime>, GenericRepository<WorkTime>>();
+builder.Services.AddScoped<IGenericRepository<MealType>, GenericRepository<MealType>>();
+builder.Services.AddScoped<IGenericRepository<Feature>, GenericRepository<Feature>>();
+builder.Services.AddScoped<IGenericRepository<Location>, GenericRepository<Location>>();
+builder.Services.AddScoped<IGenericRepository<Tag>, GenericRepository<Tag>>();
+builder.Services.AddScoped<IGenericRepository<City>, GenericRepository<City>>();
+builder.Services.AddScoped<IGenericRepository<Country>, GenericRepository<Country>>();
+builder.Services.AddScoped<IGenericRepository<LocalLocation>, GenericRepository<LocalLocation>>();
+builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
+builder.Services.AddScoped<IGenericRepository<Dish>, GenericRepository<Dish>>();
+
 
 var app = builder.Build();
 

@@ -1,0 +1,30 @@
+﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Domain.Abstractions;
+using Hotel_Restaurant_Reservation.Domain.Entities;
+using System.Reflection.Metadata.Ecma335;
+
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.DeleteCountry;
+
+public class DeleteCountryCommandHandler : ICommandHandler<DeleteCountryCommand, Country?>
+{
+    private readonly IGenericRepository<Country> genericRepository;
+
+    public DeleteCountryCommandHandler(IGenericRepository<Country> genericRepository)
+    {
+        this.genericRepository = genericRepository;
+    }
+
+    public async Task<Country?> Handle(DeleteCountryCommand request, CancellationToken cancellationToken)
+    {
+        var country = await genericRepository.GetByIdAsync(request.Id);
+
+        if (country is not null)
+        {
+            country = genericRepository.Remove(country);
+
+            await genericRepository.SaveChangesAsync();
+        }
+
+        return country;
+    }
+}
