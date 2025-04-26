@@ -43,7 +43,7 @@ public class RestaurantAddRequest
 
     //public IEnumerable<MealTypeRequest> MealTypeRequests { get; set; }
 
-    public CountryRequest CountryRequest { get; set; }
+    public AddCountryRequest CountryRequest { get; set; }
 
     public AddCityRequest CityRequest { get; set; }
 

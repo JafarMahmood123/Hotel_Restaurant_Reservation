@@ -10,22 +10,12 @@ public class CountryProfile : Profile
 
     public CountryProfile()
     {
+        CreateMap<Country, CountryResponse>().ReverseMap();
 
-        CreateMap<Country, CountryRequest>();
+        CreateMap<Country, AddCountryRequest>();
 
-        CreateMap<CountryRequest, Country>();
-            //.ForMember(dest => dest.Id, opt => opt.Ignore())
-            //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            //.AfterMap(async (src, dest) =>
-            //{
-            //    var existingCountry = await genericRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
+        CreateMap<AddCountryRequest, Country>();
 
-            //    if (existingCountry != null)
-            //    {
-            //        dest.Id = existingCountry.Id;
-            //    }
-
-            //    dest.Id = Guid.NewGuid();
-            //});
+        CreateMap<UpdateCountryRequest, Country>();
     }
 }

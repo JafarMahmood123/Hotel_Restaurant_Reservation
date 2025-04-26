@@ -14,7 +14,7 @@ public class DishProfile : Profile
 
         CreateMap<Dish, DishRequest>();
 
-        CreateMap<CountryRequest, Country>();
+        CreateMap<AddCountryRequest, Country>();
         //.ForMember(dest => dest.Id, opt => opt.Ignore())
         //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         //.AfterMap(async (src, dest) =>

@@ -6,7 +6,7 @@ namespace Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
 
 public class LocationRequest
 {
-    public CountryRequest CountryRequest { get; set; }
+    public AddCountryRequest CountryRequest { get; set; }
 
     public AddCityRequest CityRequest { get; set; }
 
