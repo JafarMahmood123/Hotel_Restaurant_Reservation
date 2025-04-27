@@ -9,13 +9,14 @@ public class City
 
     // Foreign Keys
 
+    public Guid CountryId { get; set; }
 
     // Navigation Properties
 
-    public virtual ICollection<Location> Locations { get; set; }
+    public virtual ICollection<LocalLocation> LocalLocations { get; set; }
 
     public City()
     {
-        Locations = new HashSet<Location>();
+        LocalLocations = new HashSet<LocalLocation>();
     }
 }

@@ -15,10 +15,17 @@ public class UpdateCityCommandHandler : ICommandHandler<UpdateCityCommand, City?
 
     public async Task<City?> Handle(UpdateCityCommand request, CancellationToken cancellationToken)
     {
-        var city = await genericRepository.UpdateAsync(request.Id, request.City);
+        var city = await genericRepository.GetByIdAsync(request.Id);
 
-        if (city is not null)
+        if(city is not null)
+        {
+            if(city.Name == request.City.Name)
+                return city;
+
+            city = await genericRepository.UpdateAsync(request.Id, request.City);
+
             await genericRepository.SaveChangesAsync();
+        }
 
         return city;
     }

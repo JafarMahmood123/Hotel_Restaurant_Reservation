@@ -11,10 +11,10 @@ public class Country
 
     // Navigation Properties
 
-    public virtual ICollection<Location> Locations { get; set; }
+    public virtual ICollection<City> Cities { get; set; }
 
     public Country()
     {
-        Locations = new HashSet<Location>();
+        Cities = new HashSet<City>();
     }
 }

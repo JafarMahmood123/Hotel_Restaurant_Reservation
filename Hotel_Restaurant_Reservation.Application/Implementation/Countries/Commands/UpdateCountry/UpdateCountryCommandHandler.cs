@@ -15,10 +15,17 @@ public class UpdateCountryCommandHandler : ICommandHandler<UpdateCountryCommand,
 
     public async Task<Country?> Handle(UpdateCountryCommand request, CancellationToken cancellationToken)
     {
-        var country = await genericRepository.UpdateAsync(request.Id, request.Country);
+        var country = await genericRepository.GetByIdAsync(request.Id);
 
         if (country is not null)
+        {
+            if (country.Name == request.Country.Name)
+                return country;
+
+            country = await genericRepository.UpdateAsync(request.Id, request.Country);
+
             await genericRepository.SaveChangesAsync();
+        }
 
         return country;
     }

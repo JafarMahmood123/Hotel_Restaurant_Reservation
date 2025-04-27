@@ -43,6 +43,7 @@ builder.Services.AddScoped<IGenericRepository<Country>, GenericRepository<Countr
 builder.Services.AddScoped<IGenericRepository<LocalLocation>, GenericRepository<LocalLocation>>();
 builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
 builder.Services.AddScoped<IGenericRepository<Dish>, GenericRepository<Dish>>();
+builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 
 
 var app = builder.Build();

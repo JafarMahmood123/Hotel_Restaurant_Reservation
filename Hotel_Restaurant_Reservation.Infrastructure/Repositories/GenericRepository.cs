@@ -74,7 +74,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     {
         // 1. Get existing entity
         var existingEntity = _dbSet.Find(id);
-        if (existingEntity == null) return null;
+
+        if (existingEntity == null)
+            return null;
 
         // 2. Get all properties EXCEPT the primary key
         var properties = _hotelRestaurantDbContext.Entry(existingEntity).Properties
@@ -87,7 +89,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             property.CurrentValue = newValue;
         }
 
-        //await _hotelRestaurantDbContext.SaveChangesAsync();
         return existingEntity;
     }
 
@@ -96,7 +97,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         // 1. Get existing entity
         var existingEntity = await _dbSet.FindAsync(id);
-        if (existingEntity == null) return null;
+
+        if (existingEntity == null) 
+            return null;
 
         // 2. Get all properties EXCEPT the primary key
         var properties = _hotelRestaurantDbContext.Entry(existingEntity).Properties
@@ -109,7 +112,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             property.CurrentValue = newValue;
         }
 
-        //await _hotelRestaurantDbContext.SaveChangesAsync();
         return existingEntity;
     }
 }

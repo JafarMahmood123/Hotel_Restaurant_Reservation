@@ -1,5 +1,4 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -7,15 +6,17 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
 
 public class GetAllRestaurantsQueryHandler : IQueryHandler<GetAllRestaurantsQuery, IEnumerable<Restaurant>?>
 {
-    private readonly IGenericRepository<Restaurant> _genericRepository;
+    private readonly IRestaurantRespository restaurantRespository;
 
-    public GetAllRestaurantsQueryHandler(IGenericRepository<Restaurant> genericRepository)
+    public GetAllRestaurantsQueryHandler(IRestaurantRespository restaurantRespository)
     {
-        _genericRepository = genericRepository;
+        this.restaurantRespository = restaurantRespository;
     }
 
     public async Task<IEnumerable<Restaurant>?> Handle(GetAllRestaurantsQuery request, CancellationToken cancellationToken)
     {
-        return await _genericRepository.GetAllAsync();
+        return await restaurantRespository.GetFilteredRestaurantsAsync(request.TagId, request.FeatureId,
+            request.CuisineId, request.DishId, request.MealTypeId, request.CountryId, request.CityId, request.LocationId,
+            request.MinPrice, request.MaxPrice, request.MinStarRating, request.MaxStarRating);
     }
 }

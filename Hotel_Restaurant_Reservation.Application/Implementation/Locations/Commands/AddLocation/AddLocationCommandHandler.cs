@@ -15,15 +15,12 @@ public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Loc
 
     public async Task<Location> Handle(AddLocationCommand request, CancellationToken cancellationToken)
     {
-        Country country = request.Country;
-        City city = request.City;
-        LocalLocation localLocation = request.LocalLocation;
 
-        Location location = new Location(); 
+        Location location = request.Location;
 
 
-        var existingLocation = await _genericRepository.GetFirstOrDefaultAsync(x => x.LocalLocationId == localLocation.Id
-        && x.CityId == city.Id && x.CountryId == country.Id);
+        var existingLocation = await _genericRepository.GetFirstOrDefaultAsync(x => x.LocalLocationId == location.LocalLocationId
+        && x.CityId == location.CityId && x.CountryId == location.CountryId);
 
         if (existingLocation != null)
         {
@@ -32,9 +29,9 @@ public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Loc
         else
         {
             location.Id = Guid.NewGuid();
-            location.CountryId = country.Id;
-            location.CityId = city.Id;
-            location.LocalLocationId = localLocation.Id;
+            location.CountryId = location.CountryId;
+            location.CityId = location.CityId;
+            location.LocalLocationId = location.LocalLocationId;
 
             location = await _genericRepository.AddAsync(location);
             await _genericRepository.SaveChangesAsync();

@@ -4,11 +4,11 @@ using Hotel_Restaurant_Reservation.Application.DTOs.LocalLocationDTOs;
 
 namespace Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
 
-public class LocationRequest
+public class AddLocationRequest
 {
-    public AddCountryRequest CountryRequest { get; set; }
+    public Guid CountryId { get; set; }
 
-    public AddCityRequest CityRequest { get; set; }
+    public Guid CityId { get; set; }
 
-    public LocalLocationRequest LocalLocationRequest { get; set; }
+    public Guid LocalLocationId { get; set; }
 }

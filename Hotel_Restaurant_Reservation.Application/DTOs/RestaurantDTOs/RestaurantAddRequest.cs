@@ -47,5 +47,5 @@ public class RestaurantAddRequest
 
     public AddCityRequest CityRequest { get; set; }
 
-    public LocalLocationRequest LocalLocationRequest { get; set; }
+    public AddLocalLocationRequest LocalLocationRequest { get; set; }
 }

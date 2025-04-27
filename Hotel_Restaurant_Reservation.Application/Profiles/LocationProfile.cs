@@ -11,22 +11,12 @@ public class LocationProfile : Profile
 
     public LocationProfile()
     {
+        CreateMap<Location, LocationResponse>().ReverseMap();
 
-        CreateMap<Location, LocationRequest>();
+        CreateMap<Location, AddLocationRequest>();
 
-        CreateMap<LocationRequest, Location>();
-           //.ForMember(dest => dest.Id, opt => opt.Ignore())
-           //.AfterMap(async (src, dest) =>
-           //{
-           //    var existingLocation = await genericRepository.GetFirstOrDefaultAsync(x => x.CountryId == countryId
-           //    && x.CityId == cityId && x.LocalLocationId == localLocationId);
+        CreateMap<AddLocationRequest, Location>();
 
-           //    if (existingLocation != null)
-           //    {
-           //        dest.Id = existingLocation.Id;
-           //    }
-
-           //    dest.Id = Guid.NewGuid();
-           //});
+        CreateMap<UpdateLocationRequest, Location>();
     }
 }

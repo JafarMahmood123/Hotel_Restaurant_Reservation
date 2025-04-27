@@ -17,6 +17,8 @@ internal static class RestaurantSeeder
         CreateDbContext([]);
 
     private static int recordNumber = 0;
+
+    private static int NumberOfErrors = 0;
     public async static void Insert()
     {
 
@@ -45,8 +47,8 @@ internal static class RestaurantSeeder
                 try
                 {
                     GenerateCountry(country);
-                    GenerateCity(record, city);
-                    GenerateLocalLocation(record, localLocation);
+                    GenerateCity(record, city, country);
+                    GenerateLocalLocation(record, localLocation, city);
                     GenerateLocation(country, city, location, localLocation);
                     GenerateRestaurant(record, restaurant, location);
 
@@ -67,11 +69,13 @@ internal static class RestaurantSeeder
                 {
                     Console.WriteLine("##################################################################");
                     Console.WriteLine("Error at record " + recordNumber);
+                    NumberOfErrors++;
                     Console.WriteLine(ex.Message);
                 }
             }
         }
 
+        Console.WriteLine("The number of total errors = " + NumberOfErrors);
     }
 
     private static void GenerateDishes(dynamic record, Restaurant restaurant)
@@ -605,7 +609,7 @@ internal static class RestaurantSeeder
         }
     }
 
-    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation)
+    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation, City city)
     {
         string name = record.GENERAL_LOCATION;
 
@@ -614,12 +618,14 @@ internal static class RestaurantSeeder
         {
             localLocation.Id = existingLocalLocation.Id;
             localLocation.Name = existingLocalLocation.Name;
+            localLocation.CityId = city.Id;
             return;
         }
 
 
         localLocation.Id = Guid.NewGuid();
         localLocation.Name = record.GENERAL_LOCATION;
+        localLocation.CityId = city.Id;
 
         hotelRestaurantDbContext.Add(localLocation);
         try
@@ -636,7 +642,7 @@ internal static class RestaurantSeeder
         }
     }
 
-    private static void GenerateCity(dynamic record, City city)
+    private static void GenerateCity(dynamic record, City city, Country country)
     {
         string name = record.DESTINATION;
 
@@ -645,11 +651,13 @@ internal static class RestaurantSeeder
         {
             city.Id = existingCity.Id;
             city.Name = existingCity.Name;
+            city.CountryId = country.Id;
             return;
         }
 
         city.Id = Guid.NewGuid();
         city.Name = record.DESTINATION;
+        city.CountryId = country.Id;
 
         hotelRestaurantDbContext.Cities.Add(city);
         try

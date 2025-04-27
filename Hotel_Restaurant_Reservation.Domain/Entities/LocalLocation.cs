@@ -9,6 +9,8 @@ public class LocalLocation
 
     // Foreign Keys
 
+    public Guid CityId { get; set; }
+
     // Navigation Properties
 
     public virtual ICollection<Location> Locations { get; set; }
