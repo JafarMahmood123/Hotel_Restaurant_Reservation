@@ -21,7 +21,7 @@ public class WorkTimeProfile : Profile
            //.ForMember(dest => dest.CloseHour, opt => opt.MapFrom(src => src.CloseHour))
            //.AfterMap(async (src, dest) =>
            //{
-           //    var existingWorkTime = await genericRepository.GetFirstOrDefaultAsync(x => x.Day == dest.Day
+           //    var existingWorkTime = await cityRepository.GetFirstOrDefaultAsync(x => x.Day == dest.Day
            //    && x.OpenHour == dest.OpenHour && x.CloseHour == dest.CloseHour);
 
            //    if (existingWorkTime != null)

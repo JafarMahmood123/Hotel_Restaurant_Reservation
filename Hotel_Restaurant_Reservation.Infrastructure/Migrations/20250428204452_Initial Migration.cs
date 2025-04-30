@@ -12,18 +12,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Cities",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Countries",
                 columns: table => new
                 {
@@ -202,13 +190,57 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cities_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CityLocalLocations",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    LocalLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CityLocalLocations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CityLocalLocations_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CityLocalLocations_LocalLocations_LocalLocationId",
+                        column: x => x.LocalLocationId,
+                        principalTable: "LocalLocations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CountryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    LocalLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    CityLocalLocationsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CityId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -217,20 +249,19 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         name: "FK_Locations_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Locations_CityLocalLocations_CityLocalLocationsId",
+                        column: x => x.CityLocalLocationsId,
+                        principalTable: "CityLocalLocations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Locations_Countries_CountryId",
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Locations_LocalLocations_LocalLocationId",
-                        column: x => x.LocalLocationId,
-                        principalTable: "LocalLocations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -346,7 +377,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     PriceLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MinPrice = table.Column<double>(type: "float", nullable: false),
                     MaxPrice = table.Column<double>(type: "float", nullable: false),
-                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RestaurantCurrencyTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -507,6 +539,31 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantCuisines_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RestaurantCurrencyTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RestaurantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CurrencyTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantCurrencyTypes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RestaurantCurrencyTypes_CurrencyTypes_CurrencyTypeId",
+                        column: x => x.CurrencyTypeId,
+                        principalTable: "CurrencyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RestaurantCurrencyTypes_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
@@ -765,6 +822,21 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cities_CountryId",
+                table: "Cities",
+                column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CityLocalLocations_CityId",
+                table: "CityLocalLocations",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CityLocalLocations_LocalLocationId",
+                table: "CityLocalLocations",
+                column: "LocalLocationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CurrencyTypeEvent_EventsId",
                 table: "CurrencyTypeEvent",
                 column: "EventsId");
@@ -835,14 +907,14 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Locations_CityLocalLocationsId",
+                table: "Locations",
+                column: "CityLocalLocationsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Locations_CountryId",
                 table: "Locations",
                 column: "CountryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Locations_LocalLocationId",
-                table: "Locations",
-                column: "LocalLocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RestaurantCuisines_CuisineId",
@@ -852,6 +924,16 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_RestaurantCuisines_RestaurantId",
                 table: "RestaurantCuisines",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantCurrencyTypes_CurrencyTypeId",
+                table: "RestaurantCurrencyTypes",
+                column: "CurrencyTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantCurrencyTypes_RestaurantId",
+                table: "RestaurantCurrencyTypes",
                 column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
@@ -972,6 +1054,9 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "RestaurantCuisines");
 
             migrationBuilder.DropTable(
+                name: "RestaurantCurrencyTypes");
+
+            migrationBuilder.DropTable(
                 name: "RestaurantDishPrices");
 
             migrationBuilder.DropTable(
@@ -996,9 +1081,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "RoomRoomAmenity");
 
             migrationBuilder.DropTable(
-                name: "CurrencyTypes");
-
-            migrationBuilder.DropTable(
                 name: "Role");
 
             migrationBuilder.DropTable(
@@ -1006,6 +1088,9 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cuisines");
+
+            migrationBuilder.DropTable(
+                name: "CurrencyTypes");
 
             migrationBuilder.DropTable(
                 name: "Dishes");
@@ -1050,13 +1135,16 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "PropertyTypes");
 
             migrationBuilder.DropTable(
+                name: "CityLocalLocations");
+
+            migrationBuilder.DropTable(
                 name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Countries");
+                name: "LocalLocations");
 
             migrationBuilder.DropTable(
-                name: "LocalLocations");
+                name: "Countries");
         }
     }
 }

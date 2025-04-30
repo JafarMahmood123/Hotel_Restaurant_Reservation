@@ -1,29 +1,29 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CountryDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;
 
-public class FeatureProfile : Profile
+public class DishProfile : Profile
 {
 
-    public FeatureProfile()
-    {
+    public DishProfile()
+    {;
 
-        CreateMap<Feature, FeatureRequest>();
+        CreateMap<Dish, DishRequest>();
 
-        CreateMap<FeatureRequest, Feature>();
+        CreateMap<AddCountryRequest, Country>();
         //.ForMember(dest => dest.Id, opt => opt.Ignore())
         //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
         //.AfterMap(async (src, dest) =>
         //{
-        //    var existingFeature = await genericRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
+        //    var existingDish = await cityRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
 
-        //    if (existingFeature != null)
+        //    if (existingDish != null)
         //    {
-        //        dest.Id = existingFeature.Id;
+        //        dest.Id = existingDish.Id;
         //    }
 
         //    dest.Id = Guid.NewGuid();

@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Implementation\Customers\Commands\LogOut\" />
+    <Folder Include="Implementation\Customers\Commands\SignUp\" />
+  </ItemGroup>
+
 </Project>

@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelRestaurantDbContext))]
-    partial class HotelRestaurantDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250428204452_Initial Migration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,6 +53,21 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasIndex("HotelsId");
 
                     b.ToTable("CurrencyTypeHotel");
+                });
+
+            modelBuilder.Entity("CustomerRole", b =>
+                {
+                    b.Property<Guid>("CustomersId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("RolesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("CustomersId", "RolesId");
+
+                    b.HasIndex("RolesId");
+
+                    b.ToTable("CustomerRole");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.City", b =>
@@ -160,9 +178,15 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("EventRegistrationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("HotelReservationId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -175,20 +199,14 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("Preferences")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("LocationId");
-
-                    b.ToTable("Customers");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.CustomerRoles", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("RestaurantOrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CustomerId")
+                    b.Property<Guid>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("RoleId")
@@ -196,11 +214,9 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerId");
+                    b.HasIndex("LocationId");
 
-                    b.HasIndex("RoleId");
-
-                    b.ToTable("CustomersRoles");
+                    b.ToTable("Customer");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Dish", b =>
@@ -439,6 +455,9 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("CityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid>("CityLocalLocationsId")
                         .HasColumnType("uniqueidentifier");
 
@@ -446,6 +465,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("CityLocalLocationsId");
 
@@ -769,13 +790,16 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Roles");
+                    b.ToTable("Role");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>
@@ -931,6 +955,21 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CustomerRole", b =>
+                {
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", null)
+                        .WithMany()
+                        .HasForeignKey("CustomersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.City", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Country", null)
@@ -970,25 +1009,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("Location");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.CustomerRoles", b =>
-                {
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
-                        .WithMany("CustomerRoles")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Role", "Role")
-                        .WithMany("CustomerRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Role");
-                });
-
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Event", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Location", "Location")
@@ -1003,7 +1023,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.EventRegistration", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("EventRegistrations")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1049,7 +1069,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.HotelReservation", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("HotelReservations")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1075,6 +1095,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Location", b =>
                 {
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.City", null)
+                        .WithMany("Locations")
+                        .HasForeignKey("CityId");
+
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.CityLocalLocations", "CityLocalLocations")
                         .WithMany()
                         .HasForeignKey("CityLocalLocationsId")
@@ -1201,7 +1225,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantOrder", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customers")
-                        .WithMany()
+                        .WithMany("RestaurantOrders")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1258,7 +1282,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Review", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1319,6 +1343,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.City", b =>
                 {
                     b.Navigation("CityLocalLocations");
+
+                    b.Navigation("Locations");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Country", b =>
@@ -1335,7 +1361,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Customer", b =>
                 {
-                    b.Navigation("CustomerRoles");
+                    b.Navigation("EventRegistrations");
+
+                    b.Navigation("HotelReservations");
+
+                    b.Navigation("RestaurantOrders");
+
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Dish", b =>
@@ -1412,11 +1444,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("RestaurantWorkTimes");
 
                     b.Navigation("Reviews");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Role", b =>
-                {
-                    b.Navigation("CustomerRoles");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>

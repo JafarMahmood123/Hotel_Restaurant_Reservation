@@ -16,7 +16,7 @@ public class GetAllRestaurantsQueryHandler : IQueryHandler<GetAllRestaurantsQuer
     public async Task<IEnumerable<Restaurant>?> Handle(GetAllRestaurantsQuery request, CancellationToken cancellationToken)
     {
         return await restaurantRespository.GetFilteredRestaurantsAsync(request.TagId, request.FeatureId,
-            request.CuisineId, request.DishId, request.MealTypeId, request.CountryId, request.CityId, request.LocationId,
+            request.CuisineId, request.DishId, request.MealTypeId, request.CountryId, request.CityLocalLocationId,
             request.MinPrice, request.MaxPrice, request.MinStarRating, request.MaxStarRating);
     }
 }

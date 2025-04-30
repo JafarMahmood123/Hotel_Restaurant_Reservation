@@ -19,8 +19,8 @@ public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Loc
         Location location = request.Location;
 
 
-        var existingLocation = await _genericRepository.GetFirstOrDefaultAsync(x => x.LocalLocationId == location.LocalLocationId
-        && x.CityId == location.CityId && x.CountryId == location.CountryId);
+        var existingLocation = await _genericRepository.GetFirstOrDefaultAsync(x => x.CityLocalLocationsId == location.CityLocalLocationsId
+        && x.CountryId == location.CountryId);
 
         if (existingLocation != null)
         {
@@ -30,8 +30,7 @@ public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Loc
         {
             location.Id = Guid.NewGuid();
             location.CountryId = location.CountryId;
-            location.CityId = location.CityId;
-            location.LocalLocationId = location.LocalLocationId;
+            location.CityLocalLocationsId = location.CityLocalLocationsId;
 
             location = await _genericRepository.AddAsync(location);
             await _genericRepository.SaveChangesAsync();

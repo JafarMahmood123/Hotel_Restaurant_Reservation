@@ -21,12 +21,12 @@ public class RestaurantsController : ApiController
 
 
     [HttpGet]
-    public async Task<IActionResult> GetAllRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? countryId, Guid? cityId,
-        Guid? locationId, Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken, double? minPrice = 0,
+    public async Task<IActionResult> GetAllRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? countryId, Guid? cityLocalLocationId,
+        Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken, double? minPrice = 0,
         double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
     {
         GetAllRestaurantsQuery query = new GetAllRestaurantsQuery(tagId, featureId, cuisineId, dishId, mealTypeId,
-            countryId, cityId, locationId, minPrice, maxPrice, minStarRating, maxStarRating);
+            countryId, cityLocalLocationId, minPrice, maxPrice, minStarRating, maxStarRating);
 
         IEnumerable<Restaurant>? restaurants = await Sender.Send(query, cancellationToken);
 

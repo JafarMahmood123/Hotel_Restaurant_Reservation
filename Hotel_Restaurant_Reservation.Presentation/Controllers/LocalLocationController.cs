@@ -1,12 +1,5 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CountryDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.LocalLocationDTOs;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.DeleteCountry;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetAllCountries;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryById;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryByName;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.AddLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.DeleteLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.UpdateLocalLocation;
@@ -76,7 +69,7 @@ public class LocalLocationController : ApiController
     public async Task<IActionResult> AddLocalLocation(AddLocalLocationRequest addlocalLocationRequest, CancellationToken cancellationToken)
     {
         var localLocation = mapper.Map<LocalLocation>(addlocalLocationRequest);
-        var query = new AddLocalLocationCommand(localLocation);
+        var query = new AddLocalLocationCommand(localLocation, addlocalLocationRequest.CityId);
 
         localLocation = await Sender.Send(query, cancellationToken);
 

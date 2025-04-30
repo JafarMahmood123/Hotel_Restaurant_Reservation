@@ -13,6 +13,8 @@ public class Country
 
     public virtual ICollection<City> Cities { get; set; }
 
+    public virtual ICollection<Location> Locations { get; set; }
+
     public Country()
     {
         Cities = new HashSet<City>();

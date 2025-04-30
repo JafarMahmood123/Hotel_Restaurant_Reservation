@@ -6,9 +6,11 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Command
 public class AddCityCommand : ICommand<City>
 {
     public City City { get; set; }
+    public Guid CountryId { get; }
 
-    public AddCityCommand(City city)
+    public AddCityCommand(City city, Guid countryId)
     {
         City = city;
+        CountryId = countryId;
     }
 }

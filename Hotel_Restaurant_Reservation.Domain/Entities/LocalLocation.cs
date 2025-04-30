@@ -9,15 +9,13 @@ public class LocalLocation
 
     // Foreign Keys
 
-    public Guid CityId { get; set; }
-
     // Navigation Properties
 
-    public virtual ICollection<Location> Locations { get; set; }
+    public virtual ICollection<CityLocalLocations> CityLocalLocations { get; set; }
 
     public LocalLocation()
     {
-        Locations = new HashSet<Location>();
+        CityLocalLocations = new HashSet<CityLocalLocations>();
     }
 
 }

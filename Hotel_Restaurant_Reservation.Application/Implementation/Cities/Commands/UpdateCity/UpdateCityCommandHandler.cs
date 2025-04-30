@@ -22,6 +22,7 @@ public class UpdateCityCommandHandler : ICommandHandler<UpdateCityCommand, City?
             if(city.Name == request.City.Name)
                 return city;
 
+            request.City.CountryId = city.CountryId;
             city = await genericRepository.UpdateAsync(request.Id, request.City);
 
             await genericRepository.SaveChangesAsync();

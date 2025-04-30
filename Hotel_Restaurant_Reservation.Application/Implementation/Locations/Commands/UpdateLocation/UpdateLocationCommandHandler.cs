@@ -15,8 +15,21 @@ public class UpdateLocationCommandHandler : ICommandHandler<UpdateLocationComman
 
     public async Task<Location?> Handle(UpdateLocationCommand request, CancellationToken cancellationToken)
     {
-        var localLocation = await genericRepository.GetByIdAsync(request.Id);
+        var existingLocation = await genericRepository.GetByIdAsync(request.Id);
 
-        return localLocation;
+        //if (existingLocation is not null)
+        //{
+        //    if (existingLocation.Name == request.localLocation.Name)
+        //        return city;
+
+        //    request.City.CountryId = city.CountryId;
+        //    city = await genericRepository.UpdateAsync(request.Id, request.City);
+
+        //    await genericRepository.SaveChangesAsync();
+        //}
+
+        //return city;
+
+        return existingLocation;
     }
 }

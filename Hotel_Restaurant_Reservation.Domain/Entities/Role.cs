@@ -9,14 +9,12 @@ public class Role
 
     // Foreign Keys
 
-    public Guid CustomerId { get; set; }
-
     // Navigation Properties
 
-    public virtual ICollection<Customer> Customers { get; set; }
+    public virtual ICollection<CustomerRoles> CustomerRoles { get; set; }
 
     public Role()
     {
-        Customers = new HashSet<Customer>();
+        CustomerRoles = new HashSet<CustomerRoles>();
     }
 }

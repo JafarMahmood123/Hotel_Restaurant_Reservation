@@ -47,7 +47,7 @@ public class RestaurantRepository : IRestaurantRespository
     }
 
     public IEnumerable<Restaurant>? GetFilteredRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? dishId,
-        Guid? countryId, Guid? cityId, Guid? locationId, Guid? mealTypeId, double? minPrice = 0,
+        Guid? countryId, Guid? cityLocalLocationId, Guid? mealTypeId, double? minPrice = 0,
         double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
     {
         IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants;
@@ -75,11 +75,8 @@ public class RestaurantRepository : IRestaurantRespository
         if (countryId is not null)
             restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.Location.CountryId == countryId);
 
-        if (cityId is not null)
-            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.Location.CityId == cityId);
-
-        if (locationId is not null)
-            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.Location.LocalLocationId == locationId);
+        if (cityLocalLocationId is not null)
+            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.Location.CityLocalLocationsId == cityLocalLocationId);
 
         restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MinPrice >= minPrice && restaurant.MaxPrice <= maxPrice);
 
@@ -90,9 +87,8 @@ public class RestaurantRepository : IRestaurantRespository
     }
 
     public async Task<IEnumerable<Restaurant>?> GetFilteredRestaurantsAsync(Guid? tagId, Guid? featureId, Guid? cuisineId,
-        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? locationId,
-        double? minPrice = 0, double? maxPrice = double.MaxValue, double? minStarRating = 0,
-        double? maxStarRating = 5)
+        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityLocalLocationId,double? minPrice = 0,
+        double? maxPrice = double.MaxValue, double? minStarRating = 0,double? maxStarRating = 5)
     {
         IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants;
 

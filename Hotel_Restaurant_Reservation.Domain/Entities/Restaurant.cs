@@ -33,6 +33,8 @@ public class Restaurant
 
     public Guid LocationId { get; set; }
 
+    public Guid RestaurantCurrencyTypeId { get; set; }
+
 
     // Navigation Properties
 
@@ -52,7 +54,10 @@ public class Restaurant
 
     public virtual ICollection<Review> Reviews { get; set; }
 
+    public virtual ICollection<RestaurantCurrencyTypes> RestaurantCurrencyTypes { get; set; }
+
     public virtual Location Location { get; set; }
+
 
     public Restaurant()
     {

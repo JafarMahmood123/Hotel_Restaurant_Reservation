@@ -9,17 +9,13 @@ public class Location
 
     public Guid CountryId { get; set; }
 
-    public Guid CityId { get; set; }
-
-    public Guid LocalLocationId { get; set; }
+    public Guid CityLocalLocationsId { get; set; } 
 
     // Navigation Properties
 
-    public virtual Country? Country { get; set; }
+    public virtual Country Country { get; set; }
 
-    public virtual City? City { get; set; }
-
-    public virtual LocalLocation? LocalLocation { get; set; }
+    public virtual CityLocalLocations CityLocalLocations { get; set; }
 
     public virtual ICollection<Customer?> Customer { get; set; }
 

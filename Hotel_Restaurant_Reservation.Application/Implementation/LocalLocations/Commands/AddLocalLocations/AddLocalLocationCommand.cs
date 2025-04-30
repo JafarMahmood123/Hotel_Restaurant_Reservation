@@ -5,10 +5,13 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations
 
 public class AddLocalLocationCommand : ICommand<LocalLocation>
 {
-    public LocalLocation LocalLocation;
 
-    public AddLocalLocationCommand(LocalLocation localLocation)
+    public AddLocalLocationCommand(LocalLocation localLocation, Guid cityId)
     {
         LocalLocation = localLocation;
+        CityId = cityId;
     }
+
+    public LocalLocation LocalLocation;
+    public Guid CityId { get; }
 }

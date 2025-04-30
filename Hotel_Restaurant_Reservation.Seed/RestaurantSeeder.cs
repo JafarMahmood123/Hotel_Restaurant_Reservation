@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Seed.Fields;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.Text.Json;
 
@@ -42,15 +43,20 @@ internal static class RestaurantSeeder
                 Location location = new Location();
                 LocalLocation localLocation = new LocalLocation();
 
+                CityLocalLocations cityLocalLocations = new CityLocalLocations();
+
+                CurrencyType currencyType = new CurrencyType();
+
 
 
                 try
                 {
                     GenerateCountry(country);
                     GenerateCity(record, city, country);
-                    GenerateLocalLocation(record, localLocation, city);
-                    GenerateLocation(country, city, location, localLocation);
+                    GenerateLocalLocation(record, localLocation, city, cityLocalLocations);
+                    GenerateLocation(country, cityLocalLocations, location);
                     GenerateRestaurant(record, restaurant, location);
+                    GenerateRestaurantCurrencyType(restaurant,currencyType);
 
                     var options = new JsonSerializerOptions
                     {
@@ -76,6 +82,49 @@ internal static class RestaurantSeeder
         }
 
         Console.WriteLine("The number of total errors = " + NumberOfErrors);
+    }
+
+    private static void GenerateRestaurantCurrencyType(Restaurant restaurant, CurrencyType currencyType)
+    {
+        string currencyName = "Dolar";
+
+        var existingCurrencyType = hotelRestaurantDbContext.CurrencyTypes.FirstOrDefault(x => x.CurrencyCode == currencyName);
+        if (existingCurrencyType is not null)
+        {
+            currencyType.Id = existingCurrencyType.Id;
+            currencyType.CurrencyCode = existingCurrencyType.CurrencyCode;
+        }
+        else
+        {
+            currencyType.Id = Guid.NewGuid();
+            currencyType.CurrencyCode = currencyName;
+
+            hotelRestaurantDbContext.CurrencyTypes.Add(currencyType);
+            hotelRestaurantDbContext.SaveChanges();
+        }
+
+
+        var restaurantCurrencType = new RestaurantCurrencyTypes()
+        {
+            Id = Guid.NewGuid(),
+            CurrencyTypeId = currencyType.Id,
+            RestaurantId = restaurant.Id
+        };
+
+        hotelRestaurantDbContext.RestaurantCurrencyTypes.Add(restaurantCurrencType);
+
+        try
+        {
+            hotelRestaurantDbContext.SaveChanges();
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
+        {
+            Console.WriteLine("##################################################################");
+            Console.WriteLine("Error at record " + recordNumber);
+            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
+            Console.WriteLine($"Error Message: {sqlEx.Message}");
+            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
+        }
     }
 
     private static void GenerateDishes(dynamic record, Restaurant restaurant)
@@ -575,24 +624,22 @@ internal static class RestaurantSeeder
         }
     }
 
-    private static void GenerateLocation(Country country, City city, Location location, LocalLocation localLocation)
+    private static void GenerateLocation(Country country, CityLocalLocations cityLocalLocations, Location location)
     {
         var existingLocation = hotelRestaurantDbContext.Locations.FirstOrDefault(x => x.CountryId == country.Id
-        && x.CityId == city.Id && x.LocalLocationId == localLocation.Id);
+        && x.CityLocalLocationsId == cityLocalLocations.Id);
 
         if (existingLocation is not null)
         {
             location.Id = existingLocation.Id;
             location.CountryId = existingLocation.CountryId;
-            location.CityId = existingLocation.CityId;
-            location.LocalLocationId = existingLocation.LocalLocationId;
+            location.CityLocalLocationsId = cityLocalLocations.Id;
             return;
         }
 
         location.Id = Guid.NewGuid();
         location.CountryId = country.Id;
-        location.CityId = city.Id;
-        location.LocalLocationId = localLocation.Id;
+        location.CityLocalLocationsId = cityLocalLocations.Id;
 
         hotelRestaurantDbContext.Add(location);
         try
@@ -609,7 +656,8 @@ internal static class RestaurantSeeder
         }
     }
 
-    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation, City city)
+    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation, City city,
+        CityLocalLocations cityLocalLocations)
     {
         string name = record.GENERAL_LOCATION;
 
@@ -618,16 +666,35 @@ internal static class RestaurantSeeder
         {
             localLocation.Id = existingLocalLocation.Id;
             localLocation.Name = existingLocalLocation.Name;
-            localLocation.CityId = city.Id;
+        }
+
+        else
+        {
+            localLocation.Id = Guid.NewGuid();
+            localLocation.Name = record.GENERAL_LOCATION;
+
+            hotelRestaurantDbContext.LocalLocations.Add(localLocation);
+            hotelRestaurantDbContext.SaveChanges();
+        }
+
+        var existingCityLocalLocation = hotelRestaurantDbContext.CityLocalLocations.FirstOrDefault(x => x.CityId == city.Id
+        && x.LocalLocationId == localLocation.Id);
+
+        if (existingCityLocalLocation is not null)
+        {
+            cityLocalLocations.Id= existingCityLocalLocation.Id;
+            cityLocalLocations.CityId= existingCityLocalLocation.CityId;
+            cityLocalLocations.LocalLocationId= existingCityLocalLocation.LocalLocationId;
             return;
         }
 
 
-        localLocation.Id = Guid.NewGuid();
-        localLocation.Name = record.GENERAL_LOCATION;
-        localLocation.CityId = city.Id;
+        cityLocalLocations.Id = Guid.NewGuid();
+        cityLocalLocations.CityId= city.Id;
+        cityLocalLocations.LocalLocationId = localLocation.Id;
 
-        hotelRestaurantDbContext.Add(localLocation);
+        hotelRestaurantDbContext.CityLocalLocations.Add(cityLocalLocations);
+
         try
         {
             hotelRestaurantDbContext.SaveChanges();

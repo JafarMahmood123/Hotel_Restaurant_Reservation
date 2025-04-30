@@ -71,7 +71,7 @@ public class CitiesController : ApiController
     {
         var city = mapper.Map<City>(addCityRequest);
 
-        var query = new AddCityCommand(city);
+        var query = new AddCityCommand(city, city.CountryId);
 
         city = await Sender.Send(query, cancellationToken);
 

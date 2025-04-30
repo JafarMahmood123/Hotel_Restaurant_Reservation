@@ -33,6 +33,8 @@ public class HotelRestaurantDbContext : DbContext
 
     public DbSet<LocalLocation> LocalLocations { get; set; }
 
+    public DbSet<CityLocalLocations> CityLocalLocations { get; set; }
+
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<Restaurant> Restaurants { get; set; }
@@ -49,6 +51,8 @@ public class HotelRestaurantDbContext : DbContext
 
     public DbSet<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
 
+    public DbSet<RestaurantCurrencyTypes> RestaurantCurrencyTypes { get; set; }
+
     public DbSet<WorkTime> WorkTimes { get; set; }
 
     public DbSet<Feature> Features { get; set; }
@@ -60,4 +64,10 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<MealType> MealTypes { get; set; }
 
     public DbSet<Dish> Dishes { get; set; }
+
+    public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<CustomerRoles> CustomersRoles { get; set; }
+
+    public DbSet<Role> Roles { get; set; }
 }

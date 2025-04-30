@@ -13,10 +13,10 @@ public class City
 
     // Navigation Properties
 
-    public virtual ICollection<LocalLocation> LocalLocations { get; set; }
+    public virtual ICollection<CityLocalLocations> CityLocalLocations { get; set; }
 
     public City()
     {
-        LocalLocations = new HashSet<LocalLocation>();
+        CityLocalLocations = new HashSet<CityLocalLocations>();
     }
 }

@@ -18,7 +18,7 @@ public class CuisineProfile : Profile
            //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
            //.AfterMap(async (src, dest) =>
            //{
-           //    var existingCuisine = await genericRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
+           //    var existingCuisine = await cityRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
 
            //    if (existingCuisine != null)
            //    {

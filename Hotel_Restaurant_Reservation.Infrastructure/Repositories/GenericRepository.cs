@@ -112,6 +112,10 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
             property.CurrentValue = newValue;
         }
 
+        //_dbSet.Update(existingEntity);
+
+        //existingEntity = entity;
+
         return existingEntity;
     }
 }
