@@ -50,7 +50,7 @@ public class Restaurant
 
     public virtual ICollection<RestaurantMealType> RestaurantMealTypes { get; set; }
 
-    public virtual ICollection<Review> Reviews { get; set; }
+    public virtual ICollection<RestaurantReview> RestaurantReviews { get; set; }
 
     public virtual ICollection<RestaurantCurrencyTypes> RestaurantCurrencyTypes { get; set; }
 
@@ -68,5 +68,6 @@ public class Restaurant
         RestaurantDishPrices = new HashSet<RestaurantDishPrice>();
         RestaurantMealTypes = new HashSet<RestaurantMealType>();
         RestaurantBookings = new HashSet<RestaurantBooking>();
+        RestaurantReviews = new HashSet<RestaurantReview>();
     }
 }

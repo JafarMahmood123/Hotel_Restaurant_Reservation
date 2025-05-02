@@ -19,6 +19,9 @@
     <Folder Include="Implementation\Customers\Commands\LogOut\" />
     <Folder Include="Implementation\Customers\Queries\" />
     <Folder Include="Implementation\RestaurantBookings\Queries\" />
+    <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
+    <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByCustomerId\" />
+    <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
   </ItemGroup>
 
 </Project>

@@ -7,25 +7,13 @@ public class Review
 
     public string Description { get; set; }
 
-    public bool IsLiked { get; set; }
-
     public double CustomerStarRating { get; set; }
 
     // Foreign Keys
 
-    public Guid HotelId { get; set; }
-
-    public Guid RestaurantId { get; set; }
-
-    public Guid CustomerId { get; set; }
-
     // Navigation Properties
 
-    public virtual Hotel? Hotel { get; set; }
-
-    public virtual Restaurant? Restaurant { get; set; }
-
-    public virtual Customer Customer { get; set; }
+   public virtual ICollection<RestaurantReview> RestaurantReviews { get; set; }
 
     public Review()
     {
