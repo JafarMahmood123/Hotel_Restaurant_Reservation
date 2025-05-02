@@ -1,8 +1,14 @@
+using Hotel_Restaurant_Reservation.API.OptionsSetup;
+using Hotel_Restaurant_Reservation.Application.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
+using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +27,12 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
+builder.Services.ConfigureOptions<JwtOptionsSetup>();
+
+builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 {
@@ -42,8 +54,13 @@ builder.Services.AddScoped<IGenericRepository<CityLocalLocations>, GenericReposi
 builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
 builder.Services.AddScoped<IGenericRepository<Dish>, GenericRepository<Dish>>();
 builder.Services.AddScoped<IGenericRepository<Customer>, GenericRepository<Customer>>();
+builder.Services.AddScoped<IGenericRepository<BookingDish>, GenericRepository<BookingDish>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantBooking>,  GenericRepository<RestaurantBooking>>();
+builder.Services.AddScoped<IGenericRepository<Role>,  GenericRepository<Role>>();
+builder.Services.AddScoped<IGenericRepository<CustomerRoles>,  GenericRepository<CustomerRoles>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 
+builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
 var app = builder.Build();
 
@@ -53,6 +70,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

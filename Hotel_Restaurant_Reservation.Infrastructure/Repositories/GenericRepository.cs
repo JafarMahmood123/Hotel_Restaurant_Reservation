@@ -31,6 +31,13 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return entity;
     }
 
+    public IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate)
+    {
+        var filteredDbSet = _dbSet.Where(predicate);
+
+        return filteredDbSet.ToList();
+    }
+
     public virtual IEnumerable<TEntity>? GetAll()
     {
         return _dbSet.ToList();
@@ -49,6 +56,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
     public async Task<TEntity?> GetByIdAsync(Guid id)
     {
         return await _dbSet.FindAsync(id);
+    }
+
+    public TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate)
+    {
+        return _dbSet.FirstOrDefault(predicate);
     }
 
     public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
@@ -117,5 +129,12 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         //existingEntity = entity;
 
         return existingEntity;
+    }
+
+    public async Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate)
+    {
+        var filteredDbSet = _dbSet.Where(predicate);
+
+        return await filteredDbSet.ToListAsync();
     }
 }

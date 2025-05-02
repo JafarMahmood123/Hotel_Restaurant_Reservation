@@ -52,6 +52,28 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.ToTable("CurrencyTypeHotel");
                 });
 
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.BookingDish", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("DishId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("RestaurantBookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantBookingId");
+
+                    b.ToTable("BookingDish");
+                });
+
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.City", b =>
                 {
                     b.Property<Guid>("Id")
@@ -544,6 +566,39 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("BookingDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("CustomerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("NumberOfPeople")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("ReceiveDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("RestaurantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TableNumber")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.ToTable("RestaurantBooking");
+                });
+
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantCuisine", b =>
                 {
                     b.Property<Guid>("Id")
@@ -650,39 +705,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasIndex("RestaurantId");
 
                     b.ToTable("RestaurantMealTypes");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("NumberOfPeople")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("OrderDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ReceiveDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("RestaurantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("TableNumber")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("RestaurantId");
-
-                    b.ToTable("RestaurantOrder");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantTag", b =>
@@ -931,6 +953,15 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.BookingDish", b =>
+                {
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", null)
+                        .WithMany("BookingDishes")
+                        .HasForeignKey("RestaurantBookingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.City", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Country", null)
@@ -1103,6 +1134,25 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("Location");
                 });
 
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", b =>
+                {
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customers")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
+                        .WithMany("RestaurantBookings")
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customers");
+
+                    b.Navigation("Restaurant");
+                });
+
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantCuisine", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Cuisine", "Cuisine")
@@ -1194,25 +1244,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("MealType");
-
-                    b.Navigation("Restaurant");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantOrder", b =>
-                {
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customers")
-                        .WithMany()
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
-                        .WithMany("RestaurantOrders")
-                        .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customers");
 
                     b.Navigation("Restaurant");
                 });
@@ -1395,6 +1426,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", b =>
                 {
+                    b.Navigation("RestaurantBookings");
+
                     b.Navigation("RestaurantCuisines");
 
                     b.Navigation("RestaurantCurrencyTypes");
@@ -1405,13 +1438,16 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
                     b.Navigation("RestaurantMealTypes");
 
-                    b.Navigation("RestaurantOrders");
-
                     b.Navigation("RestaurantTags");
 
                     b.Navigation("RestaurantWorkTimes");
 
                     b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", b =>
+                {
+                    b.Navigation("BookingDishes");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Role", b =>

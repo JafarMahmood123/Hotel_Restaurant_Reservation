@@ -18,6 +18,8 @@
   <ItemGroup>
     <Folder Include="Implementation\Customers\Commands\LogOut\" />
     <Folder Include="Implementation\Customers\Commands\SignUp\" />
+    <Folder Include="Implementation\Customers\Queries\" />
+    <Folder Include="Implementation\RestaurantBookings\Queries\" />
   </ItemGroup>
 
 </Project>

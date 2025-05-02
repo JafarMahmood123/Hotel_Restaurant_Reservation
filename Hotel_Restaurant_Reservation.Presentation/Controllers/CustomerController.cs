@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries.LogIn;
+using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -16,20 +16,16 @@ public class CustomerController : ApiController
         this.mapper = mapper;
     }
 
-    [HttpGet]
-    public async Task<IActionResult> LogIn(string email, string password, CancellationToken cancellationToken)
+    [HttpPost("LogIn")]
+    public async Task<IActionResult> LogIn([FromBody] LogInRequest logInRequest, CancellationToken cancellationToken)
     {
-        var query = new LogInQuery(email, password);
+        var command = new LogInCommand(logInRequest.Email, logInRequest.Password);
 
-        var customer = await Sender.Send(query, cancellationToken);
+        var token = await Sender.Send(command, cancellationToken);
 
-        if(customer is not null)
-        {
-            var customerResponse = mapper.Map<CustomerResponse>(customer);
+        if (token == null)
+            return BadRequest();
 
-            return Ok(customerResponse);
-        }
-
-        return NotFound();
+        return Ok(token);
     }
 }

@@ -120,6 +120,11 @@ public class RestaurantRepository : IRestaurantRespository
         return await restaurantsQuery.ToListAsync();
     }
 
+    public Restaurant? GetFirstOrDefault(Expression<Func<Restaurant, bool>> predicate)
+    {
+        return hotelRestaurantDbContext.Restaurants.FirstOrDefault(predicate);
+    }
+
     public async Task<Restaurant?> GetFirstOrDefaultAsync(Expression<Func<Restaurant, bool>> predicate)
     {
         return await hotelRestaurantDbContext.Restaurants.FirstOrDefaultAsync(predicate);
@@ -156,5 +161,17 @@ public class RestaurantRepository : IRestaurantRespository
         existingRestaurant = entity;
 
         return existingRestaurant;
+    }
+
+    public IEnumerable<Restaurant>? Where(Expression<Func<Restaurant, bool>> predicate)
+    {
+        var filteredRestaurants = hotelRestaurantDbContext.Restaurants.Where(predicate);
+        return filteredRestaurants.ToList();
+    }
+
+    public async Task<IEnumerable<Restaurant>?> WhereAsync(Expression<Func<Restaurant, bool>> predicate)
+    {
+        var filteredRestaurants = hotelRestaurantDbContext.Restaurants.Where(predicate);
+        return await filteredRestaurants.ToListAsync();
     }
 }

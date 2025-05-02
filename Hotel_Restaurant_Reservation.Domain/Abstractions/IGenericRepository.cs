@@ -28,4 +28,11 @@ public interface IGenericRepository<TEntity> where TEntity : class
     Task SaveChangesAsync();
 
     Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
+    TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate);
+
+
+    IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate);
+
+    Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate);
 }

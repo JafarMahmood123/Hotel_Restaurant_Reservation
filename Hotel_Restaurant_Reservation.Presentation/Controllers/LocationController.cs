@@ -1,13 +1,5 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CityDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetAllCities;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityById;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
-using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.AddLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocationCommand;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLcoation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;

@@ -1,13 +1,15 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿    namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-public class RestaurantOrder
+public class RestaurantBooking
 {
     // Key Properties
     public Guid Id { get; set; }
 
-    public DateTime OrderDateTime{ get; set; }
+    public DateTime BookingDateTime{ get; set; }
 
     public DateTime ReceiveDateTime { get; set; }
+
+    public DateTime EndBookingDateTime { get; set; }
 
     public int NumberOfPeople { get; set; }
 
@@ -25,8 +27,10 @@ public class RestaurantOrder
 
     public virtual Customer Customers { get; set; }
 
-    public RestaurantOrder()
+    public virtual ICollection<BookingDish> BookingDishes { get; set; }
+
+    public RestaurantBooking()
     {
-        
+        BookingDishes = new HashSet<BookingDish>();
     }
 }
