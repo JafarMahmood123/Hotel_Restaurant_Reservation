@@ -22,7 +22,7 @@ public class RestaurantBookingController : ApiController
         , CancellationToken cancellationToken)
     {
         if (!addRestaurantBookingRequest.AddBookingDishRequest.Any())
-            return BadRequest();
+            return BadRequest("You have to add some dishes.");
 
         var restaurantBooking = mapper.Map<RestaurantBooking>(addRestaurantBookingRequest);
 
@@ -30,15 +30,13 @@ public class RestaurantBookingController : ApiController
 
         restaurantBooking = await Sender.Send(restaurantBookingddCommand, cancellationToken);
 
-        if(restaurantBookingddCommand is not null)
-        {
-            var restaurantBookingResponse = mapper.Map<RestaurantBookingResponse>(restaurantBooking);
+        if (restaurantBooking is null)
+            return BadRequest("This table is reserved before.");
 
-            return Ok(restaurantBookingResponse);
-        }
+        var restaurantBookingResponse = mapper.Map<RestaurantBookingResponse>(restaurantBooking);
 
-
+        return Ok(restaurantBookingResponse);
         //Need something to tell that thi table is resrved at this time
-        return BadRequest();
+
     }
 }
