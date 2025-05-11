@@ -6,11 +6,14 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
 
 public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand, Restaurant>
 {
-    private readonly IGenericRepository<Restaurant> _genericRepository;
+    private readonly IGenericRepository<Restaurant> restaurantRepository;
+    private readonly IGenericRepository<Location> locationRepository;
 
-    public AddRestaurantCommandHandler(IGenericRepository<Restaurant> restaurantRepository)
+    public AddRestaurantCommandHandler(IGenericRepository<Restaurant> restaurantRepository,
+        IGenericRepository<Location> locationRepository)
     {
-        _genericRepository = restaurantRepository;
+        this.restaurantRepository = restaurantRepository;
+        this.locationRepository = locationRepository;
     }
 
     public async Task<Restaurant> Handle(AddRestaurantCommand request, CancellationToken cancellationToken)
@@ -19,11 +22,26 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
         var location = request.Location;
 
         restaurant.Id = Guid.NewGuid();
-        restaurant.LocationId = location.Id;
 
-        restaurant = await _genericRepository.AddAsync(restaurant);
+        var existingLocation = await locationRepository.GetFirstOrDefaultAsync(x => x.CountryId == location.CountryId
+        && x.CityLocalLocationsId == location.CityLocalLocationsId);
 
-        await _genericRepository.SaveChangesAsync();
+        if (existingLocation == null)
+        {
+            location.Id = Guid.NewGuid();
+            location = await locationRepository.AddAsync(location);
+            await locationRepository.SaveChangesAsync();
+            restaurant.LocationId = location.Id;
+        }
+        else
+        {
+            restaurant.LocationId = existingLocation.Id;
+        }
+
+
+        restaurant = await restaurantRepository.AddAsync(restaurant);
+
+        await restaurantRepository.SaveChangesAsync();
 
         return restaurant;
     }

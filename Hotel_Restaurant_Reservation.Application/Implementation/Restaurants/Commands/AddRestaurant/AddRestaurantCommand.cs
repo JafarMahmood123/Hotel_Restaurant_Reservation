@@ -6,7 +6,7 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
 
 public class AddRestaurantCommand : ICommand<Restaurant>
 {
-    public Restaurant Restaurant { get; set; }
+    public Restaurant Restaurant { get; set; }  
 
     public Location Location { get; set; }
 

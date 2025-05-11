@@ -21,6 +21,9 @@ public class CustomerController : ApiController
     [HttpPost("LogIn")]
     public async Task<IActionResult> LogIn([FromBody] LogInRequest logInRequest, CancellationToken cancellationToken)
     {
+        if (!ModelState.IsValid)
+            return BadRequest();
+
         var command = new LogInCommand(logInRequest.Email, logInRequest.Password);
 
         var token = await Sender.Send(command, cancellationToken);
