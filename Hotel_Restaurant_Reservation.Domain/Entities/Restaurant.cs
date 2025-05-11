@@ -33,8 +33,6 @@ public class Restaurant
 
     public Guid LocationId { get; set; }
 
-    public Guid RestaurantCurrencyTypeId { get; set; }
-
 
     // Navigation Properties
 

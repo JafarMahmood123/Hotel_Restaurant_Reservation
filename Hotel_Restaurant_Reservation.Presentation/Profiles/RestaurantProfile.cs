@@ -15,5 +15,7 @@ public class RestaurantProfile : Profile
         CreateMap<Restaurant, RestaurantResponse>().ReverseMap();
 
         CreateMap<RestaurantAddRequest, Restaurant>();
+
+        CreateMap<RestaurantUpdateRequest, Restaurant>();
     }
 }

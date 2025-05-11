@@ -3,12 +3,12 @@ using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -89,5 +89,24 @@ public class RestaurantsController : ApiController
         var deletedRestaurantResponse = mapper.Map<RestaurantResponse>(deletedRestaurant);
 
         return Ok(deletedRestaurantResponse);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> UpdateRestaurant([FromRoute] Guid id, [FromBody] RestaurantUpdateRequest restaurantUpdateRequest,
+        CancellationToken cancellationToken)
+    {
+        var newRestaurant = mapper.Map<Restaurant>(restaurantUpdateRequest);
+
+        var command = new UpdateRestaurantCommand(id, newRestaurant);
+
+        var updatedRestaurant = await Sender.Send(command, cancellationToken);
+
+        if (updatedRestaurant == null)
+            return NotFound();
+
+        var updatedRestaurantResponse = mapper.Map<RestaurantResponse>(updatedRestaurant);
+
+        return Ok(updatedRestaurantResponse);
     }
 }
