@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -73,5 +74,20 @@ public class RestaurantsController : ApiController
         var restaurantResponse = mapper.Map<RestaurantResponse>(restaurant);
 
         return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurant.Id }, restaurantResponse);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> DeleteRestaurant(Guid id,  CancellationToken cancellationToken)
+    {
+        var command = new DeleteRestaurantCommand(id);
+
+        var deletedRestaurant = await Sender.Send(command, cancellationToken);
+
+        if(deletedRestaurant == null)
+            return NotFound();
+
+        var deletedRestaurantResponse = mapper.Map<RestaurantResponse>(deletedRestaurant);
+
+        return Ok(deletedRestaurantResponse);
     }
 }

@@ -22,6 +22,7 @@
     <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByCustomerId\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
+    <Folder Include="Implementation\Restaurants\Commands\UpdateRestaurant\" />
   </ItemGroup>
 
 </Project>
