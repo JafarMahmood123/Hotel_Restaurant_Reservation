@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Implementation\Restaurants\Commands\AddCurrencyTypesToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\AddDishesToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\AddFeaturesToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\AddMealTypesToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\AddTagsToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\AddWorkTimeToRestaurant\**" />
+    <Compile Remove="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddCurrencyTypesToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddDishesToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddFeaturesToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddMealTypesToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddTagsToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\AddWorkTimeToRestaurant\**" />
+    <EmbeddedResource Remove="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddCurrencyTypesToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddDishesToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddFeaturesToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddMealTypesToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddTagsToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\AddWorkTimeToRestaurant\**" />
+    <None Remove="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hotel_Restaurant_Reservation.Domain\Hotel_Restaurant_Reservation.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Implementation\Customers\Commands\LogOut\" />
+    <Folder Include="Implementation\Customers\Queries\" />
+    <Folder Include="Implementation\RestaurantBookings\Queries\" />
+    <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
+    <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByCustomerId\" />
+    <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
+  </ItemGroup>
+
+</Project>
