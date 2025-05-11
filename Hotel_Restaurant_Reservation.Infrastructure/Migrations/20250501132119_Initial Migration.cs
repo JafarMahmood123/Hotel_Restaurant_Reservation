@@ -24,7 +24,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cuisines",
+                name: "Cuisine",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -551,7 +551,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_RestaurantCuisines_Cuisines_CuisineId",
                         column: x => x.CuisineId,
-                        principalTable: "Cuisines",
+                        principalTable: "Cuisine",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -1103,7 +1103,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "Event");
 
             migrationBuilder.DropTable(
-                name: "Cuisines");
+                name: "Cuisine");
 
             migrationBuilder.DropTable(
                 name: "CurrencyTypes");

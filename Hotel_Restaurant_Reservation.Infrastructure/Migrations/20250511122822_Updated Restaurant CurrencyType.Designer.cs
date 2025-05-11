@@ -145,7 +145,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cuisines");
+                    b.ToTable("Cuisine");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.CurrencyType", b =>

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
@@ -108,5 +110,19 @@ public class RestaurantsController : ApiController
         var updatedRestaurantResponse = mapper.Map<RestaurantResponse>(updatedRestaurant);
 
         return Ok(updatedRestaurantResponse);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}")]
+    public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, 
+        [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddCuisineToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Id);
+
+        var cuisine = await Sender.Send(command, cancellationToken);
+
+        var cuisineResponse = mapper.Map<CuisineResponse>(cuisine);
+
+        return Ok(cuisineResponse);
     }
 }

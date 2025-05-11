@@ -60,6 +60,8 @@ builder.Services.AddScoped<IGenericRepository<Role>,  GenericRepository<Role>>()
 builder.Services.AddScoped<IGenericRepository<CustomerRoles>,  GenericRepository<CustomerRoles>>();
 builder.Services.AddScoped<IGenericRepository<Review>,  GenericRepository<Review>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantReview>,  GenericRepository<RestaurantReview>>();
+builder.Services.AddScoped<IGenericRepository<Cuisine>,  GenericRepository<Cuisine>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantCuisine>,  GenericRepository<RestaurantCuisine>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();

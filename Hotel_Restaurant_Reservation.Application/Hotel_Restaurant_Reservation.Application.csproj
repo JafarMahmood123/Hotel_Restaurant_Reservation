@@ -22,6 +22,13 @@
     <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByCustomerId\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddTagsToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddFeaturesToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddWorkTimeToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddDishesToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddMealTypesToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\AddCurrencyTypesToRestaurant\" />
+    <Folder Include="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\" />
   </ItemGroup>
 
 </Project>

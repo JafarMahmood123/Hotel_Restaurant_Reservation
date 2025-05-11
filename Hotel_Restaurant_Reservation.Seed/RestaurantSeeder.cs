@@ -276,7 +276,7 @@ internal static class RestaurantSeeder
         cuisinesInJson = cuisinesInJson.Replace("'", "\"");
 
         if (cuisinesInJson is null)
-            throw new Exception("Cuisines Is Null.");
+            throw new Exception("Cuisine Is Null.");
 
         List<string> cuisineStrings = JsonSerializer.Deserialize<List<string>>(cuisinesInJson);
         List<CuisineFeild> cuisineFeilds = cuisineStrings.Select(f => new CuisineFeild(f)).ToList();

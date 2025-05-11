@@ -11,21 +11,12 @@ public class CuisineProfile : Profile
     public CuisineProfile()
     {
 
-        CreateMap<Cuisine, CuisineRequest>();
+        CreateMap<Cuisine, AddCuisineRequest>();
 
-        CreateMap<CuisineRequest, Cuisine>();
-           //.ForMember(dest => dest.Id, opt => opt.Ignore())
-           //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-           //.AfterMap(async (src, dest) =>
-           //{
-           //    var existingCuisine = await cityRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
+        CreateMap<AddCuisineRequest, Cuisine>();
+           
+        CreateMap<AddCuisineToRestaurantRequest, Cuisine>();
 
-           //    if (existingCuisine != null)
-           //    {
-           //        dest.Id = existingCuisine.Id;
-           //    }
-
-           //    dest.Id = Guid.NewGuid();
-           //});
+        CreateMap<Cuisine, CuisineResponse>();
     }
 }
