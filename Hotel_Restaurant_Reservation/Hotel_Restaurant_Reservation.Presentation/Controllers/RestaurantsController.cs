@@ -5,6 +5,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -118,6 +119,20 @@ public class RestaurantsController : ApiController
         [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddCuisineToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Id);
+
+        var cuisine = await Sender.Send(command, cancellationToken);
+
+        var cuisineResponse = mapper.Map<CuisineResponse>(cuisine);
+
+        return Ok(cuisineResponse);
+    }
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}")]
+    public async Task<IActionResult> RemoveCuisineFromRestaurant([FromRoute] Guid restaurantId, 
+        [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveCuisineFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest.Id);
 
         var cuisine = await Sender.Send(command, cancellationToken);
 
