@@ -80,6 +80,7 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
+    [Route("{id:guid}")]
     public async Task<IActionResult> DeleteRestaurant(Guid id,  CancellationToken cancellationToken)
     {
         var command = new DeleteRestaurantCommand(id);
@@ -114,21 +115,21 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}")]
+    [Route("{restaurantId:guid}/cuisines")]
     public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, 
         [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddCuisineToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Id);
+        var command = new AddCuisineToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Ids);
 
         var cuisine = await Sender.Send(command, cancellationToken);
 
-        var cuisineResponse = mapper.Map<CuisineResponse>(cuisine);
+        var cuisineResponse = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
 
         return Ok(cuisineResponse);
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}")]
+    [Route("{restaurantId:guid}/cuisines")]
     public async Task<IActionResult> RemoveCuisineFromRestaurant([FromRoute] Guid restaurantId, 
         [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
     {

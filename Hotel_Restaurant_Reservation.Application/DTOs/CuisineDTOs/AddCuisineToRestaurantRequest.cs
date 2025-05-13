@@ -2,5 +2,5 @@
 
 public class AddCuisineToRestaurantRequest
 {
-    public Guid Id { get; set; }
+    public IEnumerable<Guid> Ids { get; set; }
 }

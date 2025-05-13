@@ -3,14 +3,15 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 
-public class AddCuisineToRestaurantCommand : ICommand<Cuisine>
+public class AddCuisineToRestaurantCommand : ICommand<IEnumerable<Cuisine>>
 {
-    public AddCuisineToRestaurantCommand(Guid restaurantId, Guid cuisineId)
+    public AddCuisineToRestaurantCommand(Guid restaurantId, IEnumerable<Guid> cuisineIds)
     {
         RestaurantId = restaurantId;
-        CuisineId = cuisineId;
+        CuisineIds = cuisineIds;
     }
 
     public Guid RestaurantId { get; }
-    public Guid CuisineId { get; }
+    public IEnumerable<Guid> CuisineIds { get; }
+
 }

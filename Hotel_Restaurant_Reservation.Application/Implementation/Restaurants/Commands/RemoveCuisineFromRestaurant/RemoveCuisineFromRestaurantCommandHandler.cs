@@ -26,6 +26,8 @@ public class RemoveCuisineFromRestaurantCommandHandler : ICommandHandler<RemoveC
 
         restaurantCuisineRepository.Remove(restaurantCuisine);
 
+        await restaurantCuisineRepository.SaveChangesAsync();
+
         var cuisine = await cuisineRepository.GetByIdAsync(cuisineId);
 
         return cuisine;
