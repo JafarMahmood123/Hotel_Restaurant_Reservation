@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
@@ -171,5 +173,29 @@ public class RestaurantsController : ApiController
         var currencyTypeResponses = mapper.Map<IEnumerable<CurrencyTypeResponse>>(currencyTypes);
 
         return Ok(currencyTypeResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/dishes")]
+    public async Task<IActionResult> AddDishesToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddDishesWithPricesToRestaurantRequest addDishesWithPricesToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddDishesToRestaurantCommand(restaurantId, addDishesWithPricesToRestaurantRequest.dishIdsWithPrices);
+
+        var dishesWithPrices = await Sender.Send(command, cancellationToken);
+
+        var dishesWithPriceResponses = new List<DishWithPriceResponse>();
+
+        foreach (var (dish,price) in dishesWithPrices)
+        {
+            dishesWithPriceResponses.Add(new DishWithPriceResponse()
+            {
+               Id = dish.Id,
+               Price = price,
+               Name = dish.Name,
+            });
+        }
+
+        return Ok(dishesWithPriceResponses);
     }
 }
