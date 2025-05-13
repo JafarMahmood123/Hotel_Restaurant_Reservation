@@ -3,14 +3,15 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 
-public class RemoveCuisineFromRestaurantCommand : ICommand<Cuisine>
+public class RemoveCuisineFromRestaurantCommand : ICommand<IEnumerable<Cuisine>>
 {
-    public RemoveCuisineFromRestaurantCommand(Guid restaurantId, Guid cuisineId)
+
+    public RemoveCuisineFromRestaurantCommand(Guid restaurantId, IEnumerable<Guid> cuisineIds)
     {
         RestaurantId = restaurantId;
-        CuisineId = cuisineId;
+        CuisineIds = cuisineIds;
     }
 
     public Guid RestaurantId { get; }
-    public Guid CuisineId { get; }
+    public IEnumerable<Guid> CuisineIds { get; }
 }

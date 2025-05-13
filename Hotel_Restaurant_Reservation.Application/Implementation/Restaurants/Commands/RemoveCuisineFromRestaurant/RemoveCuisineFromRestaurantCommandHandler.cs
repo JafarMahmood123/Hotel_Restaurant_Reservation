@@ -4,7 +4,7 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 
-public class RemoveCuisineFromRestaurantCommandHandler : ICommandHandler<RemoveCuisineFromRestaurantCommand, Cuisine>
+public class RemoveCuisineFromRestaurantCommandHandler : ICommandHandler<RemoveCuisineFromRestaurantCommand, IEnumerable<Cuisine>>
 {
     private readonly IGenericRepository<RestaurantCuisine> restaurantCuisineRepository;
     private readonly IGenericRepository<Cuisine> cuisineRepository;
@@ -16,20 +16,32 @@ public class RemoveCuisineFromRestaurantCommandHandler : ICommandHandler<RemoveC
         this.cuisineRepository = cuisineRepository;
     }
 
-    public async Task<Cuisine> Handle(RemoveCuisineFromRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Cuisine>> Handle(RemoveCuisineFromRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var cuisineId = request.CuisineId;
+        var cuisineIds = request.CuisineIds;
 
-        var restaurantCuisine = await restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
-        && x.CuisineId == cuisineId);
 
-        restaurantCuisineRepository.Remove(restaurantCuisine);
+        List<RestaurantCuisine> restaurantCuisines = new List<RestaurantCuisine>();
+        foreach (var cuisineId in cuisineIds)
+        {
+            var restaurantCuisine = await restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
+            && x.CuisineId == cuisineId);
+
+            restaurantCuisines.Add(restaurantCuisine);
+        }
+
+        restaurantCuisineRepository.RemoveRange(restaurantCuisines);
 
         await restaurantCuisineRepository.SaveChangesAsync();
 
-        var cuisine = await cuisineRepository.GetByIdAsync(cuisineId);
+        List<Cuisine> cuisines = new List<Cuisine>();
 
-        return cuisine;
+        foreach (var cuisineId in cuisineIds)
+        {
+            cuisines.Add(await cuisineRepository.GetByIdAsync(cuisineId));
+        }
+
+        return cuisines;
     }
 }

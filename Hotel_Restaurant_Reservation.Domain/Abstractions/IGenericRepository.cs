@@ -4,35 +4,43 @@ namespace Hotel_Restaurant_Reservation.Domain.Abstractions;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
-    Task<TEntity?> GetByIdAsync(Guid id);
+    public Task<TEntity?> GetByIdAsync(Guid id);
 
-    Task<IEnumerable<TEntity>?> GetAllAsync();
+    public Task<IEnumerable<TEntity>?> GetAllAsync();
 
-    Task<TEntity> AddAsync(TEntity entity);
+    public Task<TEntity> AddAsync(TEntity entity);
 
-    Task<TEntity?> UpdateAsync(Guid id, TEntity entity);
-
-
-
-    TEntity? GetById(Guid id);
-
-    IEnumerable<TEntity>? GetAll();
-
-    TEntity Add(TEntity entity);
-
-    TEntity? Update(Guid id, TEntity entity);
+    public Task<TEntity?> UpdateAsync(Guid id, TEntity entity);
 
 
-    TEntity Remove(TEntity entity);
 
-    Task SaveChangesAsync();
+    public TEntity? GetById(Guid id);
 
-    Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+    public IEnumerable<TEntity>? GetAll();
 
-    TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate);
+    public TEntity Add(TEntity entity);
+
+    public TEntity? Update(Guid id, TEntity entity);
 
 
-    IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate);
+    public TEntity Remove(TEntity entity);
 
-    Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+    public Task SaveChangesAsync();
+
+    public Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate);
+
+    public TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate);
+
+
+    public IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate);
+
+    public Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+
+
+    public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);
+
+    public Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities);
+
+
+    public IEnumerable<TEntity> RemoveRange(IEnumerable<TEntity> entities);
 }

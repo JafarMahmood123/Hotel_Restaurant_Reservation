@@ -23,6 +23,7 @@ public class AddCuisineToRestaurantCommandHandler : ICommandHandler<AddCuisineTo
 
         var cuisineIds = request.CuisineIds;
 
+        List<RestaurantCuisine> restaurantCuisines = new List<RestaurantCuisine>();
 
         foreach (var cuisineId in cuisineIds)
         {
@@ -39,12 +40,14 @@ public class AddCuisineToRestaurantCommandHandler : ICommandHandler<AddCuisineTo
                     RestaurantId = restaurantId
                 };
 
-                await restaurantCuisineRepository.AddAsync(restaurantCuisine);
-
-                await restaurantCuisineRepository.SaveChangesAsync();
+                restaurantCuisines.Add(restaurantCuisine);
             }
             
         }
+
+        await restaurantCuisineRepository.AddRangeAsync(restaurantCuisines);
+
+        await restaurantCuisineRepository.SaveChangesAsync();
 
 
         List<Cuisine> cuisines = new List<Cuisine>();

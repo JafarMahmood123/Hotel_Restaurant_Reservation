@@ -137,4 +137,23 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         return await filteredDbSet.ToListAsync();
     }
+
+    public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
+    {
+        _dbSet.AddRange(entities);
+        return entities;
+    }
+
+    public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
+    {
+        await _dbSet.AddRangeAsync(entities);
+        return entities;
+    }
+
+    public IEnumerable<TEntity> RemoveRange(IEnumerable<TEntity> entities)
+    {
+        _dbSet.RemoveRange(entities);
+        return entities;
+    }
+
 }

@@ -26,6 +26,24 @@ public class RestaurantRepository : IRestaurantRespository
         return restaurant;
     }
 
+    public IEnumerable<Restaurant> AddRange(IEnumerable<Restaurant> entities)
+    {
+        hotelRestaurantDbContext.Restaurants.AddRange(entities);
+        return entities;
+    }
+
+    public async Task<IEnumerable<Restaurant>> AddRangeAsync(IEnumerable<Restaurant> entities)
+    {
+        await hotelRestaurantDbContext.Restaurants.AddRangeAsync(entities);
+        return entities;
+    }
+
+    public IEnumerable<Restaurant> RemoveRange(IEnumerable<Restaurant> entities)
+    {
+        hotelRestaurantDbContext.Restaurants.RemoveRange(entities);
+        return entities;
+    }
+
     public IEnumerable<Restaurant>? GetAll()
     {
         return hotelRestaurantDbContext.Restaurants.ToList();

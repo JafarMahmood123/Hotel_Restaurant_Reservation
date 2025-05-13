@@ -133,11 +133,11 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveCuisineFromRestaurant([FromRoute] Guid restaurantId, 
         [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveCuisineFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest.Id);
+        var command = new RemoveCuisineFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest.Ids);
 
         var cuisine = await Sender.Send(command, cancellationToken);
 
-        var cuisineResponse = mapper.Map<CuisineResponse>(cuisine);
+        var cuisineResponse = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
 
         return Ok(cuisineResponse);
     }
