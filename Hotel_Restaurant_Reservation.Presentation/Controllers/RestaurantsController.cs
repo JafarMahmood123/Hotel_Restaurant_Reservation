@@ -2,11 +2,13 @@
 using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
@@ -177,7 +179,7 @@ public class RestaurantsController : ApiController
 
     [HttpPost]
     [Route("{restaurantId:guid}/dishes")]
-    public async Task<IActionResult> AddDishesToRestaurant([FromRoute] Guid restaurantId,
+    public async Task<IActionResult> AddDishesWithPricesToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddDishesWithPricesToRestaurantRequest addDishesWithPricesToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddDishesToRestaurantCommand(restaurantId, addDishesWithPricesToRestaurantRequest.dishIdsWithPrices);
@@ -197,5 +199,19 @@ public class RestaurantsController : ApiController
         }
 
         return Ok(dishesWithPriceResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/features")]
+    public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddFeaturesToRestaurantRequest addFeaturesToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddFeaturesToRestaurantCommand(restaurantId, addFeaturesToRestaurantRequest.Ids);
+
+        var features = await Sender.Send(command, cancellationToken);
+
+        var featureResponses = mapper.Map<IEnumerable<FeatureResponse>>(features);
+
+        return Ok(featureResponses);
     }
 }
