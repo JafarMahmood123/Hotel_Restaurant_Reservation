@@ -8,6 +8,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -150,6 +151,20 @@ public class RestaurantsController : ApiController
         [FromBody] AddCurrencyTypeToRestaurantRequest addCurrencyTypeToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddCurrencyTypesToRestaurantCommand(restaurantId, addCurrencyTypeToRestaurantRequest.Ids);
+
+        var currencyTypes = await Sender.Send(command, cancellationToken);
+
+        var currencyTypeResponses = mapper.Map<IEnumerable<CurrencyTypeResponse>>(currencyTypes);
+
+        return Ok(currencyTypeResponses);
+    }
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}/currencyTypes")]
+    public async Task<IActionResult> RemoveCurrencyTypesFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveCurrencyTypesFromRestaurant removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveCurrencyTypesFromResaturantCommand(restaurantId, removeCuisineFromRestaurantRequest.Ids);
 
         var currencyTypes = await Sender.Send(command, cancellationToken);
 

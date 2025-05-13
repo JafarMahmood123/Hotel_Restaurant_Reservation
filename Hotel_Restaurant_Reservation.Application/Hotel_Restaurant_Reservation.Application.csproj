@@ -32,7 +32,6 @@
     <Folder Include="Implementation\Restaurants\Commands\RemoveMealTypesFromRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveFeaturesFromRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveDishesFromRestaurant\" />
-    <Folder Include="Implementation\Restaurants\Commands\RemoveCurrencyTypesFromResaturant\" />
   </ItemGroup>
 
 </Project>
