@@ -104,7 +104,7 @@ internal static class RestaurantSeeder
         }
 
 
-        var restaurantCurrencType = new RestaurantCurrencyTypes()
+        var restaurantCurrencType = new RestaurantCurrencyType()
         {
             Id = Guid.NewGuid(),
             CurrencyTypeId = currencyType.Id,

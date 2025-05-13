@@ -50,7 +50,7 @@ public class Restaurant
 
     public virtual ICollection<RestaurantReview> RestaurantReviews { get; set; }
 
-    public virtual ICollection<RestaurantCurrencyTypes> RestaurantCurrencyTypes { get; set; }
+    public virtual ICollection<RestaurantCurrencyType> RestaurantCurrencyTypes { get; set; }
 
     public virtual Location Location { get; set; }
 

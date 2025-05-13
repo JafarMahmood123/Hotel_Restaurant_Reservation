@@ -51,7 +51,7 @@ public class HotelRestaurantDbContext : DbContext
 
     public DbSet<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
 
-    public DbSet<RestaurantCurrencyTypes> RestaurantCurrencyTypes { get; set; }
+    public DbSet<RestaurantCurrencyType> RestaurantCurrencyTypes { get; set; }
 
     public DbSet<WorkTime> WorkTimes { get; set; }
 

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
@@ -119,26 +121,40 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, 
         [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddCuisineToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Ids);
+        var command = new AddCuisinesToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest.Ids);
 
         var cuisine = await Sender.Send(command, cancellationToken);
 
-        var cuisineResponse = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
+        var cuisineResponses = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
 
-        return Ok(cuisineResponse);
+        return Ok(cuisineResponses);
     }
 
     [HttpDelete]
     [Route("{restaurantId:guid}/cuisines")]
-    public async Task<IActionResult> RemoveCuisineFromRestaurant([FromRoute] Guid restaurantId, 
+    public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId, 
         [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveCuisineFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest.Ids);
+        var command = new RemoveCuisinesFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest.Ids);
 
         var cuisine = await Sender.Send(command, cancellationToken);
 
-        var cuisineResponse = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
+        var cuisineResponses = mapper.Map<IEnumerable<CuisineResponse>>(cuisine);
 
-        return Ok(cuisineResponse);
+        return Ok(cuisineResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/currencyTypes")]
+    public async Task<IActionResult> AddCurrencyTypesToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddCurrencyTypeToRestaurantRequest addCurrencyTypeToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddCurrencyTypesToRestaurantCommand(restaurantId, addCurrencyTypeToRestaurantRequest.Ids);
+
+        var currencyTypes = await Sender.Send(command, cancellationToken);
+
+        var currencyTypeResponses = mapper.Map<IEnumerable<CurrencyTypeResponse>>(currencyTypes);
+
+        return Ok(currencyTypeResponses);
     }
 }

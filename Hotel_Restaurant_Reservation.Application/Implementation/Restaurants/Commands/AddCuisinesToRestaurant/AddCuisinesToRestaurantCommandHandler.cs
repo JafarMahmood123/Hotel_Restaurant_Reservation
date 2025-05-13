@@ -5,19 +5,19 @@ using MediatR;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 
-public class AddCuisineToRestaurantCommandHandler : ICommandHandler<AddCuisineToRestaurantCommand, IEnumerable<Cuisine>>
+public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisinesToRestaurantCommand, IEnumerable<Cuisine>>
 {
     private readonly IGenericRepository<Cuisine> cuisineRepository;
     private readonly IGenericRepository<RestaurantCuisine> restaurantCuisineRepository;
 
-    public AddCuisineToRestaurantCommandHandler(IGenericRepository<Cuisine> cuisineRepository,
+    public AddCuisinesToRestaurantCommandHandler(IGenericRepository<Cuisine> cuisineRepository,
         IGenericRepository<RestaurantCuisine> restaurantCuisineRepository)
     {
         this.cuisineRepository = cuisineRepository;
         this.restaurantCuisineRepository = restaurantCuisineRepository;
     }
 
-    public async Task<IEnumerable<Cuisine>> Handle(AddCuisineToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Cuisine>> Handle(AddCuisinesToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
 

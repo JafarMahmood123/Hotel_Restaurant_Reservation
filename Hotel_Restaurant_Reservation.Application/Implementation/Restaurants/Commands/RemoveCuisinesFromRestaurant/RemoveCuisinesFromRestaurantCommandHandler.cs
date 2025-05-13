@@ -4,19 +4,19 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 
-public class RemoveCuisineFromRestaurantCommandHandler : ICommandHandler<RemoveCuisineFromRestaurantCommand, IEnumerable<Cuisine>>
+public class RemoveCuisinesFromRestaurantCommandHandler : ICommandHandler<RemoveCuisinesFromRestaurantCommand, IEnumerable<Cuisine>>
 {
     private readonly IGenericRepository<RestaurantCuisine> restaurantCuisineRepository;
     private readonly IGenericRepository<Cuisine> cuisineRepository;
 
-    public RemoveCuisineFromRestaurantCommandHandler(IGenericRepository<RestaurantCuisine> restaurantCuisineRepository,
+    public RemoveCuisinesFromRestaurantCommandHandler(IGenericRepository<RestaurantCuisine> restaurantCuisineRepository,
         IGenericRepository<Cuisine> cuisineRepository)
     {
         this.restaurantCuisineRepository = restaurantCuisineRepository;
         this.cuisineRepository = cuisineRepository;
     }
 
-    public async Task<IEnumerable<Cuisine>> Handle(RemoveCuisineFromRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Cuisine>> Handle(RemoveCuisinesFromRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
         var cuisineIds = request.CuisineIds;

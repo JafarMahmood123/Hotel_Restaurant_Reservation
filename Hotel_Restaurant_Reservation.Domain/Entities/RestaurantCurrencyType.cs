@@ -1,6 +1,6 @@
 ﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-public class RestaurantCurrencyTypes
+public class RestaurantCurrencyType
 {
     // Key Properties
     public Guid Id { get; set; }
@@ -17,7 +17,7 @@ public class RestaurantCurrencyTypes
 
     public virtual CurrencyType CurrencyType { get; set; }
 
-    public RestaurantCurrencyTypes()
+    public RestaurantCurrencyType()
     {
 
     }
