@@ -49,13 +49,13 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
         await restaurantMealTypeRepository.SaveChangesAsync();
 
 
-        List<MealType> features = new List<MealType>();
+        List<MealType> mealTypes = new List<MealType>();
 
         foreach (var mealTypeId in mealTypeIds)
         {
-            features.Add(await mealTypeRepository.GetByIdAsync(mealTypeId));
+            mealTypes.Add(await mealTypeRepository.GetByIdAsync(mealTypeId));
         }
 
-        return features;
+        return mealTypes;
     }
 }

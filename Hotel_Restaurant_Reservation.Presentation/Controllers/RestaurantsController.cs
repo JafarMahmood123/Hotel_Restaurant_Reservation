@@ -6,15 +6,19 @@ using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddTagsToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveDishesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -203,6 +207,30 @@ public class RestaurantsController : ApiController
         return Ok(dishesWithPriceResponses);
     }
 
+    [HttpDelete]
+    [Route("{restaurantId:guid}/dishes")]
+    public async Task<IActionResult> RemoveDishesWithPricesFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveDishesFromRestaurantRequest removeDishesWithPricesFormRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveDishesFromRestaurantCommand(restaurantId, removeDishesWithPricesFormRestaurantRequest.Ids);
+
+        var dishesWithPrices = await Sender.Send(command, cancellationToken);
+
+        var dishesWithPriceResponses = new List<DishWithPriceResponse>();
+
+        foreach (var (dish, price) in dishesWithPrices)
+        {
+            dishesWithPriceResponses.Add(new DishWithPriceResponse()
+            {
+                Id = dish.Id,
+                Price = price,
+                Name = dish.Name,
+            });
+        }
+
+        return Ok(dishesWithPriceResponses);
+    }
+
     [HttpPost]
     [Route("{restaurantId:guid}/features")]
     public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId,
@@ -217,6 +245,22 @@ public class RestaurantsController : ApiController
         return Ok(featureResponses);
     }
 
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}/features")]
+    public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveFeaturesFromRestaurantRequest removeFeaturesFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddFeaturesToRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest.Ids);
+
+        var features = await Sender.Send(command, cancellationToken);
+
+        var featureResponses = mapper.Map<IEnumerable<FeatureResponse>>(features);
+
+        return Ok(featureResponses);
+    }
+
+
     [HttpPost]
     [Route("{restaurantId:guid}/mealTypes")]
     public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId,
@@ -229,5 +273,33 @@ public class RestaurantsController : ApiController
         var mealTypeResponses = mapper.Map<IEnumerable<MealTypeResponse>>(mealTypes);
 
         return Ok(mealTypeResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/tags")]
+    public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddTagsToRestaurantRequest addTagsToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddTagsToRestaurantCommand(restaurantId, addTagsToRestaurantRequest.Ids);
+
+        var tags = await Sender.Send(command, cancellationToken);
+
+        var tagsResponses = mapper.Map<IEnumerable<TagResponse>>(tags);
+
+        return Ok(tagsResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/workTimes")]
+    public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddWorkTimesToRestaurantRequest addworkTimeToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddWorkTimesToRestaurantCommand(restaurantId, addworkTimeToRestaurantRequest.Ids);
+
+        var workTimes = await Sender.Send(command, cancellationToken);
+
+        var workTimeResponses = mapper.Map<IEnumerable<WorkTimeResponse>>(workTimes);
+
+        return Ok(workTimeResponses);
     }
 }
