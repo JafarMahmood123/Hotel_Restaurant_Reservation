@@ -24,7 +24,6 @@
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
     <Folder Include="Implementation\Restaurants\Commands\AddTagsToRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\AddWorkTimesToRestaurant\" />
-    <Folder Include="Implementation\Restaurants\Commands\AddMealTypesToRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveWorkTimesFromRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveMealTypesFromRestaurant\" />

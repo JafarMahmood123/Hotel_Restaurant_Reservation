@@ -3,12 +3,14 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
@@ -34,12 +36,12 @@ public class RestaurantsController : ApiController
 
 
     [HttpGet]
-    public async Task<IActionResult> GetAllRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? countryId, Guid? cityLocalLocationId,
-        Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken, double? minPrice = 0,
-        double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
+    public async Task<IActionResult> GetAllRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? countryId,
+        Guid? cityId, Guid? localLocationId, Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken,
+        double? minPrice = 0, double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
     {
         GetAllRestaurantsQuery query = new GetAllRestaurantsQuery(tagId, featureId, cuisineId, dishId, mealTypeId,
-            countryId, cityLocalLocationId, minPrice, maxPrice, minStarRating, maxStarRating);
+            countryId, cityId, localLocationId, minPrice, maxPrice, minStarRating, maxStarRating);
 
         IEnumerable<Restaurant>? restaurants = await Sender.Send(query, cancellationToken);
 
@@ -213,5 +215,19 @@ public class RestaurantsController : ApiController
         var featureResponses = mapper.Map<IEnumerable<FeatureResponse>>(features);
 
         return Ok(featureResponses);
+    }
+
+    [HttpPost]
+    [Route("{restaurantId:guid}/mealTypes")]
+    public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] AddMealTypesToRestaurantRequest addMealTypesToRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddMealTypesToRestaurantCommand(restaurantId, addMealTypesToRestaurantRequest.Ids);
+
+        var mealTypes = await Sender.Send(command, cancellationToken);
+
+        var mealTypeResponses = mapper.Map<IEnumerable<MealTypeResponse>>(mealTypes);
+
+        return Ok(mealTypeResponses);
     }
 }

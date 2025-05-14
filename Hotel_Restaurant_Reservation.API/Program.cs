@@ -66,6 +66,7 @@ builder.Services.AddScoped<IGenericRepository<CurrencyType>,  GenericRepository<
 builder.Services.AddScoped<IGenericRepository<RestaurantCurrencyType>,  GenericRepository<RestaurantCurrencyType>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantDishPrice>,  GenericRepository<RestaurantDishPrice>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantFeature>,  GenericRepository<RestaurantFeature>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantMealType>,  GenericRepository<RestaurantMealType>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();

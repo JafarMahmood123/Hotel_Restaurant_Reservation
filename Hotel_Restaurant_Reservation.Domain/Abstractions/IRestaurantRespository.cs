@@ -9,6 +9,6 @@ public interface IRestaurantRespository : IGenericRepository<Restaurant>
         double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5);
 
     public Task<IEnumerable<Restaurant>?> GetFilteredRestaurantsAsync(Guid? tagId, Guid? featureId, Guid? cuisineId,
-        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityLocalLocationId, double? minPrice = 0,
+        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0,
         double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5);
 }

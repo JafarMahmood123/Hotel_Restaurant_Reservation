@@ -6,7 +6,7 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
 public class GetAllRestaurantsQuery : IQuery<IEnumerable<Restaurant>?>
 {
     public GetAllRestaurantsQuery(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? dishId, Guid? mealTypeId,
-        Guid? countryId, Guid? cityLocalLocationId, double? minPrice = 0, double? maxPrice = double.MaxValue,
+        Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0, double? maxPrice = double.MaxValue,
         double? minStarRating = 0, double? maxStarRating = 5)
     {
         TagId = tagId;
@@ -15,7 +15,8 @@ public class GetAllRestaurantsQuery : IQuery<IEnumerable<Restaurant>?>
         DishId = dishId;
         MealTypeId = mealTypeId;
         CountryId = countryId;
-        CityLocalLocationId = cityLocalLocationId;
+        CityId = cityId;
+        LocalLocationId = localLocationId;
         MinPrice = minPrice;
         MaxPrice = maxPrice;
         MinStarRating = minStarRating;
@@ -28,7 +29,8 @@ public class GetAllRestaurantsQuery : IQuery<IEnumerable<Restaurant>?>
     public Guid? DishId { get; }
     public Guid? MealTypeId { get; }
     public Guid? CountryId { get; }
-    public Guid? CityLocalLocationId { get; }
+    public Guid? CityId { get; }
+    public Guid? LocalLocationId { get; }
     public double? MinPrice { get; }
     public double? MaxPrice { get; }
     public double? MinStarRating { get; }

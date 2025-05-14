@@ -105,7 +105,7 @@ public class RestaurantRepository : IRestaurantRespository
     }
 
     public async Task<IEnumerable<Restaurant>?> GetFilteredRestaurantsAsync(Guid? tagId, Guid? featureId, Guid? cuisineId,
-        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityLocalLocationId,double? minPrice = 0,
+        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0,
         double? maxPrice = double.MaxValue, double? minStarRating = 0,double? maxStarRating = 5)
     {
         IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants;
@@ -129,6 +129,19 @@ public class RestaurantRepository : IRestaurantRespository
         if (mealTypeId is not null)
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
             restaurant.RestaurantMealTypes.Where(mealType => mealType.MealTypeId == mealTypeId).Any());
+
+        if (countryId is not null)
+            restaurantsQuery = restaurantsQuery.Where(restaurant =>
+            restaurant.Location.CountryId == countryId);
+
+        if (cityId is not null)
+            restaurantsQuery = restaurantsQuery.Where(restaurant =>
+            restaurant.Location.CityLocalLocations.CityId == cityId);
+
+        if(localLocationId is not null)
+            restaurantsQuery = restaurantsQuery.Where(restaurant =>
+            restaurant.Location.CityLocalLocations.LocalLocationId == localLocationId);
+
 
         restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MinPrice >= minPrice && restaurant.MaxPrice <= maxPrice);
 
