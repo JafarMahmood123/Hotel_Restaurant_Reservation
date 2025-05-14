@@ -19,6 +19,8 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveDishesFromRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -267,6 +269,20 @@ public class RestaurantsController : ApiController
         [FromBody] AddMealTypesToRestaurantRequest addMealTypesToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddMealTypesToRestaurantCommand(restaurantId, addMealTypesToRestaurantRequest.Ids);
+
+        var mealTypes = await Sender.Send(command, cancellationToken);
+
+        var mealTypeResponses = mapper.Map<IEnumerable<MealTypeResponse>>(mealTypes);
+
+        return Ok(mealTypeResponses);
+    }
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}/mealTypes")]
+    public async Task<IActionResult> RemoveMealTypesFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, removeMealTypesFromRestaurantRequest.Ids);
 
         var mealTypes = await Sender.Send(command, cancellationToken);
 
