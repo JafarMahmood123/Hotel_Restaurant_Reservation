@@ -22,6 +22,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveWorkTimesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -326,6 +327,20 @@ public class RestaurantsController : ApiController
         [FromBody] AddWorkTimesToRestaurantRequest addworkTimeToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddWorkTimesToRestaurantCommand(restaurantId, addworkTimeToRestaurantRequest.Ids);
+
+        var workTimes = await Sender.Send(command, cancellationToken);
+
+        var workTimeResponses = mapper.Map<IEnumerable<WorkTimeResponse>>(workTimes);
+
+        return Ok(workTimeResponses);
+    }
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}/workTimes")]
+    public async Task<IActionResult> RemoveWorkTimeTFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveWorkTimesFromRestaurantRequest removeworkTimeFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest.Ids);
 
         var workTimes = await Sender.Send(command, cancellationToken);
 
