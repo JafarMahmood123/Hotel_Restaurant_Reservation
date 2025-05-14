@@ -24,7 +24,6 @@
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
     <Folder Include="Implementation\Restaurants\Commands\AddWorkTimesToRestaurant\" />
     <Folder Include="Implementation\Restaurants\Commands\RemoveWorkTimesFromRestaurant\" />
-    <Folder Include="Implementation\Restaurants\Commands\RemoveTagsFromRestaurant\" />
   </ItemGroup>
 
 </Project>

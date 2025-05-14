@@ -21,6 +21,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveDishesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -253,7 +254,7 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveFeaturesFromRestaurantRequest removeFeaturesFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddFeaturesToRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest.Ids);
+        var command = new RemoveFeaturesFromRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest.Ids);
 
         var features = await Sender.Send(command, cancellationToken);
 
@@ -297,6 +298,20 @@ public class RestaurantsController : ApiController
         [FromBody] AddTagsToRestaurantRequest addTagsToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddTagsToRestaurantCommand(restaurantId, addTagsToRestaurantRequest.Ids);
+
+        var tags = await Sender.Send(command, cancellationToken);
+
+        var tagsResponses = mapper.Map<IEnumerable<TagResponse>>(tags);
+
+        return Ok(tagsResponses);
+    }
+
+    [HttpDelete]
+    [Route("{restaurantId:guid}/tags")]
+    public async Task<IActionResult> RemoveTagsFromRestaurant([FromRoute] Guid restaurantId,
+        [FromBody] RemoveTagsFromRestaurantRequest removeTagsFromRestaurantRequest, CancellationToken cancellationToken)
+    {
+        var command = new RemoveTagsFromRestaurantCommand(restaurantId, removeTagsFromRestaurantRequest.Ids);
 
         var tags = await Sender.Send(command, cancellationToken);
 
