@@ -31,11 +31,11 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return entity;
     }
 
-    public IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate)
+    public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
     {
         var filteredDbSet = _dbSet.Where(predicate);
 
-        return filteredDbSet.ToList();
+        return filteredDbSet;
     }
 
     public virtual IEnumerable<TEntity>? GetAll()
@@ -129,13 +129,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         //existingEntity = entity;
 
         return existingEntity;
-    }
-
-    public async Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate)
-    {
-        var filteredDbSet = _dbSet.Where(predicate);
-
-        return await filteredDbSet.ToListAsync();
     }
 
     public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -39,5 +41,22 @@ public class RestaurantBookingController : ApiController
         return Ok(restaurantBookingResponse);
         //Need something to tell that thi table is resrved at this time
 
+    }
+
+    [HttpGet]
+    [Route("{customerId:guid}")]
+    public async Task<IActionResult> GetRestaurantBookingByCustomerId(Guid customerId, CancellationToken cancellationToken)
+    {
+        var query = new GetRestaurantBookingsByCustomerIdQuery(customerId);
+
+        var restaurantBookings = await Sender.Send(query, cancellationToken);
+
+        if (restaurantBookings is null)
+            return NotFound();
+
+        var restaurantBookingResponses = mapper.Map<IEnumerable<RestaurantBookingResponse>>(restaurantBookings);
+
+
+        return Ok(restaurantBookingResponses);
     }
 }

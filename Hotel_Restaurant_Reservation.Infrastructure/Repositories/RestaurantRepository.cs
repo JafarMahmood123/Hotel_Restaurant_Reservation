@@ -194,15 +194,9 @@ public class RestaurantRepository : IRestaurantRespository
         return existingRestaurant;
     }
 
-    public IEnumerable<Restaurant>? Where(Expression<Func<Restaurant, bool>> predicate)
+    public IQueryable<Restaurant> Where(Expression<Func<Restaurant, bool>> predicate)
     {
         var filteredRestaurants = hotelRestaurantDbContext.Restaurants.Where(predicate);
-        return filteredRestaurants.ToList();
-    }
-
-    public async Task<IEnumerable<Restaurant>?> WhereAsync(Expression<Func<Restaurant, bool>> predicate)
-    {
-        var filteredRestaurants = hotelRestaurantDbContext.Restaurants.Where(predicate);
-        return await filteredRestaurants.ToListAsync();
+        return filteredRestaurants;
     }
 }

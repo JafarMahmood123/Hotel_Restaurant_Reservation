@@ -32,9 +32,7 @@ public interface IGenericRepository<TEntity> where TEntity : class
     public TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate);
 
 
-    public IEnumerable<TEntity>? Where(Expression<Func<TEntity, bool>> predicate);
-
-    public Task<IEnumerable<TEntity>?> WhereAsync(Expression<Func<TEntity, bool>> predicate);
+    public IQueryable<TEntity> Where(Expression<Func<TEntity, bool>> predicate);
 
 
     public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities);

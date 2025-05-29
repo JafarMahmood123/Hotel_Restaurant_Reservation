@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.15" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +19,6 @@
   <ItemGroup>
     <Folder Include="Implementation\Customers\Commands\LogOut\" />
     <Folder Include="Implementation\Customers\Queries\" />
-    <Folder Include="Implementation\RestaurantBookings\Queries\" />
     <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByCustomerId\" />
     <Folder Include="Implementation\RestaurantReviews\Queries\GetReviewByRestaurantId\" />
