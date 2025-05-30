@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveDishesFromRestaurant;
 
-public class RemoveDishesFromRestaurantCommand : ICommand<Dictionary<Dish, double>>
+public class RemoveDishesFromRestaurantCommand : ICommand<Result<List<DishWithPriceResponse>>>
 {
-    public RemoveDishesFromRestaurantCommand(Guid restaurantId, IEnumerable<Guid> dishesIds)
+    public RemoveDishesFromRestaurantCommand(
+        Guid restaurantId,
+        RemoveDishesFromRestaurantRequest request)
     {
         RestaurantId = restaurantId;
-        DishesIds = dishesIds;
+        Request = request;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> DishesIds { get; }
+    public RemoveDishesFromRestaurantRequest Request { get; }
 }

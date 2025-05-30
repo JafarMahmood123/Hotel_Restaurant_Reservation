@@ -23,8 +23,8 @@ public static class DomainErrors
             "Dish.AddDish.ExistingDish",
             $"A dish with the name '{dishName}' already exists.");
 
-        public static Error NotExistingDish(Guid dishId) => new(
-            "Dish.GetDish.NotExistingDish",
+        public static Error NotFound(Guid dishId) => new(
+            "Dish.GetDish.NotFound",
             $"A dish with the Id '{dishId}' does not exist.");
     }
 
@@ -127,6 +127,10 @@ public static class DomainErrors
         public static Error NoCurrencyTypesToRemove => new(
             "Restaurant.NoCurrencyTypesToRemove",
             "No matching currency type associations found to remove.");
+
+        public static Error NoDishesToRemove => new(
+            "Restaurant.NoDishesToRemove",
+            "No matching dish associations found to remove.");
     }
 
     public static class Location

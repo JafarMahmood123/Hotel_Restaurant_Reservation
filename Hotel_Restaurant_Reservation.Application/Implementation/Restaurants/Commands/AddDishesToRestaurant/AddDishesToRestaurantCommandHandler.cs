@@ -41,7 +41,7 @@ public class AddDishesToRestaurantCommandHandler
             if (dish == null)
             {
                 return Result.Failure<List<DishWithPriceResponse>>(
-                    DomainErrors.Dish.NotExistingDish(dishPrice.Key));
+                    DomainErrors.Dish.NotFound(dishPrice.Key));
             }
             dishes.Add(dish);
         }

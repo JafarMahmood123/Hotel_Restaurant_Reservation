@@ -213,23 +213,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveDishesWithPricesFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveDishesFromRestaurantRequest removeDishesWithPricesFormRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveDishesFromRestaurantCommand(restaurantId, removeDishesWithPricesFormRestaurantRequest.Ids);
+        var command = new RemoveDishesFromRestaurantCommand(restaurantId, removeDishesWithPricesFormRestaurantRequest);
 
-        var dishesWithPrices = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var dishesWithPriceResponses = new List<DishWithPriceResponse>();
+        if(result.IsFailure)
+            return BadRequest(result.Error);
 
-        foreach (var (dish, price) in dishesWithPrices)
-        {
-            //dishesWithPriceResponses.Add(new DishWithPriceResponse()
-            //{
-            //    Id = dish.Id,
-            //    Price = price,
-            //    Name = dish.Name,
-            //});
-        }
-
-        return Ok(dishesWithPriceResponses);
+        return Ok(result.Value);
     }
 
     [HttpPost]
