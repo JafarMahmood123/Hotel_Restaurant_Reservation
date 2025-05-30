@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
@@ -116,18 +115,12 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> UpdateRestaurant([FromRoute] Guid id, [FromBody] RestaurantUpdateRequest restaurantUpdateRequest,
         CancellationToken cancellationToken)
     {
-        var newRestaurant = mapper.Map<Restaurant>(restaurantUpdateRequest);
-
-        var command = new UpdateRestaurantCommand(id, newRestaurant);
-
-        var updatedRestaurant = await Sender.Send(command, cancellationToken);
-
-        if (updatedRestaurant == null)
-            return NotFound();
-
-        var updatedRestaurantResponse = mapper.Map<RestaurantResponse>(updatedRestaurant);
-
-        return Ok(updatedRestaurantResponse);
+        var command = new UpdateRestaurantCommand(id, restaurantUpdateRequest);
+        var result = await Sender.Send(command);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        
+        return Ok(result.Value);
     }
 
     [HttpPost]
@@ -330,11 +323,10 @@ public class RestaurantsController : ApiController
         [FromBody] RemoveWorkTimesFromRestaurantRequest removeworkTimeFromRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest);
-        var result = await Sender.Send(command);
+        var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
-        {
             return BadRequest(result.Error);
-        }
+        
         return Ok(result.Value);
     }
 }
