@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CountryDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Features.Commands.AddFeature;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -12,21 +13,9 @@ public class FeatureProfile : Profile
     public FeatureProfile()
     {
 
-        CreateMap<Feature, FeatureRequest>();
+        CreateMap<Feature, FeatureResponse>();
 
-        CreateMap<FeatureRequest, Feature>();
-        //.ForMember(dest => dest.Id, opt => opt.Ignore())
-        //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-        //.AfterMap(async (src, dest) =>
-        //{
-        //    var existingFeature = await cityRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
+        CreateMap<AddFeatureRequest, Feature>();
 
-        //    if (existingFeature != null)
-        //    {
-        //        dest.Id = existingFeature.Id;
-        //    }
-
-        //    dest.Id = Guid.NewGuid();
-        //});
     }
 }

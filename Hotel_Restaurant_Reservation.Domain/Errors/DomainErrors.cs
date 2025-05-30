@@ -21,4 +21,10 @@ public static class DomainErrors
         public static readonly Error ExistingDish = new Error("Dish.AddDish.ExistingDish",
             "The dish is already existing.");
     }
+
+    public static class Feature
+    {
+        public static readonly Error ExistingFeature= new Error("Feature.AddFeature.ExistingFeature",
+            "The feature is already existing.");
+    }
 }

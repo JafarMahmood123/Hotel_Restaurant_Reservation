@@ -1,26 +1,41 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Errors;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Features.Commands.AddFeature;
 
-public class AddFeatureCommandHandler : ICommandHandler<AddFeatureCommand, Feature>
+public class AddFeatureCommandHandler : ICommandHandler<AddFeatureCommand, Result<FeatureResponse>>
 {
-    private readonly IGenericRepository<Feature> _genericRepository;
+    private readonly IGenericRepository<Feature> _featureRepository;
+    private readonly IMapper _mapper;
 
-    public AddFeatureCommandHandler(IGenericRepository<Feature> genericRepository)
+    public AddFeatureCommandHandler(IGenericRepository<Feature> featureRepository, IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _featureRepository = featureRepository;
+        this._mapper = mapper;
     }
 
-    public async Task<Feature> Handle(AddFeatureCommand request, CancellationToken cancellationToken)
+    public async Task<Result<FeatureResponse>> Handle(AddFeatureCommand request, CancellationToken cancellationToken)
     {
-        Feature feature = request.Feature;
+        var feature = _mapper.Map<Feature>(request.AddFeatureRequest);
 
-        feature = await _genericRepository.AddAsync(feature);
+        var existingDish = await _featureRepository.GetFirstOrDefaultAsync(x => x.Name == feature.Name);
 
-        await _genericRepository.SaveChangesAsync();
+        if (existingDish != null)
+            return Result.Failure<FeatureResponse>(DomainErrors.Feature.ExistingFeature);
 
-        return feature;
+        feature.Id = Guid.NewGuid();
+
+        feature = await _featureRepository.AddAsync(feature);
+
+        await _featureRepository.SaveChangesAsync();
+
+        var featureResponse = _mapper.Map<FeatureResponse>(feature);
+
+        return Result.Success(featureResponse);
     }
 }

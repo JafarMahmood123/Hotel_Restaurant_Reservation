@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Features.Commands.AddFeature;
 
-public class AddFeatureCommand : ICommand<Feature>
+public class AddFeatureCommand : ICommand<Result<FeatureResponse>>
 {
-    public Feature Feature { get; set; }
-
-    public AddFeatureCommand(Feature feature)
+    public AddFeatureCommand(AddFeatureRequest addFeatureRequest)
     {
-        Feature = feature;
+        AddFeatureRequest = addFeatureRequest;
     }
+
+    public AddFeatureRequest AddFeatureRequest { get; }
 }
