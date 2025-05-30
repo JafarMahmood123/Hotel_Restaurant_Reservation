@@ -50,19 +50,16 @@ public class RestaurantsController : ApiController
         Guid? cityId, Guid? localLocationId, Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken,
         double? minPrice = 0, double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
     {
-        GetAllRestaurantsQuery query = new GetAllRestaurantsQuery(tagId, featureId, cuisineId, dishId, mealTypeId,
-            countryId, cityId, localLocationId, minPrice, maxPrice, minStarRating, maxStarRating);
+        var query = new GetAllRestaurantsQuery(
+        tagId, featureId, cuisineId, dishId, mealTypeId,
+        countryId, cityId, localLocationId,
+        minPrice, maxPrice, minStarRating, maxStarRating);
 
-        IEnumerable<Restaurant>? restaurants = await Sender.Send(query, cancellationToken);
-
-        IEnumerable<RestaurantResponse> restaurantResponses = new List<RestaurantResponse>();
-
-        if (restaurants != null)
-        {
-            restaurantResponses = mapper.Map<IEnumerable<RestaurantResponse>>(restaurants);
-        }
-
-        return Ok(restaurantResponses);
+        var result = await Sender.Send(query);
+        if (result.IsFailure)   
+            return BadRequest(result.Error);
+        
+        return Ok(result.Value);
     }
 
     [HttpGet]

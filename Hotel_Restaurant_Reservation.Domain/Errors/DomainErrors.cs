@@ -147,6 +147,10 @@ public static class DomainErrors
         public static Error NoWorkTimesToRemove => new(
             "Restaurant.NoWorkTimesToRemove",
             "No matching work time associations found to remove.");
+
+        public static Error NotFoundForFilters => new(
+            "Restaurant.NotFoundForFilters",
+            "No restaurants found matching the specified filters.");
     }
 
     public static class Location

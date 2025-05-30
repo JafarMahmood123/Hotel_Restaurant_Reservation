@@ -1,13 +1,23 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 
-public class GetAllRestaurantsQuery : IQuery<IEnumerable<Restaurant>?>
+public class GetAllRestaurantsQuery : IQuery<Result<List<RestaurantResponse>>>
 {
-    public GetAllRestaurantsQuery(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? dishId, Guid? mealTypeId,
-        Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0, double? maxPrice = double.MaxValue,
-        double? minStarRating = 0, double? maxStarRating = 5)
+    public GetAllRestaurantsQuery(
+        Guid? tagId = null,
+        Guid? featureId = null,
+        Guid? cuisineId = null,
+        Guid? dishId = null,
+        Guid? mealTypeId = null,
+        Guid? countryId = null,
+        Guid? cityId = null,
+        Guid? localLocationId = null,
+        double? minPrice = 0,
+        double? maxPrice = double.MaxValue,
+        double? minStarRating = 0,
+        double? maxStarRating = 5)
     {
         TagId = tagId;
         FeatureId = featureId;
