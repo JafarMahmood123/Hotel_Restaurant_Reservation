@@ -1,33 +1,51 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Errors;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 using MediatR;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 
-public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisinesToRestaurantCommand, IEnumerable<Cuisine>>
+public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisinesToRestaurantCommand, Result<List<CuisineResponse>>>
 {
-    private readonly IGenericRepository<Cuisine> cuisineRepository;
-    private readonly IGenericRepository<RestaurantCuisine> restaurantCuisineRepository;
+    private readonly IGenericRepository<Cuisine> _cuisineRepository;
+    private readonly IGenericRepository<RestaurantCuisine> _restaurantCuisineRepository;
+    private readonly IMapper _mapper;
 
     public AddCuisinesToRestaurantCommandHandler(IGenericRepository<Cuisine> cuisineRepository,
-        IGenericRepository<RestaurantCuisine> restaurantCuisineRepository)
+        IGenericRepository<RestaurantCuisine> restaurantCuisineRepository, IMapper mapper)
     {
-        this.cuisineRepository = cuisineRepository;
-        this.restaurantCuisineRepository = restaurantCuisineRepository;
+        this._cuisineRepository = cuisineRepository;
+        this._restaurantCuisineRepository = restaurantCuisineRepository;
+        this._mapper = mapper;
     }
 
-    public async Task<IEnumerable<Cuisine>> Handle(AddCuisinesToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<List<CuisineResponse>>> Handle(AddCuisinesToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
 
-        var cuisineIds = request.CuisineIds;
+        var cuisineIds = request.AddCuisineToRestaurantRequest.Ids;
+
+        List<Cuisine> cuisines = new List<Cuisine>();
+
+        foreach (var cuisineId in cuisineIds)
+        {
+            var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
+
+            if (cuisine == null)
+                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExist);
+
+            cuisines.Add(cuisine);
+        }
 
         List<RestaurantCuisine> restaurantCuisines = new List<RestaurantCuisine>();
 
         foreach (var cuisineId in cuisineIds)
         {
-            var restaurantCuisine = await restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
+            var restaurantCuisine = await _restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
             && x.CuisineId == cuisineId);
 
             if (restaurantCuisine == null)
@@ -41,23 +59,16 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
                 };
 
                 restaurantCuisines.Add(restaurantCuisine);
+
+                await _restaurantCuisineRepository.AddAsync(restaurantCuisine);
+                await _restaurantCuisineRepository.SaveChangesAsync();
             }
             
         }
 
-        await restaurantCuisineRepository.AddRangeAsync(restaurantCuisines);
+        var cuisineResponses = _mapper.Map<List<CuisineResponse>>(cuisines);
 
-        await restaurantCuisineRepository.SaveChangesAsync();
-
-
-        List<Cuisine> cuisines = new List<Cuisine>();
-
-        foreach (var cuisineId in cuisineIds)
-        {
-            cuisines.Add(await cuisineRepository.GetByIdAsync(cuisineId));
-        }
-
-        return cuisines;
+        return Result.Success(cuisineResponses);
     }
 
 }

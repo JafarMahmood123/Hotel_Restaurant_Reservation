@@ -69,4 +69,11 @@ public static class DomainErrors
             "RestaurantReview.AddReview.RatingGreaterThanFive",
             "The review rating can't be greater than five.");
     }
+
+    public static class Cuisine
+    {
+        public static readonly Error NotExist = new Error(
+            "Cuisine.GetCuisine.NotExist",
+            "This cuisine does not exist in the system.");
+    }
 }

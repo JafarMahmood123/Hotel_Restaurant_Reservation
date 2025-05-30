@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 
 public class CuisineResponse
 {
