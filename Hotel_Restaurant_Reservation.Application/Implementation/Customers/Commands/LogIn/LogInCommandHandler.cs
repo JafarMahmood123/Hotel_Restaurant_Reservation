@@ -43,7 +43,7 @@ public class LogInCommandHandler : ICommandHandler<LogInCommand, string?>
         {
             foreach (var customerRole in customerRoles)
             {
-                Role? role = roleRepository.GetById(customerRole.RoleId);
+                Role? role = await roleRepository.GetByIdAsync(customerRole.RoleId);
 
                 if(role != null) 
                     roles.Add(role);

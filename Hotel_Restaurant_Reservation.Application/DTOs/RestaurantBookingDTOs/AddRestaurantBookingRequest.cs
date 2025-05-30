@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.DTOs.BookingDishDTOs;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.AddBookingDishes;
 
 namespace Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
 
@@ -22,5 +22,5 @@ public class AddRestaurantBookingRequest
 
     public Guid CustomerId { get; set; }
 
-    public IEnumerable<AddBookingDishRequest> AddBookingDishRequest { get; set; }
+    public IEnumerable<AddBookingDishesRequest> AddBookingDishRequest { get; set; }
 }

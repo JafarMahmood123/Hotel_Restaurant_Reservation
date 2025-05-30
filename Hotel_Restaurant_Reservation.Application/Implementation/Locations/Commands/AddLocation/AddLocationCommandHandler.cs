@@ -2,7 +2,7 @@
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocationCommand;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
 
 public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Location>
 {

@@ -15,14 +15,12 @@ public class DeleteLcoationCommandHandler : ICommandHandler<DeleteLcoationComman
 
     public async Task<Location?> Handle(DeleteLcoationCommand request, CancellationToken cancellationToken)
     {
-        var location = await genericRepository.GetByIdAsync(request.Id);
+        var location = await genericRepository.RemoveAsync(request.Id);
 
-        if (location is not null)
-        {
-            location = genericRepository.Remove(location);
+        if (location == null) 
+            return null;
 
-            await genericRepository.SaveChangesAsync();
-        }
+        await genericRepository.SaveChangesAsync();
 
         return location;
     }

@@ -17,13 +17,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         _dbSet = _hotelRestaurantDbContext.Set<TEntity>();
     }
 
-    public virtual TEntity Add(TEntity entity)
-    {
-        _dbSet.Add(entity);
-
-        return entity;
-    }
-
     public virtual async Task<TEntity> AddAsync(TEntity entity)
     {
          await _dbSet.AddAsync(entity);
@@ -38,19 +31,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return filteredDbSet;
     }
 
-    public virtual IEnumerable<TEntity>? GetAll()
-    {
-        return _dbSet.ToList();
-    }
-
     public virtual async Task<IEnumerable<TEntity>?> GetAllAsync()
     {
         return await _dbSet.ToListAsync();
-    }
-
-    public virtual TEntity? GetById(Guid id)
-    {
-        return _dbSet.Find(id);
     }
 
     public async Task<TEntity?> GetByIdAsync(Guid id)
@@ -58,50 +41,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return await _dbSet.FindAsync(id);
     }
 
-    public TEntity? GetFirstOrDefault(Expression<Func<TEntity, bool>> predicate)
-    {
-        return _dbSet.FirstOrDefault(predicate);
-    }
-
     public async Task<TEntity?> GetFirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate)
     {
         return await _dbSet.FirstOrDefaultAsync(predicate);
     }
 
-    public TEntity Remove(TEntity entity)
-    {
-        _dbSet.Remove(entity);
-
-        return entity;
-    }
-
-   
-
     public async Task SaveChangesAsync()
     {
         await _hotelRestaurantDbContext.SaveChangesAsync();
-    }
-
-    public TEntity? Update(Guid id, TEntity entity)
-    {
-        // 1. Get existing entity
-        var existingEntity = _dbSet.Find(id);
-
-        if (existingEntity == null)
-            return null;
-
-        // 2. Get all properties EXCEPT the primary key
-        var properties = _hotelRestaurantDbContext.Entry(existingEntity).Properties
-            .Where(p => !p.Metadata.IsPrimaryKey());
-
-        // 3. Update only non-key properties
-        foreach (var property in properties)
-        {
-            var newValue = _hotelRestaurantDbContext.Entry(entity).Property(property.Metadata.Name).CurrentValue;
-            property.CurrentValue = newValue;
-        }
-
-        return existingEntity;
     }
 
     public async Task<TEntity?> UpdateAsync(Guid id, TEntity entity)
@@ -131,12 +78,6 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return existingEntity;
     }
 
-    public IEnumerable<TEntity> AddRange(IEnumerable<TEntity> entities)
-    {
-        _dbSet.AddRange(entities);
-        return entities;
-    }
-
     public async Task<IEnumerable<TEntity>> AddRangeAsync(IEnumerable<TEntity> entities)
     {
         await _dbSet.AddRangeAsync(entities);
@@ -149,4 +90,14 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
         return entities;
     }
 
+    public async Task<TEntity?> RemoveAsync(Guid id)
+    {
+        var entity = await _dbSet.FindAsync(id);
+
+        if(entity == null) return null;
+
+        _dbSet.Remove(entity);
+
+        return entity;
+    }
 }

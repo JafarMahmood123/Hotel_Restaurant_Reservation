@@ -2,7 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
+namespace Hotel_Restaurant_Reservation.Application.Profiles;
 
 public class CurrencyTypeProfile : Profile
 {

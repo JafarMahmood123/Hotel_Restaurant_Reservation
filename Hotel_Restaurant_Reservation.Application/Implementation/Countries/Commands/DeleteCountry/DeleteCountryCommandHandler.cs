@@ -16,14 +16,11 @@ public class DeleteCountryCommandHandler : ICommandHandler<DeleteCountryCommand,
 
     public async Task<Country?> Handle(DeleteCountryCommand request, CancellationToken cancellationToken)
     {
-        var country = await genericRepository.GetByIdAsync(request.Id);
+        var country = await genericRepository.RemoveAsync(request.Id);
 
-        if (country is not null)
-        {
-            country = genericRepository.Remove(country);
+        if (country == null) return null;
 
-            await genericRepository.SaveChangesAsync();
-        }
+        await genericRepository.SaveChangesAsync();
 
         return country;
     }

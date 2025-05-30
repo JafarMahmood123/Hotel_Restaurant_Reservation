@@ -15,14 +15,12 @@ public class DeleteLocalLocationCommandHandler : ICommandHandler<DeleteLocalLoca
 
     public async Task<LocalLocation?> Handle(DeleteLocalLocationCommand request, CancellationToken cancellationToken)
     {
-        var localLocation = await genericRepository.GetByIdAsync(request.Id);
+        var localLocation = await genericRepository.RemoveAsync(request.Id);
 
-        if (localLocation is not null)
-        {
-            localLocation = genericRepository.Remove(localLocation);
+        if (localLocation == null) 
+            return null;
 
-            await genericRepository.SaveChangesAsync();
-        }
+        await genericRepository.SaveChangesAsync();
 
         return localLocation;
     }

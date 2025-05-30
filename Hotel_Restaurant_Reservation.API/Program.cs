@@ -13,7 +13,7 @@ using System.Text;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddAutoMapper(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
+builder.Services.AddAutoMapper(typeof(Hotel_Restaurant_Reservation.Application.AssemplyReference).Assembly);
 
 builder.Services.AddMediatR(cfg =>
 {

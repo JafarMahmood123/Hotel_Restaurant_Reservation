@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
 using Hotel_Restaurant_Reservation.Application.DTOs.HotelDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -21,11 +22,11 @@ public class HotelsController : ApiController
         _mapper = mapper;
     }
 
-    [HttpGet("{hotelId:guid}")]
+    [HttpGet("{id:guid}")]
     [ActionName("GetHotelById")]
-    public async Task<IActionResult> GetHotelById(Guid hotelId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetHotelById(Guid id, CancellationToken cancellationToken)
     {
-        var query = new GetHotelByIdQuery(hotelId);
+        var query = new GetHotelByIdQuery(id);
 
         var hotel = await Sender.Send(query, cancellationToken);
 
@@ -44,15 +45,7 @@ public class HotelsController : ApiController
 
         var hotels = await Sender.Send(query, cancellationToken);
 
-        IEnumerable<HotelResponse> hotelResponses = new List<HotelResponse>();
-
-        if (hotels != null)
-        {
-            foreach (Hotel hotel in hotels)
-            {
-                hotelResponses.Append(_mapper.Map<HotelResponse>(hotel));
-            }
-        }
+        IEnumerable<HotelResponse> hotelResponses = _mapper.Map<IEnumerable<HotelResponse>>(hotels);
 
         return Ok(hotelResponses);
     }
@@ -67,5 +60,19 @@ public class HotelsController : ApiController
         var hotel = await Sender.Send(command, cancellationToken);
 
         return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, hotel);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> DeleteHotel(Guid hotelId, CancellationToken cancellationToken)
+    {
+        var command = new DeleteHotelCommand(hotelId);
+
+        var hotelResponse = await Sender.Send(command, cancellationToken);
+
+        if (hotelResponse == null)
+            return NotFound();
+
+        return Ok(hotelResponse);
     }
 }

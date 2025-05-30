@@ -15,14 +15,12 @@ public class DeleteCityCommandHandler : ICommandHandler<DeleteCityCommand, City?
 
     public async Task<City?> Handle(DeleteCityCommand request, CancellationToken cancellationToken)
     {
-        var city = await genericRepository.GetByIdAsync(request.Id);
+        var city = await genericRepository.RemoveAsync(request.Id);
 
-        if (city is not null)
-        {
-            city = genericRepository.Remove(city);
+        if (city == null)
+            return null;
 
-            await genericRepository.SaveChangesAsync();
-        }
+        await genericRepository.SaveChangesAsync();
 
         return city;
     }

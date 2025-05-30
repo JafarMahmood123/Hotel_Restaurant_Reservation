@@ -2,7 +2,7 @@
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisineFromRestaurant;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisinesFromRestaurant;
 
 public class RemoveCuisinesFromRestaurantCommandHandler : ICommandHandler<RemoveCuisinesFromRestaurantCommand, IEnumerable<Cuisine>>
 {

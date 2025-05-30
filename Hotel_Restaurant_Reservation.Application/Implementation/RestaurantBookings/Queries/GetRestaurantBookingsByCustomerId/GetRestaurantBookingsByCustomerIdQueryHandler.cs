@@ -9,13 +9,10 @@ public class GetRestaurantBookingsByCustomerIdQueryHandler : IQueryHandler<GetRe
     IEnumerable<RestaurantBooking>?>
 {
     private readonly IGenericRepository<RestaurantBooking> restaurantBookingRepository;
-    private readonly IGenericRepository<BookingDish> bookingDishRepository;
 
-    public GetRestaurantBookingsByCustomerIdQueryHandler(IGenericRepository<RestaurantBooking> restaurantBookingRepository,
-        IGenericRepository<BookingDish> bookingDishRepository)
+    public GetRestaurantBookingsByCustomerIdQueryHandler(IGenericRepository<RestaurantBooking> restaurantBookingRepository)
     {
         this.restaurantBookingRepository = restaurantBookingRepository;
-        this.bookingDishRepository = bookingDishRepository;
     }
 
     public async Task<IEnumerable<RestaurantBooking>?> Handle(GetRestaurantBookingsByCustomerIdQuery request,

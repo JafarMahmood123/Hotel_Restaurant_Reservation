@@ -17,12 +17,10 @@ public class DeleteRestaurantCommandHandler : ICommandHandler<DeleteRestaurantCo
     {
         var restaurantId = request.Id;
 
-        var existingRestaurant = await restaurantRepository.GetByIdAsync(restaurantId);
+        var restaurant = await restaurantRepository.RemoveAsync(restaurantId);
 
-        if(existingRestaurant == null) 
+        if (restaurant == null)
             return null;
-
-        var restaurant = restaurantRepository.Remove(existingRestaurant);
 
         await restaurantRepository.SaveChangesAsync();
 

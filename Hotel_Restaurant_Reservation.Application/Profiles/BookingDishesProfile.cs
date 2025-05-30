@@ -8,6 +8,6 @@ public class BookingDishesProfile : Profile
 {
     public BookingDishesProfile()
     {
-        CreateMap<AddBookingDishRequest, BookingDish>();
+        CreateMap<BookingDish, BookingDishResponse>();
     }
 }
