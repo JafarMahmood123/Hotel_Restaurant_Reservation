@@ -1,61 +1,74 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
 
-public class AddFeaturesToRestaurantCommandHandler : ICommandHandler<AddFeaturesToRestaurantCommand, IEnumerable<Feature>>
+public class AddFeaturesToRestaurantCommandHandler
+    : ICommandHandler<AddFeaturesToRestaurantCommand, Result<List<FeatureResponse>>>
 {
-    private readonly IGenericRepository<Feature> featureRepository;
-    private readonly IGenericRepository<RestaurantFeature> restaurantFeatureRepository;
+    private readonly IGenericRepository<Feature> _featureRepository;
+    private readonly IGenericRepository<RestaurantFeature> _restaurantFeatureRepository;
+    private readonly IMapper _mapper;
 
-    public AddFeaturesToRestaurantCommandHandler(IGenericRepository<Feature> featureRepository,
-        IGenericRepository<RestaurantFeature> restaurantFeatureRepository)
+    public AddFeaturesToRestaurantCommandHandler(
+        IGenericRepository<Feature> featureRepository,
+        IGenericRepository<RestaurantFeature> restaurantFeatureRepository,
+        IMapper mapper)
     {
-        this.featureRepository = featureRepository;
-        this.restaurantFeatureRepository = restaurantFeatureRepository;
+        _featureRepository = featureRepository;
+        _restaurantFeatureRepository = restaurantFeatureRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Feature>> Handle(AddFeaturesToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<List<FeatureResponse>>> Handle(
+        AddFeaturesToRestaurantCommand request,
+        CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
+        var featureIds = request.Request.Ids;
 
-        var featureIds = request.FeatureIds;
+        List<Feature> features = new();
+        List<RestaurantFeature> restaurantFeatures = new();
 
-        List<RestaurantFeature> restaurantFeatures = new List<RestaurantFeature>();
-
+        // Verify all features exist
         foreach (var featureId in featureIds)
         {
-            var restaurantFeature = await restaurantFeatureRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
-            && x.FeatureId == featureId);
-
-            if (restaurantFeature == null)
+            var feature = await _featureRepository.GetByIdAsync(featureId);
+            if (feature == null)
             {
+                return Result.Failure<List<FeatureResponse>>(
+                    DomainErrors.Feature.NotFound(featureId));
+            }
+            features.Add(feature);
+        }
 
-                restaurantFeature = new RestaurantFeature()
+        // Create new restaurant-feature associations
+        foreach (var featureId in featureIds)
+        {
+            var existingAssociation = await _restaurantFeatureRepository.GetFirstOrDefaultAsync(
+                x => x.RestaurantId == restaurantId && x.FeatureId == featureId);
+
+            if (existingAssociation == null)
+            {
+                var newAssociation = new RestaurantFeature
                 {
                     Id = Guid.NewGuid(),
-                    FeatureId = featureId,
-                    RestaurantId = restaurantId
+                    RestaurantId = restaurantId,
+                    FeatureId = featureId
                 };
-
-                restaurantFeatures.Add(restaurantFeature);
+                restaurantFeatures.Add(newAssociation);
+                await _restaurantFeatureRepository.AddAsync(newAssociation);
+                await _restaurantFeatureRepository.SaveChangesAsync();
             }
-
         }
 
-        await restaurantFeatureRepository.AddRangeAsync(restaurantFeatures);
+        // Map to response DTOs
+        var response = _mapper.Map<List<FeatureResponse>>(features);
 
-        await restaurantFeatureRepository.SaveChangesAsync();
-
-
-        List<Feature> features = new List<Feature>();
-
-        foreach (var featureId in featureIds)
-        {
-            features.Add(await featureRepository.GetByIdAsync(featureId));
-        }
-
-        return features;
+        return Result.Success(response);
     }
 }

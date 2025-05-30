@@ -45,7 +45,6 @@ public class AddCurrencyTypesToRestaurantCommandHandler
         }
 
         // Add new restaurant-currency type associations
-        List<RestaurantCurrencyType> restaurantCurrencyTypes = new();
 
         foreach (var currencyTypeId in currencyTypeIds)
         {
@@ -61,12 +60,10 @@ public class AddCurrencyTypesToRestaurantCommandHandler
                     RestaurantId = restaurantId
                 };
 
-                restaurantCurrencyTypes.Add(newAssociation);
                 await _restaurantCurrencyTypeRepository.AddAsync(newAssociation);
+                await _restaurantCurrencyTypeRepository.SaveChangesAsync();
             }
         }
-
-        await _restaurantCurrencyTypeRepository.SaveChangesAsync();
 
         // Map to response DTOs
         var currencyTypeResponses = _mapper.Map<List<CurrencyTypeResponse>>(currencyTypes);

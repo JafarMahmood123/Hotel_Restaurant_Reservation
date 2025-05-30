@@ -33,6 +33,10 @@ public static class DomainErrors
         public static Error ExistingFeature(string featureName) => new(
             "Feature.AddFeature.ExistingFeature",
             $"A feature with the name '{featureName}' already exists.");
+
+        public static Error NotFound(Guid featureId) => new(
+            "Feature.NotFound",
+            $"Feature with ID {featureId} was not found.");
     }
 
     public static class MealType

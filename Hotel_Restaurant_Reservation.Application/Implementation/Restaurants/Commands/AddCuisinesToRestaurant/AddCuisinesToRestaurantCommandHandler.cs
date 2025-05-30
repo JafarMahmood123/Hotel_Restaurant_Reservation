@@ -39,8 +39,6 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
             cuisines.Add(cuisine);
         }
 
-        List<RestaurantCuisine> restaurantCuisines = new List<RestaurantCuisine>();
-
         foreach (var cuisineId in cuisineIds)
         {
             var restaurantCuisine = await _restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
@@ -48,15 +46,12 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
 
             if (restaurantCuisine == null)
             {
-
                 restaurantCuisine = new RestaurantCuisine()
                 {
                     Id = Guid.NewGuid(),
                     CuisineId = cuisineId,
                     RestaurantId = restaurantId
                 };
-
-                restaurantCuisines.Add(restaurantCuisine);
 
                 await _restaurantCuisineRepository.AddAsync(restaurantCuisine);
                 await _restaurantCuisineRepository.SaveChangesAsync();

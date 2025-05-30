@@ -235,13 +235,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddFeaturesToRestaurantRequest addFeaturesToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddFeaturesToRestaurantCommand(restaurantId, addFeaturesToRestaurantRequest.Ids);
+        var command = new AddFeaturesToRestaurantCommand(restaurantId, addFeaturesToRestaurantRequest);
 
-        var features = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var featureResponses = mapper.Map<IEnumerable<FeatureResponse>>(features);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(featureResponses);
+        return Ok(result.Value);
     }
 
 

@@ -61,16 +61,11 @@ public class AddDishesToRestaurantCommandHandler
                     DishId = dishPrice.Key,
                     Price = dishPrice.Value
                 };
-                dishPricesToAdd.Add(newDishPrice);
+
+                await _dishPriceRepository.AddAsync(newDishPrice);
+                await _dishPriceRepository.SaveChangesAsync();
             }
         }
-
-        if (dishPricesToAdd.Any())
-        {
-            await _dishPriceRepository.AddRangeAsync(dishPricesToAdd);
-        }
-
-        await _dishPriceRepository.SaveChangesAsync();
 
         // Map to response DTOs
         var response = dishes.Select(dish => new DishWithPriceResponse
