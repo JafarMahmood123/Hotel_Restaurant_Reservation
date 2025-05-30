@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
-using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -39,15 +38,12 @@ public class RestaurantBookingController : ApiController
     {
         var query = new GetRestaurantBookingsByCustomerIdQuery(customerId);
 
-        var restaurantBookings = await Sender.Send(query, cancellationToken);
+        var result = await Sender.Send(query, cancellationToken);
 
-        if (restaurantBookings is null)
-            return NotFound();
+        if (!result.Value.Any())
+            return NoContent();
 
-        var restaurantBookingResponses = _mapper.Map<IEnumerable<RestaurantBookingResponse>>(restaurantBookings);
-
-
-        return Ok(restaurantBookingResponses);
+        return Ok(result.Value);
     }
 
     [HttpPost]

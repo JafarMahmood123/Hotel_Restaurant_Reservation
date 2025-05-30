@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Profiles;

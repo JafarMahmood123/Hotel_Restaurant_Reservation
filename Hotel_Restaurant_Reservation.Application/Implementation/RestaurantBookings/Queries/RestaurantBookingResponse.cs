@@ -1,6 +1,7 @@
-﻿using Hotel_Restaurant_Reservation.Domain.Entities;
+﻿using Hotel_Restaurant_Reservation.Application.DTOs.BookingDishDTOs;
+using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 
 public class RestaurantBookingResponse
 {
@@ -11,7 +12,7 @@ public class RestaurantBookingResponse
 
     public DateTime ReceiveDateTime { get; set; }
 
-    public DateTime EndBookingDateTime { get; set; }
+    public TimeOnly BookingDurationTime { get; set; }
 
     public int NumberOfPeople { get; set; }
 
@@ -23,5 +24,5 @@ public class RestaurantBookingResponse
 
     public Guid CustomerId { get; set; }
 
-    public ICollection<BookingDish> BookingDishes { get; set; }
+    public ICollection<BookingDishResponse> BookingDishes { get; set; }
 }
