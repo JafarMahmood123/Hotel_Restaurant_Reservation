@@ -38,6 +38,10 @@ public static class DomainErrors
         public static readonly Error ExistingMealType = new Error(
             "MealType.AddMealType.ExistingMealType",
             "The meal type is already existing.");
+
+        public static readonly Error NotExistMealType = new Error(
+            "MealType.GetMealType.NotExistMealType",
+            "The meal type is not existing.");
     }
 
     public static class RestaurantBooking
@@ -72,8 +76,10 @@ public static class DomainErrors
 
     public static class Cuisine
     {
-        public static readonly Error NotExist = new Error(
-            "Cuisine.GetCuisine.NotExist",
+        public static readonly Error NotExistCuisine = new Error(
+            "Cuisine.GetCuisine.NotExistCuisine",
             "This cuisine does not exist in the system.");
     }
+
+
 }

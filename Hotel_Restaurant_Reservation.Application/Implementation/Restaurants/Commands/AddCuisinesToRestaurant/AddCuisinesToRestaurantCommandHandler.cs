@@ -36,7 +36,7 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
             var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
 
             if (cuisine == null)
-                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExist);
+                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExistCuisine);
 
             cuisines.Add(cuisine);
         }

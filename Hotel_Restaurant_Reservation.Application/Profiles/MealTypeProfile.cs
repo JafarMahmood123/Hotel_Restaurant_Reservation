@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Commands;
+using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;

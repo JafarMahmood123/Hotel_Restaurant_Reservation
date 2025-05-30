@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 
 public class MealTypeResponse
 {

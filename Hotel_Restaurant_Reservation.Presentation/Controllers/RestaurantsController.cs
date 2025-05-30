@@ -9,6 +9,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
+using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
@@ -272,13 +273,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddMealTypesToRestaurantRequest addMealTypesToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddMealTypesToRestaurantCommand(restaurantId, addMealTypesToRestaurantRequest.Ids);
+        var command = new AddMealTypesToRestaurantCommand(restaurantId, addMealTypesToRestaurantRequest);
 
-        var mealTypes = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var mealTypeResponses = mapper.Map<IEnumerable<MealTypeResponse>>(mealTypes);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(mealTypeResponses);
+        return Ok(result.Value);
     }
 
     [HttpDelete]

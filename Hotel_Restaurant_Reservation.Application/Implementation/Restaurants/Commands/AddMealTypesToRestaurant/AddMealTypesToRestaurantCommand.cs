@@ -1,16 +1,17 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 
-public class AddMealTypesToRestaurantCommand : ICommand<IEnumerable<MealType>>
+public class AddMealTypesToRestaurantCommand : ICommand<Result<List<MealTypeResponse>>>
 {
-    public AddMealTypesToRestaurantCommand(Guid restaurantId, IEnumerable<Guid> mealTypeIds)
+    public AddMealTypesToRestaurantCommand(Guid restaurantId, AddMealTypesToRestaurantRequest addMealTypeToRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        MealTypeIds = mealTypeIds;
+        AddMealTypeToRestaurantRequest = addMealTypeToRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> MealTypeIds { get; }
+    public AddMealTypesToRestaurantRequest AddMealTypeToRestaurantRequest { get; }
 }
