@@ -13,7 +13,7 @@ public class RestaurantProfile : Profile
     public RestaurantProfile()
     {
 
-        CreateMap<Restaurant, RestaurantResponse>().ReverseMap();
+        CreateMap<Restaurant, RestaurantResponse>();
 
         CreateMap<AddRestaurantRequest, Restaurant>();
 

@@ -115,6 +115,10 @@ public static class DomainErrors
         public static Error DuplicateName => new(
             "Restaurant.DuplicateName",
             "A restaurant with this name already exists.");
+
+        public static Error NotFound(Guid id) => new(
+            "Restaurant.NotFound",
+            $"Restaurant with ID {id} was not found.");
     }
 
     public static class Location
@@ -140,16 +144,5 @@ public static class DomainErrors
         public static Error NotFound(Guid workTimeId) => new(
             "WorkTime.NotFound",
             $"Work time with ID {workTimeId} was not found.");
-
-        public static Error TimeConflict(
-            DayOfWeek day,
-            TimeOnly firstOpen,
-            TimeOnly firstClose,
-            TimeOnly secondOpen,
-            TimeOnly secondClose) => new(
-                "WorkTime.TimeConflict",
-                $"Time conflict on {day}: " +
-                $"{firstOpen:hh\\:mm}-{firstClose:hh\\:mm} overlaps with " +
-                $"{secondOpen:hh\\:mm}-{secondClose:hh\\:mm}");
     }
 }

@@ -105,14 +105,12 @@ public class RestaurantsController : ApiController
     {
         var command = new DeleteRestaurantCommand(id);
 
-        var deletedRestaurant = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        if(deletedRestaurant == null)
-            return NotFound();
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        var deletedRestaurantResponse = mapper.Map<RestaurantResponse>(deletedRestaurant);
-
-        return Ok(deletedRestaurantResponse);
+        return Ok(result.Value);
     }
 
     [HttpPut]
