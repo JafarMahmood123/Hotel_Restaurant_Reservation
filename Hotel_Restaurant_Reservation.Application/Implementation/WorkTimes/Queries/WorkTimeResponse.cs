@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.WorkTimes.Queries;
 
 public class WorkTimeResponse
 {

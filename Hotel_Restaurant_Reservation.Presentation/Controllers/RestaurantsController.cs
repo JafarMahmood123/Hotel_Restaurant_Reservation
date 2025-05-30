@@ -16,6 +16,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddTagsToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddWorkTimesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisinesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
@@ -29,6 +30,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Querie
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
+using Hotel_Restaurant_Reservation.Application.Implementation.WorkTimes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -323,13 +325,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddWorkTimesToRestaurantRequest addworkTimeToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddWorkTimesToRestaurantCommand(restaurantId, addworkTimeToRestaurantRequest.Ids);
+        var command = new AddWorkTimesToRestaurantCommand(restaurantId, addworkTimeToRestaurantRequest);
 
-        var workTimes = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var workTimeResponses = mapper.Map<IEnumerable<WorkTimeResponse>>(workTimes);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(workTimeResponses);
+        return Ok(result.Value);
     }
 
     [HttpDelete]

@@ -134,4 +134,22 @@ public static class DomainErrors
             "Tag.ExistingTag",
             $"Tag with name '{tagName}' already exists.");
     }
+
+    public static class WorkTime
+    {
+        public static Error NotFound(Guid workTimeId) => new(
+            "WorkTime.NotFound",
+            $"Work time with ID {workTimeId} was not found.");
+
+        public static Error TimeConflict(
+            DayOfWeek day,
+            TimeOnly firstOpen,
+            TimeOnly firstClose,
+            TimeOnly secondOpen,
+            TimeOnly secondClose) => new(
+                "WorkTime.TimeConflict",
+                $"Time conflict on {day}: " +
+                $"{firstOpen:hh\\:mm}-{firstClose:hh\\:mm} overlaps with " +
+                $"{secondOpen:hh\\:mm}-{secondClose:hh\\:mm}");
+    }
 }
