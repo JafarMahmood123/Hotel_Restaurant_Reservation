@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
 
-public class RemoveTagsFromRestaurantCommand : ICommand<IEnumerable<Tag>>
+public class RemoveTagsFromRestaurantCommand : ICommand<Result<List<TagResponse>>>
 {
-    public RemoveTagsFromRestaurantCommand(Guid restaurantId, IEnumerable<Guid> tagIds)
+    public RemoveTagsFromRestaurantCommand(
+        Guid restaurantId,
+        RemoveTagsFromRestaurantRequest request)
     {
         RestaurantId = restaurantId;
-        TagIds = tagIds;
+        Request = request;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> TagIds { get; }
+    public RemoveTagsFromRestaurantRequest Request { get; }
 }

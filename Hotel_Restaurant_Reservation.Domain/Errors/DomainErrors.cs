@@ -139,6 +139,10 @@ public static class DomainErrors
         public static Error NoMealTypesToRemove => new(
             "Restaurant.NoMealTypesToRemove",
             "No matching meal type associations found to remove.");
+
+        public static Error NoTagsToRemove => new(
+            "Restaurant.NoTagsToRemove",
+            "No matching tag associations found to remove.");
     }
 
     public static class Location

@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
@@ -275,7 +274,7 @@ public class RestaurantsController : ApiController
         [FromBody] RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, removeMealTypesFromRestaurantRequest);
-        var result = await Sender.Send(command);
+        var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
         
@@ -302,13 +301,13 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveTagsFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveTagsFromRestaurantRequest removeTagsFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveTagsFromRestaurantCommand(restaurantId, removeTagsFromRestaurantRequest.Ids);
-
-        var tags = await Sender.Send(command, cancellationToken);
-
-        var tagsResponses = mapper.Map<IEnumerable<TagResponse>>(tags);
-
-        return Ok(tagsResponses);
+        var command = new RemoveTagsFromRestaurantCommand(restaurantId, removeTagsFromRestaurantRequest);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
     }
 
     [HttpPost]
