@@ -1,47 +1,67 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisinesFromRestaurant;
 
-public class RemoveCuisinesFromRestaurantCommandHandler : ICommandHandler<RemoveCuisinesFromRestaurantCommand, IEnumerable<Cuisine>>
+public class RemoveCuisinesFromRestaurantCommandHandler
+    : ICommandHandler<RemoveCuisinesFromRestaurantCommand, Result<List<CuisineResponse>>>
 {
-    private readonly IGenericRepository<RestaurantCuisine> restaurantCuisineRepository;
-    private readonly IGenericRepository<Cuisine> cuisineRepository;
+    private readonly IGenericRepository<RestaurantCuisine> _restaurantCuisineRepository;
+    private readonly IGenericRepository<Cuisine> _cuisineRepository;
+    private readonly IMapper _mapper;
 
-    public RemoveCuisinesFromRestaurantCommandHandler(IGenericRepository<RestaurantCuisine> restaurantCuisineRepository,
-        IGenericRepository<Cuisine> cuisineRepository)
+    public RemoveCuisinesFromRestaurantCommandHandler(
+        IGenericRepository<RestaurantCuisine> restaurantCuisineRepository,
+        IGenericRepository<Cuisine> cuisineRepository,
+        IMapper mapper)
     {
-        this.restaurantCuisineRepository = restaurantCuisineRepository;
-        this.cuisineRepository = cuisineRepository;
+        _restaurantCuisineRepository = restaurantCuisineRepository;
+        _cuisineRepository = cuisineRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Cuisine>> Handle(RemoveCuisinesFromRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<List<CuisineResponse>>> Handle(
+        RemoveCuisinesFromRestaurantCommand request,
+        CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var cuisineIds = request.CuisineIds;
+        var cuisineIds = request.RemoveCuisineFromRestaurantRequest.Ids;
 
-
-        List<RestaurantCuisine> restaurantCuisines = new List<RestaurantCuisine>();
+        // Verify all cuisines exist
+        var cuisines = new List<Cuisine>();
         foreach (var cuisineId in cuisineIds)
         {
-            var restaurantCuisine = await restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
-            && x.CuisineId == cuisineId);
-
-            restaurantCuisines.Add(restaurantCuisine);
+            var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
+            if (cuisine == null)
+            {
+                return Result.Failure<List<CuisineResponse>>(
+                    DomainErrors.Cuisine.NotExistCuisine(cuisineId));
+            }
+            cuisines.Add(cuisine);
         }
 
-        restaurantCuisineRepository.RemoveRange(restaurantCuisines);
+        // Get all existing associations
+        var restaurantCuisines = await _restaurantCuisineRepository
+            .Where(x => x.RestaurantId == restaurantId && cuisineIds.Contains(x.CuisineId))
+            .ToListAsync();
 
-        await restaurantCuisineRepository.SaveChangesAsync();
-
-        List<Cuisine> cuisines = new List<Cuisine>();
-
-        foreach (var cuisineId in cuisineIds)
+        if (!restaurantCuisines.Any())
         {
-            cuisines.Add(await cuisineRepository.GetByIdAsync(cuisineId));
+            return Result.Failure<List<CuisineResponse>>(
+                DomainErrors.Restaurant.NoCuisinesToRemove);
         }
 
-        return cuisines;
+        // Remove associations
+        _restaurantCuisineRepository.RemoveRange(restaurantCuisines);
+        await _restaurantCuisineRepository.SaveChangesAsync();
+
+        // Map to response DTOs
+        var response = _mapper.Map<List<CuisineResponse>>(cuisines);
+        return Result.Success(response);
     }
 }

@@ -11,12 +11,7 @@ public class CuisineProfile : Profile
 
     public CuisineProfile()
     {
-
-        CreateMap<Cuisine, AddCuisineRequest>();
-
         CreateMap<AddCuisineRequest, Cuisine>();
-           
-        CreateMap<AddCuisineToRestaurantRequest, Cuisine>();
 
         CreateMap<Cuisine, CuisineResponse>();
     }

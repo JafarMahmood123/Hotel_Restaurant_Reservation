@@ -119,6 +119,10 @@ public static class DomainErrors
         public static Error NotFound(Guid id) => new(
             "Restaurant.NotFound",
             $"Restaurant with ID {id} was not found.");
+
+        public static Error NoCuisinesToRemove => new(
+            "Restaurant.NoCuisinesToRemove",
+            "No matching cuisine associations found to remove.");
     }
 
     public static class Location
