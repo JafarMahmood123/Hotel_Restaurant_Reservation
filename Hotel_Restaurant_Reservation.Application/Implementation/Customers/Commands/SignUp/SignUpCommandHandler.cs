@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
@@ -27,7 +26,7 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
         var existingCustomer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Email == customer.Email);
 
         if (existingCustomer != null)
-            return Result.Failure<CustomerResponse>(DomainErrors.Customer.SignUpExistingAccount);
+            return Result.Failure<CustomerResponse>(DomainErrors.Customer.SignUpExistingAccount(request.SignUpRequest.Email));
 
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;

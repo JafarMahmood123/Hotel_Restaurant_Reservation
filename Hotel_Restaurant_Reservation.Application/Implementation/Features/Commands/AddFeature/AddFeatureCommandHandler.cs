@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Features.Commands.AddFeature;
@@ -26,7 +25,7 @@ public class AddFeatureCommandHandler : ICommandHandler<AddFeatureCommand, Resul
         var existingFeature = await _featureRepository.GetFirstOrDefaultAsync(x => x.Name == feature.Name);
 
         if (existingFeature != null)
-            return Result.Failure<FeatureResponse>(DomainErrors.Feature.ExistingFeature);
+            return Result.Failure<FeatureResponse>(DomainErrors.Feature.ExistingFeature(feature.Name));
 
         feature.Id = Guid.NewGuid();
 

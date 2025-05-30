@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Commands;
@@ -26,7 +25,7 @@ public class AddMealTypeCommandHandler : ICommandHandler<AddMealTypeCommand, Res
         var existingMealType = await _mealTypeRepository.GetFirstOrDefaultAsync(x => x.Name == mealType.Name);
 
         if (existingMealType != null)
-            return Result.Failure<MealTypeResponse>(DomainErrors.MealType.ExistingMealType);
+            return Result.Failure<MealTypeResponse>(DomainErrors.MealType.ExistingMealType(mealType.Name));
         mealType.Id = Guid.NewGuid();
 
         mealType = await _mealTypeRepository.AddAsync(mealType);

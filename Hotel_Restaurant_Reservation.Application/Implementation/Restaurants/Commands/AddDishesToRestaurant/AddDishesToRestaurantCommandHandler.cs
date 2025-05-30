@@ -1,68 +1,84 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
 
-public class AddDishesToRestaurantCommandHandler : ICommandHandler<AddDishesToRestaurantCommand, Dictionary<Dish, double>>
+public class AddDishesToRestaurantCommandHandler
+    : ICommandHandler<AddDishesToRestaurantCommand, Result<List<DishWithPriceResponse>>>
 {
-    private readonly IGenericRepository<Dish> dishRepository;
-    private readonly IGenericRepository<RestaurantDishPrice> dishWithPriceRepository;
+    private readonly IGenericRepository<Dish> _dishRepository;
+    private readonly IGenericRepository<RestaurantDishPrice> _dishPriceRepository;
+    private readonly IMapper _mapper;
 
-    public AddDishesToRestaurantCommandHandler(IGenericRepository<Dish> dishRepository,
-        IGenericRepository<RestaurantDishPrice> dishWithPriceRepository)
+    public AddDishesToRestaurantCommandHandler(
+        IGenericRepository<Dish> dishRepository,
+        IGenericRepository<RestaurantDishPrice> dishPriceRepository,
+        IMapper mapper)
     {
-        this.dishRepository = dishRepository;
-        this.dishWithPriceRepository = dishWithPriceRepository;
+        _dishRepository = dishRepository;
+        _dishPriceRepository = dishPriceRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Dictionary<Dish, double>> Handle(AddDishesToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<List<DishWithPriceResponse>>> Handle(
+        AddDishesToRestaurantCommand request,
+        CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
+        var dishPrices = request.DishIdsWithPrices.dishIdsWithPrices;
 
-        var dishIdsWithPrices = request.DishesIdsWithPrices;
+        List<Dish> dishes = new();
+        List<RestaurantDishPrice> dishPricesToAdd = new();
 
-        List<RestaurantDishPrice> newDishesWithPrices = new List<RestaurantDishPrice>();
-
-        foreach (var dishIdWithPrice in dishIdsWithPrices)
+        // Verify all dishes exist and collect them
+        foreach (var dishPrice in dishPrices)
         {
-            var dishWithPrice = await dishWithPriceRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
-            && x.DishId == dishIdWithPrice.Key);
-
-            if (dishWithPrice == null)
+            var dish = await _dishRepository.GetByIdAsync(dishPrice.Key);
+            if (dish == null)
             {
+                return Result.Failure<List<DishWithPriceResponse>>(
+                    DomainErrors.Dish.NotExistingDish(dishPrice.Key));
+            }
+            dishes.Add(dish);
+        }
 
-                dishWithPrice = new RestaurantDishPrice()
+        // Create or update dish prices
+        foreach (var dishPrice in dishPrices)
+        {
+            var existingDishWithPrice = await _dishPriceRepository.GetFirstOrDefaultAsync(
+                x => x.RestaurantId == restaurantId && x.DishId == dishPrice.Key);
+
+            if (existingDishWithPrice == null)
+            {
+                var newDishPrice = new RestaurantDishPrice
                 {
                     Id = Guid.NewGuid(),
-                    DishId = dishIdWithPrice.Key,
-                    Price = dishIdWithPrice.Value,
-                    RestaurantId = restaurantId
+                    RestaurantId = restaurantId,
+                    DishId = dishPrice.Key,
+                    Price = dishPrice.Value
                 };
-
-                newDishesWithPrices.Add(dishWithPrice);
+                dishPricesToAdd.Add(newDishPrice);
             }
-
         }
 
-        await dishWithPriceRepository.AddRangeAsync(newDishesWithPrices);
-
-        await dishWithPriceRepository.SaveChangesAsync();
-
-
-        Dictionary<Dish, double> dishesWithPrices = new Dictionary<Dish, double>();
-
-        foreach (var dishIdWithPrice in dishIdsWithPrices)
+        if (dishPricesToAdd.Any())
         {
-
-            var dish = await dishRepository.GetByIdAsync(dishIdWithPrice.Key);
-
-            var dishWithPrice = await dishWithPriceRepository.GetFirstOrDefaultAsync(x => x.DishId == dishIdWithPrice.Key
-            && x.RestaurantId == restaurantId);
-
-            dishesWithPrices.Add(dish, dishWithPrice.Price);
+            await _dishPriceRepository.AddRangeAsync(dishPricesToAdd);
         }
 
-        return dishesWithPrices;
+        await _dishPriceRepository.SaveChangesAsync();
+
+        // Map to response DTOs
+        var response = dishes.Select(dish => new DishWithPriceResponse
+        {
+            Dish = _mapper.Map<DishResponse>(dish),
+            Price = dishPrices[dish.Id]
+        }).ToList();
+
+        return Result.Success(response);
     }
 }

@@ -3,9 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
-using MediatR;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 
@@ -36,7 +34,7 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
             var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
 
             if (cuisine == null)
-                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExistCuisine);
+                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExistCuisine(cuisineId));
 
             cuisines.Add(cuisine);
         }

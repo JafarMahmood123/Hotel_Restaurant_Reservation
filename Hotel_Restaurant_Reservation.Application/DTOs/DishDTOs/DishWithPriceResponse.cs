@@ -2,9 +2,7 @@
 
 public class DishWithPriceResponse
 {
-    public Guid Id { get; set; }
-
-    public string Name { get; set; }
+    public DishResponse Dish { get; set; }
 
     public double Price { get; set; }
 }

@@ -196,23 +196,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddDishesWithPricesToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddDishesWithPricesToRestaurantRequest addDishesWithPricesToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddDishesToRestaurantCommand(restaurantId, addDishesWithPricesToRestaurantRequest.dishIdsWithPrices);
+        var command = new AddDishesToRestaurantCommand(restaurantId, addDishesWithPricesToRestaurantRequest);
 
-        var dishesWithPrices = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var dishesWithPriceResponses = new List<DishWithPriceResponse>();
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        foreach (var (dish,price) in dishesWithPrices)
-        {
-            dishesWithPriceResponses.Add(new DishWithPriceResponse()
-            {
-               Id = dish.Id,
-               Price = price,
-               Name = dish.Name,
-            });
-        }
-
-        return Ok(dishesWithPriceResponses);
+        return Ok(result.Value);
     }
 
     [HttpDelete]
@@ -228,12 +219,12 @@ public class RestaurantsController : ApiController
 
         foreach (var (dish, price) in dishesWithPrices)
         {
-            dishesWithPriceResponses.Add(new DishWithPriceResponse()
-            {
-                Id = dish.Id,
-                Price = price,
-                Name = dish.Name,
-            });
+            //dishesWithPriceResponses.Add(new DishWithPriceResponse()
+            //{
+            //    Id = dish.Id,
+            //    Price = price,
+            //    Name = dish.Name,
+            //});
         }
 
         return Ok(dishesWithPriceResponses);

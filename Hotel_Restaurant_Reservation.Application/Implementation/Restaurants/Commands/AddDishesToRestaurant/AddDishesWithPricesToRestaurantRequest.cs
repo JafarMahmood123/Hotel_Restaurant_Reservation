@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
 
 public class AddDishesWithPricesToRestaurantRequest
 {

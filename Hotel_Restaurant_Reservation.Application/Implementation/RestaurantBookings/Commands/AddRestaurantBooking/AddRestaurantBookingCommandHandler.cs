@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
@@ -34,17 +33,18 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
 
 
         if (existingBookingAtTheRecieveTime != null)
-            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.BookedTableAtThisTime);
+            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.BookedTableAtThisTime(
+                restaurantBooking.TableNumber, restaurantBooking.ReceiveDateTime));
 
         restaurantBooking.Id = Guid.NewGuid();
         restaurantBooking.BookingDateTime = DateTime.Now;
 
         if (restaurantBooking.BookingDurationTime.Minute < 15)
-            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.ShortBookingTime);
+            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.ShortBookingTime());
 
 
         if (restaurantBooking.BookingDurationTime.Minute > 60)
-            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.LongBookingTime);
+            return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.LongBookingTime());
 
 
         restaurantBooking = await _restaurantBookingRepository.AddAsync(restaurantBooking);

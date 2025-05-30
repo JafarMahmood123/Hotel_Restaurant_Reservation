@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Commands.AddDish;
@@ -26,7 +25,7 @@ public class AddDishCommandHandler : ICommandHandler<AddDishCommand, Result<Dish
         var existingDish = await _dishRepository.GetFirstOrDefaultAsync(x => x.Name == dish.Name);
 
         if (existingDish != null)
-            return Result.Failure<DishResponse>(DomainErrors.Dish.ExistingDish);
+            return Result.Failure<DishResponse>(DomainErrors.Dish.ExistingDish(dish.Name));
 
         dish.Id = Guid.NewGuid();
 

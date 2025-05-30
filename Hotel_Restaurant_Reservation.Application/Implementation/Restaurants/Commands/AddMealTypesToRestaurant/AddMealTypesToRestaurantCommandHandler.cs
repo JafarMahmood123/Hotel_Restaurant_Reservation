@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
-using MediatR;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 
@@ -39,7 +36,7 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
             var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
 
             if (mealType == null)
-                return Result.Failure<List<MealTypeResponse>>(DomainErrors.MealType.NotExistMealType);
+                return Result.Failure<List<MealTypeResponse>>(DomainErrors.MealType.NotExistMealType(mealTypeId));
 
             mealTypes.Add(mealType);
         }

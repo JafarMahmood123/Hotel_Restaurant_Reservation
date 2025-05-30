@@ -3,9 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
-using MediatR;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 
@@ -41,7 +39,7 @@ public class AddCurrencyTypesToRestaurantCommandHandler
             var currencyType = await _currencyTypeRepository.GetByIdAsync(currencyTypeId);
 
             if (currencyType == null)
-                return Result.Failure<List<CurrencyTypeResponse>>(DomainErrors.CurrencyType.NotExistCurrencyType);
+                return Result.Failure<List<CurrencyTypeResponse>>(DomainErrors.CurrencyType.NotExistCurrencyType(currencyTypeId));
 
             currencyTypes.Add(currencyType);
         }

@@ -1,90 +1,96 @@
 ﻿using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Domain.Errors;
-
 public static class DomainErrors
 {
     public static class Customer
     {
-        public static readonly Error SignUpExistingAccount = new Error(
+        public static Error SignUpExistingAccount(string email) => new(
             "Customer.SignUp.ExistingAccount",
-            "Your are trying to signup to an existing account.");
-        
-        public static readonly Error LogInUnExistingAccount = new Error(
-            "Customer.LogIn.UnExistingAccount",
-            "Your are trying to login to an unexisting account.");
+            $"The email '{email}' is already associated with an existing account.");
 
-        public static readonly Error IncorrectPassword = new Error(
+        public static Error LogInUnExistingAccount(string email) => new(
+            "Customer.LogIn.UnExistingAccount",
+            $"No account found with email '{email}'.");
+
+        public static Error IncorrectPassword() => new(
             "Customer.LogIn.IncorrectPassword",
-            "Your password is incorrect.");
+            $"Incorrect password.");
     }
 
     public static class Dish
     {
-        public static readonly Error ExistingDish = new Error(
+        public static Error ExistingDish(string dishName) => new(
             "Dish.AddDish.ExistingDish",
-            "The dish is already existing.");
+            $"A dish with the name '{dishName}' already exists.");
+
+        public static Error NotExistingDish(Guid dishId) => new(
+            "Dish.GetDish.NotExistingDish",
+            $"A dish with the Id '{dishId}' does not exist.");
     }
 
     public static class Feature
     {
-        public static readonly Error ExistingFeature= new Error(
+        public static Error ExistingFeature(string featureName) => new(
             "Feature.AddFeature.ExistingFeature",
-            "The feature is already existing.");
+            $"A feature with the name '{featureName}' already exists.");
     }
 
     public static class MealType
     {
-        public static readonly Error ExistingMealType = new Error(
+        public static Error ExistingMealType(string mealTypeName) => new(
             "MealType.AddMealType.ExistingMealType",
-            "The meal type is already existing.");
+            $"A meal type with the name '{mealTypeName}' already exists.");
 
-        public static readonly Error NotExistMealType = new Error(
+        public static Error NotExistMealType(Guid mealTypeId) => new(
             "MealType.GetMealType.NotExistMealType",
-            "The meal type is not existing.");
+            $"The meal type with ID '{mealTypeId}' does not exist.");
     }
 
     public static class RestaurantBooking
     {
-        public static readonly Error BookedTableAtThisTime = new Error(
+        public static Error BookedTableAtThisTime(int tableNumber, DateTime time) => new(
             "RestaurantBooking.AddRestaurantBooking.BookedTableAtThisTime",
-            "This table is already booked at this time.");
+            $"Table {tableNumber} is already booked at {time:yyyy-MM-dd HH:mm}.");
 
-        public static readonly Error ShortBookingTime = new Error(
+        public static Error ShortBookingTime() => new(
             "RestaurantBooking.AddRestaurantBooking.ShortBookingTime",
-            "You have to book the table for more than 15 minutes.");
+            $"Booking duration must be at least 15 minutes.");
 
-        public static readonly Error LongBookingTime = new Error(
+        public static Error LongBookingTime() => new(
             "RestaurantBooking.AddRestaurantBooking.LongBookingTime",
-            "You have to book the table for less than 60 minutes.");
+            $"Booking duration cannot exceed 60 minutes.");
     }
 
     public static class RestaurantReview
     {
-        public static readonly Error EmptyDescription = new Error(
+        public static Error EmptyDescription => new(
             "RestaurantReview.AddReview.EmptyDescription",
-            "The review description can't be empty.");
+            "Review description cannot be empty.");
 
-        public static readonly Error RatingLessThanOne= new Error(
+        public static Error RatingLessThanOne => new(
             "RestaurantReview.AddReview.RatingLessThanOne",
-            "The review rating can't be less than one.");
+            "Rating must be at least 1 star.");
 
-        public static readonly Error RatingGreaterThanFive = new Error(
+        public static Error RatingGreaterThanFive => new(
             "RestaurantReview.AddReview.RatingGreaterThanFive",
-            "The review rating can't be greater than five.");
+            "Rating cannot exceed 5 stars.");
     }
 
     public static class Cuisine
     {
-        public static readonly Error NotExistCuisine = new Error(
+        public static Error NotExistCuisine(Guid cuisineId) => new(
             "Cuisine.GetCuisine.NotExistCuisine",
-            "This cuisine does not exist in the system.");
+            $"Cuisine with ID '{cuisineId}' does not exist.");
     }
 
     public static class CurrencyType
     {
-        public static readonly Error NotExistCurrencyType = new Error(
-            "Cuisine.GetCurrencyType.NotExistCurrencyType",
-            "This currency type does not exist in the system.");
+        public static Error NotExistCurrencyType(Guid currencyTypeId) => new(
+            "CurrencyType.GetCurrencyType.NotExistCurrencyType",
+            $"Currency type with ID '{currencyTypeId}' does not exist.");
+
+        public static Error NotExistCurrencyType(string currencyCode) => new(
+            "CurrencyType.GetCurrencyType.NotExistCurrencyType",
+            $"Currency type with code '{currencyCode}' does not exist.");
     }
 }

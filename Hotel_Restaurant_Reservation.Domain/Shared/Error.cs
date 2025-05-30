@@ -15,6 +15,11 @@ public class Error : IEquatable<Error>
 
     public string Message { get; }
 
+    public static Error Create(string code, string messageTemplate, params object[] args)
+    {
+        return new Error(code, string.Format(messageTemplate, args));
+    }
+
     public static implicit operator string(Error error) => error.Code;
 
     public static bool operator ==(Error? a, Error? b)
