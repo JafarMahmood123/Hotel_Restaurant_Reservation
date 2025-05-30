@@ -39,7 +39,7 @@ public class AddCurrencyTypesToRestaurantCommandHandler
             var currencyType = await _currencyTypeRepository.GetByIdAsync(currencyTypeId);
 
             if (currencyType == null)
-                return Result.Failure<List<CurrencyTypeResponse>>(DomainErrors.CurrencyType.NotExistCurrencyType(currencyTypeId));
+                return Result.Failure<List<CurrencyTypeResponse>>(DomainErrors.CurrencyType.NotFound(currencyTypeId));
 
             currencyTypes.Add(currencyType);
         }

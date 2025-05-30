@@ -1,16 +1,20 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromRestaurant;
 
-public class RemoveCurrencyTypesFromResaturantCommand : ICommand<IEnumerable<CurrencyType>>
+public class RemoveCurrencyTypesFromRestaurantCommand : ICommand<Result<List<CurrencyTypeResponse>>>
 {
-    public RemoveCurrencyTypesFromResaturantCommand(Guid restaurantId, IEnumerable<Guid> currencyTypeIds)
+    public RemoveCurrencyTypesFromRestaurantCommand(
+        Guid restaurantId,
+        RemoveCurrencyTypesFromRestaurantRequest removeCurrencyTypesFromRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        CurrencyTypeIds = currencyTypeIds;
+        RemoveCurrencyTypesFromRestaurantRequest = removeCurrencyTypesFromRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> CurrencyTypeIds { get; }
+    public RemoveCurrencyTypesFromRestaurantRequest RemoveCurrencyTypesFromRestaurantRequest { get; }
 }

@@ -89,12 +89,12 @@ public static class DomainErrors
 
     public static class CurrencyType
     {
-        public static Error NotExistCurrencyType(Guid currencyTypeId) => new(
-            "CurrencyType.GetCurrencyType.NotExistCurrencyType",
-            $"Currency type with ID '{currencyTypeId}' does not exist.");
+        public static Error NotFound(Guid currencyTypeId) => new(
+            "CurrencyType.NotFound",
+            $"Currency type with ID {currencyTypeId} was not found.");
 
-        public static Error NotExistCurrencyType(string currencyCode) => new(
-            "CurrencyType.GetCurrencyType.NotExistCurrencyType",
+        public static Error NotFound(string currencyCode) => new(
+            "CurrencyType.GetCurrencyType.NotFound",
             $"Currency type with code '{currencyCode}' does not exist.");
     }
 
@@ -123,6 +123,10 @@ public static class DomainErrors
         public static Error NoCuisinesToRemove => new(
             "Restaurant.NoCuisinesToRemove",
             "No matching cuisine associations found to remove.");
+
+        public static Error NoCurrencyTypesToRemove => new(
+            "Restaurant.NoCurrencyTypesToRemove",
+            "No matching currency type associations found to remove.");
     }
 
     public static class Location

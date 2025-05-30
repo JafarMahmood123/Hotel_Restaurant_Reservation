@@ -1,47 +1,67 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromRestaurant;
 
-public class RemoveCurrencyTypesFromResaturantCommandHandler : ICommandHandler<RemoveCurrencyTypesFromResaturantCommand, IEnumerable<CurrencyType>>
+public class RemoveCurrencyTypesFromRestaurantCommandHandler
+    : ICommandHandler<RemoveCurrencyTypesFromRestaurantCommand, Result<List<CurrencyTypeResponse>>>
 {
-    private readonly IGenericRepository<RestaurantCurrencyType> restaurantCurrenctTypeRepository;
-    private readonly IGenericRepository<CurrencyType> currencyTypeRepository;
+    private readonly IGenericRepository<RestaurantCurrencyType> _restaurantCurrencyTypeRepository;
+    private readonly IGenericRepository<CurrencyType> _currencyTypeRepository;
+    private readonly IMapper _mapper;
 
-    public RemoveCurrencyTypesFromResaturantCommandHandler(IGenericRepository<RestaurantCurrencyType> restaurantCurrenctTypeRepository,
-        IGenericRepository<CurrencyType> currencyTypeRepository)
+    public RemoveCurrencyTypesFromRestaurantCommandHandler(
+        IGenericRepository<RestaurantCurrencyType> restaurantCurrencyTypeRepository,
+        IGenericRepository<CurrencyType> currencyTypeRepository,
+        IMapper mapper)
     {
-        this.restaurantCurrenctTypeRepository = restaurantCurrenctTypeRepository;
-        this.currencyTypeRepository = currencyTypeRepository;
+        _restaurantCurrencyTypeRepository = restaurantCurrencyTypeRepository;
+        _currencyTypeRepository = currencyTypeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<CurrencyType>> Handle(RemoveCurrencyTypesFromResaturantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<List<CurrencyTypeResponse>>> Handle(
+        RemoveCurrencyTypesFromRestaurantCommand request,
+        CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var currencyTypeIds = request.CurrencyTypeIds;
+        var currencyTypeIds = request.RemoveCurrencyTypesFromRestaurantRequest.Ids;
 
-
-        List<RestaurantCurrencyType> restaurantCurrencyTypes = new List<RestaurantCurrencyType>();
+        // Verify all currency types exist
+        var currencyTypes = new List<CurrencyType>();
         foreach (var currencyTypeId in currencyTypeIds)
         {
-            var restaurantCurrencyType = await restaurantCurrenctTypeRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
-            && x.CurrencyTypeId == currencyTypeId);
-
-            restaurantCurrencyTypes.Add(restaurantCurrencyType);
+            var currencyType = await _currencyTypeRepository.GetByIdAsync(currencyTypeId);
+            if (currencyType == null)
+            {
+                return Result.Failure<List<CurrencyTypeResponse>>(
+                    DomainErrors.CurrencyType.NotFound(currencyTypeId));
+            }
+            currencyTypes.Add(currencyType);
         }
 
-        restaurantCurrenctTypeRepository.RemoveRange(restaurantCurrencyTypes);
+        // Get all existing associations
+        var restaurantCurrencyTypes = await _restaurantCurrencyTypeRepository
+            .Where(x => x.RestaurantId == restaurantId && currencyTypeIds.Contains(x.CurrencyTypeId))
+            .ToListAsync();
 
-        await restaurantCurrenctTypeRepository.SaveChangesAsync();
-
-        List<CurrencyType> currencyTypes = new List<CurrencyType>();
-
-        foreach (var currencyTypeId in currencyTypeIds)
+        if (!restaurantCurrencyTypes.Any())
         {
-            currencyTypes.Add(await currencyTypeRepository.GetByIdAsync(currencyTypeId));
+            return Result.Failure<List<CurrencyTypeResponse>>(
+                DomainErrors.Restaurant.NoCurrencyTypesToRemove);
         }
 
-        return currencyTypes;
+        // Remove associations
+        _restaurantCurrencyTypeRepository.RemoveRange(restaurantCurrencyTypes);
+        await _restaurantCurrencyTypeRepository.SaveChangesAsync();
+
+        // Map to response DTOs
+        var response = _mapper.Map<List<CurrencyTypeResponse>>(currencyTypes);
+        return Result.Success(response);
     }
 }

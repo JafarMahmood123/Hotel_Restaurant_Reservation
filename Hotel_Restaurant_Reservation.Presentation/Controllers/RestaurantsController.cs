@@ -20,6 +20,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.DeleteRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisinesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveDishesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
@@ -180,15 +181,16 @@ public class RestaurantsController : ApiController
     [HttpDelete]
     [Route("{restaurantId:guid}/currencyTypes")]
     public async Task<IActionResult> RemoveCurrencyTypesFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveCurrencyTypesFromRestaurant removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
+        [FromBody] RemoveCurrencyTypesFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveCurrencyTypesFromResaturantCommand(restaurantId, removeCuisineFromRestaurantRequest.Ids);
+        var command = new RemoveCurrencyTypesFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest);
 
-        var currencyTypes = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var currencyTypeResponses = mapper.Map<IEnumerable<CurrencyTypeResponse>>(currencyTypes);
+        if (result.IsFailure) 
+            return BadRequest(result.Error);
 
-        return Ok(currencyTypeResponses);
+        return Ok(result.Value);
     }
 
     [HttpPost]
