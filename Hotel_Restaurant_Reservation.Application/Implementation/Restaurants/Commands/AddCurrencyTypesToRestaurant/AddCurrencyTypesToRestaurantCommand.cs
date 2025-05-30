@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 
-public class AddCurrencyTypesToRestaurantCommand : ICommand<IEnumerable<CurrencyType>>
+public class AddCurrencyTypesToRestaurantCommand : ICommand<Result<List<CurrencyTypeResponse>>>
 {
-    public AddCurrencyTypesToRestaurantCommand(Guid restaurantId, IEnumerable<Guid> currencyTypeIds)
+    public AddCurrencyTypesToRestaurantCommand(
+        Guid restaurantId,
+        AddCurrencyTypeToRestaurantRequest addCurrencyTypeToRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        CurrencyTypeIds = currencyTypeIds;
+        AddCurrencyTypeToRestaurantRequest = addCurrencyTypeToRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> CurrencyTypeIds { get; }
+    public AddCurrencyTypeToRestaurantRequest AddCurrencyTypeToRestaurantRequest { get; }
 }

@@ -167,13 +167,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddCurrencyTypesToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddCurrencyTypeToRestaurantRequest addCurrencyTypeToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddCurrencyTypesToRestaurantCommand(restaurantId, addCurrencyTypeToRestaurantRequest.Ids);
+        var command = new AddCurrencyTypesToRestaurantCommand(restaurantId, addCurrencyTypeToRestaurantRequest);
 
-        var currencyTypes = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var currencyTypeResponses = mapper.Map<IEnumerable<CurrencyTypeResponse>>(currencyTypes);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(currencyTypeResponses);
+        return Ok(result.Value);
     }
 
     [HttpDelete]

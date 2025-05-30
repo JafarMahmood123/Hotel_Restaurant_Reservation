@@ -81,5 +81,10 @@ public static class DomainErrors
             "This cuisine does not exist in the system.");
     }
 
-
+    public static class CurrencyType
+    {
+        public static readonly Error NotExistCurrencyType = new Error(
+            "Cuisine.GetCurrencyType.NotExistCurrencyType",
+            "This currency type does not exist in the system.");
+    }
 }
