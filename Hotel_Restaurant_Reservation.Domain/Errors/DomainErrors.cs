@@ -131,6 +131,10 @@ public static class DomainErrors
         public static Error NoDishesToRemove => new(
             "Restaurant.NoDishesToRemove",
             "No matching dish associations found to remove.");
+
+        public static Error NoFeaturesToRemove => new(
+           "Restaurant.NoFeaturesToRemove",
+           "No matching feature associations found to remove.");
     }
 
     public static class Location

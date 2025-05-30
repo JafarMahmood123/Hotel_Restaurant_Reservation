@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
 
-public class RemoveFeaturesFromRestaurantCommand : ICommand<IEnumerable<Feature>>
+public class RemoveFeaturesFromRestaurantCommand : ICommand<Result<List<FeatureResponse>>>
 {
-    public RemoveFeaturesFromRestaurantCommand(Guid restaurantId, IEnumerable<Guid> FeatureIds)
+    public RemoveFeaturesFromRestaurantCommand(
+        Guid restaurantId,
+        RemoveFeaturesFromRestaurantRequest request)
     {
         RestaurantId = restaurantId;
-        this.FeatureIds = FeatureIds;
+        Request = request;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> FeatureIds { get; }
+    public RemoveFeaturesFromRestaurantRequest Request { get; }
 }

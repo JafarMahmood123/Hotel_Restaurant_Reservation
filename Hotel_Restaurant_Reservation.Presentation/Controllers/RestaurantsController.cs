@@ -244,13 +244,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveFeaturesFromRestaurantRequest removeFeaturesFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveFeaturesFromRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest.Ids);
+        var command = new RemoveFeaturesFromRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest);
 
-        var features = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var featureResponses = mapper.Map<IEnumerable<FeatureResponse>>(features);
+        if(result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(featureResponses);
+        return Ok(result.Value);
     }
 
 
