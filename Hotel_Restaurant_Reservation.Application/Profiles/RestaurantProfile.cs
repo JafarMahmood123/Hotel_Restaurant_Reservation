@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -14,7 +15,7 @@ public class RestaurantProfile : Profile
 
         CreateMap<Restaurant, RestaurantResponse>().ReverseMap();
 
-        CreateMap<RestaurantAddRequest, Restaurant>();
+        CreateMap<AddRestaurantRequest, Restaurant>();
 
         CreateMap<RestaurantUpdateRequest, Restaurant>();
     }

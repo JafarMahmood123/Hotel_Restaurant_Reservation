@@ -97,4 +97,30 @@ public static class DomainErrors
             "CurrencyType.GetCurrencyType.NotExistCurrencyType",
             $"Currency type with code '{currencyCode}' does not exist.");
     }
+
+    public static class Restaurant
+    {
+        public static Error InvalidRequest => new(
+            "Restaurant.InvalidRequest",
+            "The restaurant request is invalid.");
+
+        public static Error InvalidStarRating => new(
+            "Restaurant.InvalidStarRating",
+            "Star rating must be between 1 and 5.");
+
+        public static Error InvalidTableCount => new(
+            "Restaurant.InvalidTableCount",
+            "Number of tables must be greater than 0.");
+
+        public static Error DuplicateName => new(
+            "Restaurant.DuplicateName",
+            "A restaurant with this name already exists.");
+    }
+
+    public static class Location
+    {
+        public static Error InvalidRequest => new(
+            "Location.InvalidRequest",
+            "The location request is invalid.");
+    }
 }

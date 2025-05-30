@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
@@ -26,6 +25,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveWorkTimesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -83,19 +83,17 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddRestaurant([FromBody] RestaurantAddRequest restaurantAddRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddRestaurant([FromBody] AddRestaurantRequest restaurantAddRequest, CancellationToken cancellationToken)
     {
-        Restaurant restaurant = mapper.Map<Restaurant>(restaurantAddRequest);
 
-        Location location = mapper.Map<Location>(restaurantAddRequest.addLocationRequest);
+        var command = new AddRestaurantCommand(restaurantAddRequest);
 
-        var command = new AddRestaurantCommand(restaurant, location);
+        var result = await Sender.Send(command, cancellationToken);
 
-        restaurant = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        var restaurantResponse = mapper.Map<RestaurantResponse>(restaurant);
-
-        return CreatedAtAction(nameof(GetRestaurantById), new { id = restaurant.Id }, restaurantResponse);
+        return CreatedAtAction(nameof(GetRestaurantById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpDelete]

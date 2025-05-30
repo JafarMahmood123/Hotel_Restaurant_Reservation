@@ -1,9 +1,9 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.Restaurant;
+﻿using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
 
-public class RestaurantResponse
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
+
+public class AddRestaurantRequest
 {
-    // Key Properties
-    public Guid Id { get; set; }
 
     public string Name { get; set; }
 
@@ -23,12 +23,5 @@ public class RestaurantResponse
 
     public string PriceLevel { get; set; }
 
-    public double MinPrice { get; set; }
-
-    public double MaxPrice { get; set; }
-
-    // Foreign Keys
-
-    public Guid LocationId { get; set; }
-
+    public AddLocationRequest addLocationRequest { get; set; }
 }

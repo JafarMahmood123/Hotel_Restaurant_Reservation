@@ -42,7 +42,6 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
         }
 
         // Add new restaurant-meal type associations
-        List<RestaurantMealType> restaurantMealTypes = new List<RestaurantMealType>();
 
         foreach (var mealTypeId in mealTypeIds)
         {
@@ -58,12 +57,12 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
                     RestaurantId = restaurantId
                 };
 
-                restaurantMealTypes.Add(newAssociation);
                 await _restaurantMealTypeRepository.AddAsync(newAssociation);
+                await _restaurantMealTypeRepository.SaveChangesAsync();
             }
         }
 
-        await _restaurantMealTypeRepository.SaveChangesAsync();
+        
 
         // Map to response DTOs
         var mealTypeResponses = _mapper.Map<List<MealTypeResponse>>(mealTypes);
