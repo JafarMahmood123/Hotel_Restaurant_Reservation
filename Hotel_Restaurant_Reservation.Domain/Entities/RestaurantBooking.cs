@@ -9,7 +9,7 @@ public class RestaurantBooking
 
     public DateTime ReceiveDateTime { get; set; }
 
-    public DateTime EndBookingDateTime { get; set; }
+    public TimeOnly BookingDurationTime { get; set; }
 
     public int NumberOfPeople { get; set; }
 

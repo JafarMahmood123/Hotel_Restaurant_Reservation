@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelRestaurantDbContext))]
-    [Migration("20250530101358_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20250530123454_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -531,11 +531,11 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<DateTime>("BookingDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<TimeOnly>("BookingDurationTime")
+                        .HasColumnType("time");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndBookingDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("NumberOfPeople")
                         .HasColumnType("int");

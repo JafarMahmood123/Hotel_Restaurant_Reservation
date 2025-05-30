@@ -1,16 +1,14 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 
-namespace Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 
 public class AddRestaurantBookingRequest
 {
     // Key Properties
 
-    public DateTime BookingDateTime { get; set; }
-
     public DateTime ReceiveDateTime { get; set; }
 
-    public DateTime EndBookingDateTime { get; set; }
+    public TimeOnly BookingDurationTime { get; set; }
 
     public int NumberOfPeople { get; set; }
 
@@ -22,5 +20,5 @@ public class AddRestaurantBookingRequest
 
     public Guid CustomerId { get; set; }
 
-    public IEnumerable<AddBookingDishesRequest> AddBookingDishRequest { get; set; }
+    public AddBookingDishesRequest AddBookingDishRequest { get; set; }
 }

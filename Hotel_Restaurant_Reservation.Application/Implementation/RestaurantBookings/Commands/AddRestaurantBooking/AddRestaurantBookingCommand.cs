@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 
-public class AddRestaurantBookingCommand : ICommand<RestaurantBooking?>
+public class AddRestaurantBookingCommand : ICommand<Result<RestaurantBookingResponse>>
 {
-    public AddRestaurantBookingCommand(RestaurantBooking restaurantBooking)
+    public AddRestaurantBookingCommand(AddRestaurantBookingRequest addRestaurantBookingRequest)
     {
-        RestaurantBooking = restaurantBooking;
+        AddRestaurantBookingRequest = addRestaurantBookingRequest;
     }
 
-    public RestaurantBooking RestaurantBooking { get; }
+    public AddRestaurantBookingRequest AddRestaurantBookingRequest { get; }
 }

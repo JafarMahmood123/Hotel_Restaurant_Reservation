@@ -20,26 +20,17 @@ public class RestaurantBookingController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddRestaurantBooking(AddRestaurantBookingRequest addRestaurantBookingRequest
+    public async Task<IActionResult> AddRestaurantBooking([FromBody] AddRestaurantBookingRequest addRestaurantBookingRequest
         , CancellationToken cancellationToken)
     {
-        if (!addRestaurantBookingRequest.AddBookingDishRequest.Any())
-            return BadRequest("You have to add some dishes.");
+        var command = new AddRestaurantBookingCommand(addRestaurantBookingRequest);
 
-        var restaurantBooking = _mapper.Map<RestaurantBooking>(addRestaurantBookingRequest);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var restaurantBookingddCommand = new AddRestaurantBookingCommand(restaurantBooking);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        restaurantBooking = await Sender.Send(restaurantBookingddCommand, cancellationToken);
-
-        if (restaurantBooking is null)
-            return BadRequest("This table is reserved before.");
-
-        var restaurantBookingResponse = _mapper.Map<RestaurantBookingResponse>(restaurantBooking);
-
-        return Ok(restaurantBookingResponse);
-        //Need something to tell that thi table is resrved at this time
-
+        return Ok(result.Value);
     }
 
     [HttpGet]

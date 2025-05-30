@@ -528,11 +528,11 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<DateTime>("BookingDateTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<TimeOnly>("BookingDurationTime")
+                        .HasColumnType("time");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EndBookingDateTime")
-                        .HasColumnType("datetime2");
 
                     b.Property<int>("NumberOfPeople")
                         .HasColumnType("int");

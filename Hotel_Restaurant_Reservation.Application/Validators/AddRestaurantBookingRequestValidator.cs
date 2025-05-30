@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Validators;
 
@@ -9,9 +9,9 @@ public class AddRestaurantBookingRequestValidator : AbstractValidator<AddRestaur
     {
         RuleFor(x => x.NumberOfPeople).GreaterThan(0);
 
-        RuleFor(x => x.ReceiveDateTime).GreaterThan(x => x.BookingDateTime);
+        //RuleFor(x => x.ReceiveDateTime).GreaterThan(x => x.BookingDateTime);
 
-        RuleFor(x => x.EndBookingDateTime).GreaterThan(x => x.ReceiveDateTime);
+        //RuleFor(x => x.EndBookingDateTime).GreaterThan(x => x.ReceiveDateTime);
 
         // ToDo..
         /*
