@@ -45,8 +45,8 @@ public static class DomainErrors
             "MealType.AddMealType.ExistingMealType",
             $"A meal type with the name '{mealTypeName}' already exists.");
 
-        public static Error NotExistMealType(Guid mealTypeId) => new(
-            "MealType.GetMealType.NotExistMealType",
+        public static Error NotFound(Guid mealTypeId) => new(
+            "MealType.GetMealType.NotFound",
             $"The meal type with ID '{mealTypeId}' does not exist.");
     }
 
@@ -135,6 +135,10 @@ public static class DomainErrors
         public static Error NoFeaturesToRemove => new(
            "Restaurant.NoFeaturesToRemove",
            "No matching feature associations found to remove.");
+
+        public static Error NoMealTypesToRemove => new(
+            "Restaurant.NoMealTypesToRemove",
+            "No matching meal type associations found to remove.");
     }
 
     public static class Location

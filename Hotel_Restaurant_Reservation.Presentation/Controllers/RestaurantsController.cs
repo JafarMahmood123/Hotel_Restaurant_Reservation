@@ -3,7 +3,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
@@ -275,13 +274,12 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveMealTypesFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, removeMealTypesFromRestaurantRequest.Ids);
-
-        var mealTypes = await Sender.Send(command, cancellationToken);
-
-        var mealTypeResponses = mapper.Map<IEnumerable<MealTypeResponse>>(mealTypes);
-
-        return Ok(mealTypeResponses);
+        var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, removeMealTypesFromRestaurantRequest);
+        var result = await Sender.Send(command);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+        
+        return Ok(result.Value);
     }
 
     [HttpPost]

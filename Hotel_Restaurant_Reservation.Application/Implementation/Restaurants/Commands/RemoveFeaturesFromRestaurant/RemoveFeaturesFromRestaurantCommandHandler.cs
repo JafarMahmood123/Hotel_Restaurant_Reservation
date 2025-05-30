@@ -30,7 +30,7 @@ public class RemoveFeaturesFromRestaurantCommandHandler
         CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var featureIds = request.Request.Ids;
+        var featureIds = request.RemoveFeaturesFromRestaurantRequest.Ids;
 
         // Verify all features exist
         var features = new List<Feature>();

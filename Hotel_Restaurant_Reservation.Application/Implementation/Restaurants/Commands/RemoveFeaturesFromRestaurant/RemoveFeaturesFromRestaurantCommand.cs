@@ -8,12 +8,12 @@ public class RemoveFeaturesFromRestaurantCommand : ICommand<Result<List<FeatureR
 {
     public RemoveFeaturesFromRestaurantCommand(
         Guid restaurantId,
-        RemoveFeaturesFromRestaurantRequest request)
+        RemoveFeaturesFromRestaurantRequest removeFeaturesFromRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        Request = request;
+        RemoveFeaturesFromRestaurantRequest = removeFeaturesFromRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public RemoveFeaturesFromRestaurantRequest Request { get; }
+    public RemoveFeaturesFromRestaurantRequest RemoveFeaturesFromRestaurantRequest { get; }
 }

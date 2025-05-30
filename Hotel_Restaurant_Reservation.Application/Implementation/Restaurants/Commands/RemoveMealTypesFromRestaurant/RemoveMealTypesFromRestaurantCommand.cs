@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
 
-public class RemoveMealTypesFromRestaurantCommand : ICommand<IEnumerable<MealType>>
+public class RemoveMealTypesFromRestaurantCommand : ICommand<Result<List<MealTypeResponse>>>
 {
-    public RemoveMealTypesFromRestaurantCommand(Guid restaurantId, IEnumerable<Guid> mealTypeIds)
+    public RemoveMealTypesFromRestaurantCommand(
+        Guid restaurantId,
+        RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        MealTypeIds = mealTypeIds;
+        RemoveMealTypesFromRestaurantRequest = removeMealTypesFromRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> MealTypeIds { get; }
+    public RemoveMealTypesFromRestaurantRequest RemoveMealTypesFromRestaurantRequest { get; }
 }

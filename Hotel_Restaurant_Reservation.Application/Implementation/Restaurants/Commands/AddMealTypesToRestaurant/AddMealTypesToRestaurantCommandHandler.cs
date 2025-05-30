@@ -36,7 +36,7 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
             var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
 
             if (mealType == null)
-                return Result.Failure<List<MealTypeResponse>>(DomainErrors.MealType.NotExistMealType(mealTypeId));
+                return Result.Failure<List<MealTypeResponse>>(DomainErrors.MealType.NotFound(mealTypeId));
 
             mealTypes.Add(mealType);
         }
