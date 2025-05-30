@@ -15,4 +15,10 @@ public static class DomainErrors
         public static readonly Error IncorrectPassword = new Error("Customer.LogIn.IncorrectPassword",
             "Your password is incorrect.");
     }
+
+    public static class Dish
+    {
+        public static readonly Error ExistingDish = new Error("Dish.AddDish.ExistingDish",
+            "The dish is already existing.");
+    }
 }

@@ -1,14 +1,16 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Commands.AddDish;
 
-public class AddDishCommand : ICommand<Dish>
+public class AddDishCommand : ICommand<Result<DishResponse>>
 {
-    public Dish Dish { get; set; }
 
-    public AddDishCommand(Dish dish)
+    public AddDishCommand(AddDishRequest addDishRequest)
     {
-        Dish = dish;
+        AddDishRequest = addDishRequest;
     }
+
+    public AddDishRequest AddDishRequest { get; }
 }
