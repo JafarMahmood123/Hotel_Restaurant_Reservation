@@ -67,16 +67,14 @@ public class RestaurantsController : ApiController
     [ActionName("GetRestaurantById")]
     public async Task<IActionResult> GetRestaurantById(Guid id, CancellationToken cancellationToken)
     {
-        GetRestaurantByIdQuery query = new GetRestaurantByIdQuery(id);
+        var query = new GetRestaurantByIdQuery(id);
 
-        Restaurant? restaurant = await Sender.Send(query, cancellationToken);
+        var result = await Sender.Send(query, cancellationToken);
 
-        if(restaurant is null) 
-            return NotFound();
+        if(result.IsFailure)
+            return BadRequest(result.Error);
 
-        var restaurantResponse = mapper.Map<RestaurantResponse>(restaurant);
-
-        return Ok(restaurantResponse);
+        return Ok(result.Value);
     }
 
     [HttpPost]
