@@ -13,6 +13,6 @@ public class TagProfile : Profile
 
         CreateMap<Tag, TagResponse>();
 
-        CreateMap<TagRequest, Tag>();
+        CreateMap<AddTagRequest, Tag>();
     }
 }

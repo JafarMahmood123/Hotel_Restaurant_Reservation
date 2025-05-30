@@ -1,26 +1,44 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Tags.Commands.AddTag;
 
-public class AddTagCommandHandler : ICommandHandler<AddTagCommand, Tag>
+public class AddTagCommandHandler : ICommandHandler<AddTagCommand, Result<TagResponse>>
 {
-    private readonly IGenericRepository<Tag> _genericRepository;
+    private readonly IGenericRepository<Tag> tagRepository;
+    private readonly IMapper _mapper;
 
-    public AddTagCommandHandler(IGenericRepository<Tag> genericRepository)
+    public AddTagCommandHandler(
+        IGenericRepository<Tag> tagRepository,
+        IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        this.tagRepository = tagRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Tag> Handle(AddTagCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TagResponse>> Handle(
+        AddTagCommand request,
+        CancellationToken cancellationToken)
     {
-        Tag tag = request.Tag;
+        var tag = _mapper.Map<Tag>(request.AddTagRequest);
 
-        tag = await _genericRepository.AddAsync(tag);
+        var existingTag = await tagRepository.GetFirstOrDefaultAsync(x => x.Name == tag.Name);
 
-        await _genericRepository.SaveChangesAsync();
+        if (existingTag != null)
+        {
+            return Result.Failure<TagResponse>(
+                DomainErrors.Tag.ExistingTag(tag.Name));
+        }
 
-        return tag;
+        tag.Id = Guid.NewGuid();
+        tag = await tagRepository.AddAsync(tag);
+        await tagRepository.SaveChangesAsync();
+
+        var tagResponse = _mapper.Map<TagResponse>(tag);
+        return Result.Success(tagResponse);
     }
 }

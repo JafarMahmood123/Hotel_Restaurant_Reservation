@@ -1,14 +1,16 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Tags.Commands.AddTag;
 
-public class AddTagCommand : ICommand<Tag>
+public class AddTagCommand : ICommand<Result<TagResponse>>
 {
-    public Tag Tag { get; set; }
-
-    public AddTagCommand(Tag tag)
+    public AddTagCommand(AddTagRequest addTagRequest)
     {
-        Tag = tag;
+        AddTagRequest = addTagRequest;
     }
+
+    public AddTagRequest AddTagRequest { get; }
 }
