@@ -66,8 +66,4 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<Dish> Dishes { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
-
-    public DbSet<CustomerRoles> CustomersRoles { get; set; }
-
-    public DbSet<Role> Roles { get; set; }
 }

@@ -1,16 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 
-public class LogInCommand : ICommand<string?>
+public class LogInCommand : ICommand<Result<string>>
 {
-    public LogInCommand(string email, string password)
+    public LogInCommand(LogInRequest logInRequest)
     {
-        Email = email;
-        Password = password;
+        LogInRequest = logInRequest;
     }
 
-    public string Email { get; }
-    public string Password { get; }
+    public LogInRequest LogInRequest { get; }
 }

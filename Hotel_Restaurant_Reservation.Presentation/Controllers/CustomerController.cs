@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -24,14 +23,14 @@ public class CustomerController : ApiController
         if (!ModelState.IsValid)
             return BadRequest();
 
-        var command = new LogInCommand(logInRequest.Email, logInRequest.Password);
+        var command = new LogInCommand(logInRequest);
 
-        var token = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        if (token == null)
-            return BadRequest();
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(token);
+        return Ok(result.Value);
     }
 
     [HttpPost("SignUp")]

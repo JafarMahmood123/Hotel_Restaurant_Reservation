@@ -2,56 +2,36 @@
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Errors;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 
-public class LogInCommandHandler : ICommandHandler<LogInCommand, string?>
+public class LogInCommandHandler : ICommandHandler<LogInCommand, Result<string>>
 {
-    private readonly IGenericRepository<Customer> customerRepository;
-    private readonly IGenericRepository<Role> roleRepository;
-    private readonly IGenericRepository<CustomerRoles> customerRolesRepository;
-    private readonly IJwtProvider jwtProvider;
+    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IJwtProvider _jwtProvider;
 
-    public LogInCommandHandler(IGenericRepository<Customer> customerRepository,
-        IGenericRepository<Role> roleRepository,
-        IGenericRepository<CustomerRoles> customerRolesRepository,
-        IJwtProvider jwtProvider)
+    public LogInCommandHandler(IGenericRepository<Customer> customerRepository, IJwtProvider jwtProvider)
     {
-        this.customerRepository = customerRepository;
-        this.roleRepository = roleRepository;
-        this.customerRolesRepository = customerRolesRepository;
-        this.jwtProvider = jwtProvider;
+        this._customerRepository = customerRepository;
+        this._jwtProvider = jwtProvider;
     }
 
 
-    public async Task<string?> Handle(LogInCommand request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(LogInCommand request, CancellationToken cancellationToken)
     {
-        var existingCustomer = await customerRepository.GetFirstOrDefaultAsync(
-            x => x.Email == request.Email && x.Password == request.Password);
+        var existingCustomer = await _customerRepository.GetFirstOrDefaultAsync(
+            x => x.Email == request.LogInRequest.Email);
 
-        if(existingCustomer == null) 
-            return null;
+        if (existingCustomer == null)
+            return Result.Failure<string>(DomainErrors.Customer.LogInUnExistingAccount);
 
-        //Fetching the roles
-        IEnumerable<CustomerRoles>? customerRoles = customerRolesRepository.Where(
-            x => x.CustomerId == existingCustomer.Id);
-
-
-        List<Role> roles = new List<Role>();
-
-        if(customerRoles is not null)
-        {
-            foreach (var customerRole in customerRoles)
-            {
-                Role? role = await roleRepository.GetByIdAsync(customerRole.RoleId);
-
-                if(role != null) 
-                    roles.Add(role);
-            }
-        }
+        if (existingCustomer.Password != request.LogInRequest.Password)
+            return Result.Failure<string>(DomainErrors.Customer.IncorrectPassword);
         
-        string token = jwtProvider.Generate(existingCustomer, roles);
+        string token = _jwtProvider.Generate(existingCustomer, existingCustomer.Role);
 
-        return token;
+        return Result.Success(token);
     }
 }

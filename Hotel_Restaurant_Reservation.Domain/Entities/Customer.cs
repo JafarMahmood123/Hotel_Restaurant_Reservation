@@ -1,4 +1,6 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿using Hotel_Restaurant_Reservation.Domain.Enums;
+
+namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
 public class Customer
 {
@@ -17,6 +19,8 @@ public class Customer
 
     public int Age { get; set; }
 
+    public Roles Role { get; set; }
+
     // Foreign Keys
 
     public Guid LocationId { get; set; }
@@ -25,10 +29,7 @@ public class Customer
 
     public virtual Location Location { get; set; }
 
-    public virtual ICollection<CustomerRoles> CustomerRoles { get; set; }
-
     public Customer()
     {
-        CustomerRoles = new HashSet<CustomerRoles>();
     }
 }

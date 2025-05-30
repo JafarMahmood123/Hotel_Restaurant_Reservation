@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 
 public class SignUpRequest
 {

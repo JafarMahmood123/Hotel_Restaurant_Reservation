@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Errors;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
@@ -30,6 +31,7 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
 
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;
+        customer.Role = Roles.Customer;
 
         customer = await _customerRepository.AddAsync(customer);
 

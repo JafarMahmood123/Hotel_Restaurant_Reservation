@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Enums;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -26,27 +27,21 @@ public class JwtProvider : IJwtProvider
             throw new ArgumentNullException(nameof(JwtOptions.Audience), "JWT Audience is not configured.");
     }
 
-    public string Generate(Customer customer, IEnumerable<Role> roles)
+    public string Generate(Customer customer, Roles role)
     {
         var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub, customer.Id.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, customer.Email),
+            new Claim(ClaimTypes.Role, role.ToString())
         };
 
-
-        if (roles != null)
-        {
-            foreach (var role in roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role.Name));
-            }
-        }
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(options.SecretKey)),
             SecurityAlgorithms.HmacSha256);
+
 
         var token = new JwtSecurityToken(
             options.Issuer,
