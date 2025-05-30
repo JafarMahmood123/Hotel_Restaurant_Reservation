@@ -123,4 +123,15 @@ public static class DomainErrors
             "Location.InvalidRequest",
             "The location request is invalid.");
     }
+
+    public static class Tag
+    {
+        public static Error NotFound(Guid tagId) => new(
+            "Tag.NotFound",
+            $"Tag with ID {tagId} was not found.");
+
+        public static Error ExistingTag(string tagName) => new(
+            "Tag.ExistingTag",
+            $"Tag with name '{tagName}' already exists.");
+    }
 }

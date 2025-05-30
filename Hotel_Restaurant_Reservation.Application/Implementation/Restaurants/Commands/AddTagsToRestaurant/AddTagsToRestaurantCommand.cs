@@ -1,16 +1,19 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddTagsToRestaurant;
 
-public class AddTagsToRestaurantCommand : ICommand<IEnumerable<Tag>>
+public class AddTagsToRestaurantCommand : ICommand<Result<List<TagResponse>>>
 {
-    public AddTagsToRestaurantCommand(Guid restaurantId, IEnumerable<Guid> tagIds)
+    public AddTagsToRestaurantCommand(
+        Guid restaurantId,
+        AddTagsToRestaurantRequest addTagsToRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        TagIds = tagIds;
+        AddTagsToRestaurantRequest = addTagsToRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public IEnumerable<Guid> TagIds { get; }
+    public AddTagsToRestaurantRequest AddTagsToRestaurantRequest { get; }
 }

@@ -28,6 +28,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -293,13 +294,14 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddTagsToRestaurantRequest addTagsToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddTagsToRestaurantCommand(restaurantId, addTagsToRestaurantRequest.Ids);
+        var command = new AddTagsToRestaurantCommand(restaurantId, addTagsToRestaurantRequest);
 
-        var tags = await Sender.Send(command, cancellationToken);
+        var result = await Sender.Send(command, cancellationToken);
 
-        var tagsResponses = mapper.Map<IEnumerable<TagResponse>>(tags);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(tagsResponses);
+        return Ok(result.Value);
     }
 
     [HttpDelete]

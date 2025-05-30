@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.TagDTOs;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries;
 
 public class TagResponse
 {
