@@ -176,5 +176,9 @@ public static class DomainErrors
         public static Error NotFound(Guid workTimeId) => new(
             "WorkTime.NotFound",
             $"Work time with ID {workTimeId} was not found.");
+
+        public static Error ExistingWorkTime() => new(
+            "WorkTime.ExistingWorkTime",
+            $"Work time already exists.");
     }
 }

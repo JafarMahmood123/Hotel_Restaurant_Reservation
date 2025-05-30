@@ -10,7 +10,7 @@ public class WorkTimeProfile : Profile
 
     public WorkTimeProfile()
     {
-        CreateMap<WorkTimeRequest, WorkTime>();
+        CreateMap<AddWorkTimeRequest, WorkTime>();
 
         CreateMap<WorkTime, WorkTimeResponse>();
     }

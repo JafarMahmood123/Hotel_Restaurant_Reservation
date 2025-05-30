@@ -1,6 +1,6 @@
 ﻿namespace Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
 
-public class WorkTimeRequest
+public class AddWorkTimeRequest
 {
     public DayOfWeek Day { get; set; }
 

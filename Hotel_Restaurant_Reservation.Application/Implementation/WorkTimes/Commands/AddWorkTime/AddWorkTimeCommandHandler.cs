@@ -1,26 +1,46 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Implementation.WorkTimes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.WorkTimes.Commands.AddWorkTime;
 
-public class AddWorkTimeCommandHandler : ICommandHandler<AddWorkTimeCommand, WorkTime>
+public class AddWorkTimeCommandHandler : ICommandHandler<AddWorkTimeCommand, Result<WorkTimeResponse>>
 {
-    private readonly IGenericRepository<WorkTime> _genericRepository;
+    private readonly IGenericRepository<WorkTime> _workTimeRepository;
+    private readonly IMapper _mapper;
 
-    public AddWorkTimeCommandHandler(IGenericRepository<WorkTime> genericRepository)
+    public AddWorkTimeCommandHandler(
+        IGenericRepository<WorkTime> workTimeRepository,
+        IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _workTimeRepository = workTimeRepository;
+        _mapper = mapper;
     }
 
-    public async Task<WorkTime> Handle(AddWorkTimeCommand request, CancellationToken cancellationToken)
+    public async Task<Result<WorkTimeResponse>> Handle(
+        AddWorkTimeCommand request,
+        CancellationToken cancellationToken)
     {
-        WorkTime workTime = request.WorkTime;
+        var workTime = _mapper.Map<WorkTime>(request.AddWorkTimeRequest);
 
-        workTime = await _genericRepository.AddAsync(workTime);
+        // Check for overlapping work times
+        var existingWorkTime = await _workTimeRepository.GetFirstOrDefaultAsync(
+            x => x.Day == workTime.Day && workTime.OpenHour == x.OpenHour && workTime.CloseHour== x.CloseHour);
 
-        await _genericRepository.SaveChangesAsync();
+        if (existingWorkTime != null)
+        {
+            return Result.Failure<WorkTimeResponse>(
+                DomainErrors.WorkTime.ExistingWorkTime());
+        }
 
-        return workTime;
+        workTime.Id = Guid.NewGuid();
+        workTime = await _workTimeRepository.AddAsync(workTime);
+        await _workTimeRepository.SaveChangesAsync();
+
+        var response = _mapper.Map<WorkTimeResponse>(workTime);
+        return Result.Success(response);
     }
 }
