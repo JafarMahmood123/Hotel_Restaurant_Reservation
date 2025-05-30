@@ -4,7 +4,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.BookingDishDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.AddBookingDishes;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 
 public class AddBookingDishesCommandHandler : ICommandHandler<AddBookingDishesCommand, IEnumerable<BookingDishResponse>>
 {
@@ -13,8 +13,8 @@ public class AddBookingDishesCommandHandler : ICommandHandler<AddBookingDishesCo
 
     public AddBookingDishesCommandHandler(IGenericRepository<BookingDish> bookingDishRepository, IMapper mapper)
     {
-        this._bookingDishRepository = bookingDishRepository;
-        this._mapper = mapper;
+        _bookingDishRepository = bookingDishRepository;
+        _mapper = mapper;
     }
 
     public async Task<IEnumerable<BookingDishResponse>> Handle(AddBookingDishesCommand request,

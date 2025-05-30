@@ -1,14 +1,16 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 
-public class SignUpCommand : ICommand<Customer?>
+public class SignUpCommand : ICommand<Result<CustomerResponse>>
 {
-    public SignUpCommand(Customer customer)
+    public SignUpCommand(SignUpRequest signUpRequest) 
     {
-        Customer = customer;
+        SignUpRequest = signUpRequest;
     }
 
-    public Customer Customer { get; }
+    public SignUpRequest SignUpRequest { get; }
 }

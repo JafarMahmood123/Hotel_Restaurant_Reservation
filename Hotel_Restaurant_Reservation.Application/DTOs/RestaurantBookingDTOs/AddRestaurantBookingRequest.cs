@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.AddBookingDishes;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 
 namespace Hotel_Restaurant_Reservation.Application.DTOs.RestaurantBookingDTOs;
 

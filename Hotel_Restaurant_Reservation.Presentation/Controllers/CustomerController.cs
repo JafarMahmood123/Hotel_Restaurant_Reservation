@@ -37,16 +37,13 @@ public class CustomerController : ApiController
     [HttpPost("SignUp")]
     public async Task<IActionResult> SignUp([FromBody] SignUpRequest signUpRequest, CancellationToken cancellationToken)
     {
-        var customer = mapper.Map<Customer>(signUpRequest);
+        var command = new SignUpCommand(signUpRequest);
 
-        var command = new SignUpCommand(customer);
+        var result = await Sender.Send(command, cancellationToken);
 
-        customer = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        if (customer == null)
-            return BadRequest("Your email is exist before.");
-
-        var customerResponse = mapper.Map<CustomerResponse>(customer);
-        return Ok(customerResponse);
+        return Ok(result.Value);
     }
 }

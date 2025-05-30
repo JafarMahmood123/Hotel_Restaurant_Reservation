@@ -1,41 +1,42 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Errors;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 
-public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Customer?>
+public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<CustomerResponse>>
 {
-    private readonly IGenericRepository<Customer> customerRepository;
+    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IMapper _mapper;
 
-    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository)
+    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IMapper mapper)
     {
-        this.customerRepository = customerRepository;
+        this._customerRepository = customerRepository;
+        this._mapper = mapper;
     }
 
-    public async Task<Customer?> Handle(SignUpCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CustomerResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
-        var existingEmail = await customerRepository.GetFirstOrDefaultAsync(x => x.Email == request.Customer.Email);
+        var customer = _mapper.Map<Customer>(request.SignUpRequest);
 
-        if (existingEmail != null)
-            return null;
+        var existingCustomer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Email == customer.Email);
 
-        var today = DateOnly.FromDateTime(DateTime.Today);
-        var age = today.Year - request.Customer.BirthDate.Year;
+        if (existingCustomer != null)
+            return Result.Failure<CustomerResponse>(DomainErrors.Customer.SignUpExistingAccount);
 
-        // Subtract a year if the birthday hasn't occurred yet this year
-        if (request.Customer.BirthDate > today.AddYears(-age))
-        {
-            age--;
-        }
+        customer.Id = Guid.NewGuid();
+        customer.Age = DateTime.Now.Year - customer.BirthDate.Year;
 
-        request.Customer.Age = age;
-        request.Customer.Id = Guid.NewGuid();
+        customer = await _customerRepository.AddAsync(customer);
 
-        var newCustomer = await customerRepository.AddAsync(request.Customer);
+        await _customerRepository.SaveChangesAsync();
 
-        await customerRepository.SaveChangesAsync();
+        var customerResponse = _mapper.Map<CustomerResponse>(customer);
 
-        return newCustomer;
+        return Result.Success(customerResponse);
     }
 }

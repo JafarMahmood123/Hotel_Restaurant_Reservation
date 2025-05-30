@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.AddBookingDishes;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 
 public class AddBookingDishesRequest
 {
