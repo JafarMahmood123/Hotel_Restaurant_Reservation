@@ -1,26 +1,40 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Errors;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Commands;
 
-public class AddMealTypeCommandHandler : ICommandHandler<AddMealTypeCommand, MealType>
+public class AddMealTypeCommandHandler : ICommandHandler<AddMealTypeCommand, Result<MealTypeResponse>>
 {
-    private readonly IGenericRepository<MealType> _genericRepository;
+    private readonly IGenericRepository<MealType> _mealTypeRepository;
+    private readonly IMapper _mapper;
 
-    public AddMealTypeCommandHandler(IGenericRepository<MealType> genericRepository)
+    public AddMealTypeCommandHandler(IGenericRepository<MealType> mealTypeRepository, IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _mealTypeRepository = mealTypeRepository;
+        this._mapper = mapper;
     }
 
-    public async Task<MealType> Handle(AddMealTypeCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MealTypeResponse>> Handle(AddMealTypeCommand request, CancellationToken cancellationToken)
     {
-        MealType mealType = request.MealType;
+        var mealType = _mapper.Map<MealType>(request.AddMealTypeRequest);
 
-        mealType = await _genericRepository.AddAsync(mealType);
+        var existingMealType = await _mealTypeRepository.GetFirstOrDefaultAsync(x => x.Name == mealType.Name);
 
-        await _genericRepository.SaveChangesAsync();
+        if (existingMealType != null)
+            return Result.Failure<MealTypeResponse>(DomainErrors.MealType.ExistingMealType);
+        mealType.Id = Guid.NewGuid();
 
-        return mealType;
+        mealType = await _mealTypeRepository.AddAsync(mealType);
+
+        await _mealTypeRepository.SaveChangesAsync();
+
+        var mealTypeResponse = _mapper.Map<MealTypeResponse>(mealType);
+
+        return Result.Success(mealTypeResponse);
     }
 }

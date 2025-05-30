@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CityDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
-using Hotel_Restaurant_Reservation.Domain.Abstractions;
+using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Commands;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;
@@ -12,21 +11,8 @@ public class MealTypeProfile : Profile
     public MealTypeProfile()
     {
 
-        CreateMap<MealType, MealTypeRequest>();
+        CreateMap<MealType, MealTypeResponse>();
 
-        CreateMap<MealTypeRequest, MealType>();
-           //.ForMember(dest => dest.Id, opt => opt.Ignore())
-           //.ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-           //.AfterMap(async (src, dest) =>
-           //{
-           //    var existingMealType = await cityRepository.GetFirstOrDefaultAsync(c => c.Name == src.Name);
-
-           //    if (existingMealType != null)
-           //    {
-           //        dest.Id = existingMealType.Id;
-           //    }
-
-           //    dest.Id = Guid.NewGuid();
-           //});
+        CreateMap<AddMealTypeRequest, MealType>();
     }
 }

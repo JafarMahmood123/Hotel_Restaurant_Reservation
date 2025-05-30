@@ -23,9 +23,9 @@ public class AddFeatureCommandHandler : ICommandHandler<AddFeatureCommand, Resul
     {
         var feature = _mapper.Map<Feature>(request.AddFeatureRequest);
 
-        var existingDish = await _featureRepository.GetFirstOrDefaultAsync(x => x.Name == feature.Name);
+        var existingFeature = await _featureRepository.GetFirstOrDefaultAsync(x => x.Name == feature.Name);
 
-        if (existingDish != null)
+        if (existingFeature != null)
             return Result.Failure<FeatureResponse>(DomainErrors.Feature.ExistingFeature);
 
         feature.Id = Guid.NewGuid();

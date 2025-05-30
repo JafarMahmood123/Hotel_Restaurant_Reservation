@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.DTOs.MealTypeDTOs;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Commands;
 
-public class AddMealTypeCommand : ICommand<MealType>
+public class AddMealTypeCommand : ICommand<Result<MealTypeResponse>>
 {
-    public MealType MealType { get; set; }
-
-    public AddMealTypeCommand(MealType mealType)
+    public AddMealTypeCommand(AddMealTypeRequest addMealTypeRequest)
     {
-        MealType = mealType;
+        AddMealTypeRequest = addMealTypeRequest;
     }
+
+    public AddMealTypeRequest AddMealTypeRequest { get; }
 }

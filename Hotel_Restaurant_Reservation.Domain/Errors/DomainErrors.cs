@@ -27,4 +27,10 @@ public static class DomainErrors
         public static readonly Error ExistingFeature= new Error("Feature.AddFeature.ExistingFeature",
             "The feature is already existing.");
     }
+
+    public static class MealType
+    {
+        public static readonly Error ExistingMealType = new Error("MealType.AddMealType.ExistingMealType",
+            "The meal type is already existing.");
+    }
 }
