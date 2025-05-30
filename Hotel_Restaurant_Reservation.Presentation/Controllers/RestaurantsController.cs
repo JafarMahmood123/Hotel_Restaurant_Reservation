@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.DishDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.RestaurantDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.WorkTimeDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
@@ -330,12 +329,12 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> RemoveWorkTimeTFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveWorkTimesFromRestaurantRequest removeworkTimeFromRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest.Ids);
-
-        var workTimes = await Sender.Send(command, cancellationToken);
-
-        var workTimeResponses = mapper.Map<IEnumerable<WorkTimeResponse>>(workTimes);
-
-        return Ok(workTimeResponses);
+        var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest);
+        var result = await Sender.Send(command);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
     }
 }

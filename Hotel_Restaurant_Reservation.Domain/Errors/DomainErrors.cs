@@ -143,6 +143,10 @@ public static class DomainErrors
         public static Error NoTagsToRemove => new(
             "Restaurant.NoTagsToRemove",
             "No matching tag associations found to remove.");
+
+        public static Error NoWorkTimesToRemove => new(
+            "Restaurant.NoWorkTimesToRemove",
+            "No matching work time associations found to remove.");
     }
 
     public static class Location
