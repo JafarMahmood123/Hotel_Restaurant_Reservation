@@ -669,24 +669,37 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<double>("CustomerFoodStarRating")
+                        .HasColumnType("float");
+
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RestaurantId")
+                    b.Property<double>("CustomerServiceStarRating")
+                        .HasColumnType("float");
+
+                    b.Property<double>("CustomerStarRating")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("HotelId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReviewId")
+                    b.Property<Guid>("RestaurantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
 
+                    b.HasIndex("HotelId");
+
                     b.HasIndex("RestaurantId");
 
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("RestaurantReview");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantTag", b =>
@@ -729,29 +742,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasIndex("WorkTimeId");
 
                     b.ToTable("RestaurantWorkTimes");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("CustomerStarRating")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HotelId");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>
@@ -882,7 +872,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", null)
                         .WithMany("BookingDishes")
                         .HasForeignKey("RestaurantBookingId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -891,7 +881,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Country", null)
                         .WithMany("Cities")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 
@@ -900,13 +890,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.City", "City")
                         .WithMany("CityLocalLocations")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.LocalLocation", "LocalLocation")
                         .WithMany("CityLocalLocations")
                         .HasForeignKey("LocalLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("City");
@@ -930,7 +920,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Location", "Location")
                         .WithMany("Customer")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Location");
@@ -941,7 +931,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Location", "Location")
                         .WithMany("Event")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Location");
@@ -952,13 +942,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction   )
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Event", "Event")
                         .WithMany("EventRegistrations")
                         .HasForeignKey("EventId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -971,19 +961,19 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.HotelRangePrices", "HotelRangePrices")
                         .WithMany("Hotels")
                         .HasForeignKey("HotelRangePricesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Location", "Location")
                         .WithMany("Hotel")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.PropertyType", "PropertyType")
                         .WithMany("Hotels")
                         .HasForeignKey("PropertyTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("HotelRangePrices");
@@ -998,19 +988,19 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", "Hotel")
                         .WithMany("HotelReservations")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Room", "Room")
                         .WithMany("HotelReservations")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customer");
@@ -1025,13 +1015,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.CityLocalLocations", "CityLocalLocations")
                         .WithMany()
                         .HasForeignKey("CityLocalLocationsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Country", "Country")
                         .WithMany("Locations")
                         .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CityLocalLocations");
@@ -1044,7 +1034,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Location", "Location")
                         .WithMany("Restaurant")
                         .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.   NoAction)
                         .IsRequired();
 
                     b.Navigation("Location");
@@ -1055,13 +1045,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customers")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantBookings")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customers");
@@ -1074,13 +1064,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Cuisine", "Cuisine")
                         .WithMany("RestaurantCuisines")
                         .HasForeignKey("CuisineId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantCuisines")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Cuisine");
@@ -1093,13 +1083,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.CurrencyType", "CurrencyType")
                         .WithMany("RestaurantCurrencyTypes")
                         .HasForeignKey("CurrencyTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantCurrencyTypes")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("CurrencyType");
@@ -1112,13 +1102,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Dish", "Dish")
                         .WithMany("RestaurantDishPrice")
                         .HasForeignKey("DishId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantDishPrices")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Dish");
@@ -1131,13 +1121,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Feature", "Feature")
                         .WithMany("RestaurantFeatures")
                         .HasForeignKey("FeatureId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantFeatures")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Feature");
@@ -1150,13 +1140,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.MealType", "MealType")
                         .WithMany("RestaurantMealTypes")
                         .HasForeignKey("MealTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantMealTypes")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("MealType");
@@ -1169,26 +1159,22 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Customer", "Customer")
                         .WithMany()
                         .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("HotelId");
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantReviews")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Review", "Review")
-                        .WithMany("RestaurantReviews")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Customer");
 
                     b.Navigation("Restaurant");
-
-                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantTag", b =>
@@ -1196,13 +1182,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantTags")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Tag", "Tag")
                         .WithMany("RestaurantTags")
                         .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Restaurant");
@@ -1215,13 +1201,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantWorkTimes")
                         .HasForeignKey("RestaurantId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.WorkTime", "WorkTime")
                         .WithMany("RestaurantWorkTimes")
                         .HasForeignKey("WorkTimeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Restaurant");
@@ -1229,25 +1215,18 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("WorkTime");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Review", b =>
-                {
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", null)
-                        .WithMany("Reviews")
-                        .HasForeignKey("HotelId");
-                });
-
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", "Hotel")
                         .WithMany("Rooms")
                         .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.RoomType", "RoomType")
                         .WithMany("Rooms")
                         .HasForeignKey("RoomTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction       )
                         .IsRequired();
 
                     b.Navigation("Hotel");
@@ -1260,13 +1239,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.RoomAmenity", null)
                         .WithMany()
                         .HasForeignKey("RoomAmenitiesId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Room", null)
                         .WithMany()
                         .HasForeignKey("RoomsId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction   )
                         .IsRequired();
                 });
 
@@ -1375,11 +1354,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantBooking", b =>
                 {
                     b.Navigation("BookingDishes");
-                });
-
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Review", b =>
-                {
-                    b.Navigation("RestaurantReviews");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.Room", b =>

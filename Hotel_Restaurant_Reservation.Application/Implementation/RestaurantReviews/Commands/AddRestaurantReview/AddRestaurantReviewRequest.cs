@@ -1,9 +1,7 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantReviews.Commands.AddReview;
 
-public class RestaurantReview
+public class AddRestaurantReviewRequest
 {
-    public Guid Id { get; set; }
-
     public Guid RestaurantId { get; set; }
 
     public Guid CustomerId { get; set; }
@@ -15,13 +13,4 @@ public class RestaurantReview
     public double CustomerServiceStarRating { get; set; }
 
     public double CustomerFoodStarRating { get; set; }
-
-    public virtual Restaurant Restaurant { get; set; }
-
-    public virtual Customer Customer { get; set; }
-
-    public RestaurantReview()
-    {
-        
-    }
 }

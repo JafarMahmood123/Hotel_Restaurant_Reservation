@@ -54,4 +54,19 @@ public static class DomainErrors
             "RestaurantBooking.AddRestaurantBooking.LongBookingTime",
             "You have to book the table for less than 60 minutes.");
     }
+
+    public static class RestaurantReview
+    {
+        public static readonly Error EmptyDescription = new Error(
+            "RestaurantReview.AddReview.EmptyDescription",
+            "The review description can't be empty.");
+
+        public static readonly Error RatingLessThanOne= new Error(
+            "RestaurantReview.AddReview.RatingLessThanOne",
+            "The review rating can't be less than one.");
+
+        public static readonly Error RatingGreaterThanFive = new Error(
+            "RestaurantReview.AddReview.RatingGreaterThanFive",
+            "The review rating can't be greater than five.");
+    }
 }

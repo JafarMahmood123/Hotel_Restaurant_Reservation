@@ -25,7 +25,7 @@ public class HotelRestaurantDbContext : DbContext
 
     public DbSet<HotelReservation> HotelReservations { get; set; }
 
-    public DbSet<Review> Reviews { get; set; }
+    public DbSet<RestaurantReview> Reviews { get; set; }
 
     public DbSet<Country> Countries { get; set; }
 

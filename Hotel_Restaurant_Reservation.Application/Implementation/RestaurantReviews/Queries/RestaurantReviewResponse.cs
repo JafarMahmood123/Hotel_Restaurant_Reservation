@@ -1,6 +1,6 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantReviews.Queries;
 
-public class RestaurantReview
+public class RestaurantReviewResponse
 {
     public Guid Id { get; set; }
 
@@ -16,12 +16,4 @@ public class RestaurantReview
 
     public double CustomerFoodStarRating { get; set; }
 
-    public virtual Restaurant Restaurant { get; set; }
-
-    public virtual Customer Customer { get; set; }
-
-    public RestaurantReview()
-    {
-        
-    }
 }

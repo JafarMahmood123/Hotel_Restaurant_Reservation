@@ -45,7 +45,7 @@ public class Hotel
 
     public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
-    public virtual ICollection<Review> Reviews { get; set; }
+    public virtual ICollection<RestaurantReview> Reviews { get; set; }
 
     public virtual Location Location { get; set; }
 
@@ -54,6 +54,6 @@ public class Hotel
         Rooms = new HashSet<Room>();
         CurrencyType = new HashSet<CurrencyType>();
         HotelReservations = new HashSet<HotelReservation>();
-        Reviews = new HashSet<Review>();
+        Reviews = new HashSet<RestaurantReview>();
     }
 }

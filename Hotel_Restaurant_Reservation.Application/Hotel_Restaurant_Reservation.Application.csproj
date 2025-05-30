@@ -9,13 +9,13 @@
   <ItemGroup>
     <Compile Remove="Implementation\Customers\Commands\LogOut\**" />
     <Compile Remove="Implementation\Customers\Queries\**" />
-    <Compile Remove="Implementation\RestaurantReviews\Queries\**" />
+    <Compile Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
     <EmbeddedResource Remove="Implementation\Customers\Commands\LogOut\**" />
     <EmbeddedResource Remove="Implementation\Customers\Queries\**" />
-    <EmbeddedResource Remove="Implementation\RestaurantReviews\Queries\**" />
+    <EmbeddedResource Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
     <None Remove="Implementation\Customers\Commands\LogOut\**" />
     <None Remove="Implementation\Customers\Queries\**" />
-    <None Remove="Implementation\RestaurantReviews\Queries\**" />
+    <None Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +32,6 @@
   <ItemGroup>
     <Folder Include="Implementation\BookingDishes\Queries\" />
     <Folder Include="Implementation\Hotels\Commands\UpdateHotel\" />
-    <Folder Include="Implementation\RestaurantReviews\Commands\DeleteReview\" />
   </ItemGroup>
 
 </Project>

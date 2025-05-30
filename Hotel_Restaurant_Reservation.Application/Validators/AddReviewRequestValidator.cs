@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using Hotel_Restaurant_Reservation.Application.DTOs.ReviewDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantReviews.Commands.AddReview;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Validators;
 
-public class AddReviewRequestValidator : AbstractValidator<AddReviewRequest>
+public class AddReviewRequestValidator : AbstractValidator<AddRestaurantReviewRequest>
 {
     public AddReviewRequestValidator()
     {
