@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
@@ -39,8 +40,12 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
 
         // Create restaurant
         var restaurant = _mapper.Map<Restaurant>(request.AddRestaurantRequest);
-        restaurant.Location = locationResult.Value;
         restaurant.Id = Guid.NewGuid();
+        restaurant.Location = locationResult.Value;
+        restaurant.MinPrice = 0;
+        restaurant.MaxPrice = 0;
+        restaurant.PriceLevel = RestaurantPriceLevel.NotSet;
+        // Process the price level and add the enum values after adding the dishes.
 
         // Validate restaurant
         var validationError = ValidateRestaurant(restaurant);
@@ -53,9 +58,6 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
 
         // Map to response
         var response = _mapper.Map<RestaurantResponse>(restaurant);
-        response.MinPrice = 0; 
-        response.MaxPrice = 0;
-        //The min and max price should be set after the adding of the dishes and their prices.
 
         return Result.Success(response);
     }
@@ -83,8 +85,8 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
 
     private Error? ValidateRestaurant(Restaurant restaurant)
     {
-        if (restaurant.StarRating < 1 || restaurant.StarRating > 5)
-            return DomainErrors.Restaurant.InvalidStarRating;
+        //if (restaurant.StarRating < 1 || restaurant.StarRating > 5)
+        //    return DomainErrors.Restaurant.InvalidStarRating;
 
         if (restaurant.NumberOfTables <= 0)
             return DomainErrors.Restaurant.InvalidTableCount;

@@ -29,8 +29,6 @@ public class Hotel
 
     public Guid HotelReservationId { get; set; }
 
-    public Guid ReviewId { get; set; }
-
     public Guid LocationId { get; set; }
 
     // Navigation Properties
@@ -45,8 +43,6 @@ public class Hotel
 
     public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
-    public virtual ICollection<RestaurantReview> Reviews { get; set; }
-
     public virtual Location Location { get; set; }
 
     public Hotel()
@@ -54,6 +50,5 @@ public class Hotel
         Rooms = new HashSet<Room>();
         CurrencyType = new HashSet<CurrencyType>();
         HotelReservations = new HashSet<HotelReservation>();
-        Reviews = new HashSet<RestaurantReview>();
     }
 }

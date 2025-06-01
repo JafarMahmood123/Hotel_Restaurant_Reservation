@@ -151,6 +151,10 @@ public static class DomainErrors
         public static Error NotFoundForFilters => new(
             "Restaurant.NotFoundForFilters",
             "No restaurants found matching the specified filters.");
+
+        public static Error NoDishesWithPricesProvided => new(
+        "Restaurant.NoDishesWithPricesProvided",
+        "At least one dish with price must be provided.");
     }
 
     public static class Location

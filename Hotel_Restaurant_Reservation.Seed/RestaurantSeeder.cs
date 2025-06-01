@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Seed.Fields;
 using Microsoft.Data.SqlClient;
@@ -568,7 +569,7 @@ internal static class RestaurantSeeder
         double latitude = Double.Parse(record.LATITUDE);
         double longitude = Double.Parse(record.LONGITUDE);
         int numberOfTables = int.Parse(record.TABLES_NUMBER);
-        string priceLevel = record.PRICE_LEVEL;
+        RestaurantPriceLevel priceLevel = record.PRICE_LEVEL;
         double minPrice = Double.Parse(record.MIN_PRICE);
         double maxPrice = Double.Parse(record.MAX_PRICE);
         Guid locationId = location.Id;

@@ -13,15 +13,11 @@ public class AddRestaurantRequest
 
     public string PictureUrl { get; set; }
 
-    public double StarRating { get; set; }
-
     public double Latitude { get; set; }
 
     public double Longitude { get; set; }
 
     public int NumberOfTables { get; set; }
-
-    public string PriceLevel { get; set; }
 
     public AddLocationRequest addLocationRequest { get; set; }
 }

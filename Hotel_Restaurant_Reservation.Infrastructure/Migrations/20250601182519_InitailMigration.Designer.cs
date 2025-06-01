@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelRestaurantDbContext))]
-    [Migration("20250530133802_Initial")]
-    partial class Initial
+    [Migration("20250601182519_InitailMigration")]
+    partial class InitailMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -314,9 +314,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<Guid>("PropertyTypeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
@@ -504,9 +501,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PriceLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("PriceLevel")
+                        .HasColumnType("int");
 
                     b.Property<double>("StarRating")
                         .HasColumnType("float");
@@ -688,17 +684,12 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("HotelId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid>("RestaurantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("HotelId");
 
                     b.HasIndex("RestaurantId");
 
@@ -1165,10 +1156,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Hotel", null)
-                        .WithMany("Reviews")
-                        .HasForeignKey("HotelId");
-
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany("RestaurantReviews")
                         .HasForeignKey("RestaurantId")
@@ -1296,8 +1283,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("CurrencyType");
 
                     b.Navigation("HotelReservations");
-
-                    b.Navigation("Reviews");
 
                     b.Navigation("Rooms");
                 });

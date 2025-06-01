@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitailMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -178,7 +178,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.CountryId,
                         principalTable: "Countries",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -197,13 +197,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_CityLocalLocations_LocalLocations_LocalLocationId",
                         column: x => x.LocalLocationId,
                         principalTable: "LocalLocations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction    );
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,7 +253,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -278,7 +278,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -297,7 +297,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     HotelRangePricesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CurrencyTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     HotelReservationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ReviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -308,19 +307,19 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.HotelRangePricesId,
                         principalTable: "HotelRangePrices",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Hotels_Locations_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Hotels_PropertyTypes_PropertyTypeId",
                         column: x => x.PropertyTypeId,
                         principalTable: "PropertyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction    );
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -336,7 +335,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     Latitude = table.Column<double>(type: "float", nullable: false),
                     Longitude = table.Column<double>(type: "float", nullable: false),
                     NumberOfTables = table.Column<int>(type: "int", nullable: false),
-                    PriceLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PriceLevel = table.Column<int>(type: "int", nullable: false),
                     MinPrice = table.Column<double>(type: "float", nullable: false),
                     MaxPrice = table.Column<double>(type: "float", nullable: false),
                     LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -349,7 +348,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.LocationId,
                         principalTable: "Locations",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -424,13 +423,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.HotelId,
                         principalTable: "Hotels",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Rooms_RoomTypes_RoomTypeId",
                         column: x => x.RoomTypeId,
                         principalTable: "RoomTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -460,7 +459,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.    NoAction);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -479,13 +478,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.CuisineId,
                         principalTable: "Cuisines",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantCuisines_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -505,13 +504,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.DishId,
                         principalTable: "Dishes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantDishPrices_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -530,13 +529,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.FeatureId,
                         principalTable: "Features",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantFeatures_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.    NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -555,13 +554,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.MealTypeId,
                         principalTable: "MealTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantMealTypes_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -580,13 +579,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantTags_Tags_TagId",
                         column: x => x.TagId,
                         principalTable: "Tags",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -605,13 +604,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantWorkTimes_WorkTimes_WorkTimeId",
                         column: x => x.WorkTimeId,
                         principalTable: "WorkTimes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -624,8 +623,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomerStarRating = table.Column<double>(type: "float", nullable: false),
                     CustomerServiceStarRating = table.Column<double>(type: "float", nullable: false),
-                    CustomerFoodStarRating = table.Column<double>(type: "float", nullable: false),
-                    HotelId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    CustomerFoodStarRating = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -636,11 +634,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         principalTable: "Customers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Reviews_Hotels_HotelId",
-                        column: x => x.HotelId,
-                        principalTable: "Hotels",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Reviews_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
@@ -665,13 +658,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.CurrencyTypeId,
                         principalTable: "CurrencyTypes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RestaurantCurrencyTypes_Restaurants_RestaurantId",
                         column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -726,13 +719,13 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.RoomAmenitiesId,
                         principalTable: "RoomAmenities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RoomRoomAmenity_Rooms_RoomsId",
                         column: x => x.RoomsId,
                         principalTable: "Rooms",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -752,7 +745,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         column: x => x.RestaurantBookingId,
                         principalTable: "RestaurantBooking",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -934,11 +927,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "IX_Reviews_CustomerId",
                 table: "Reviews",
                 column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Reviews_HotelId",
-                table: "Reviews",
-                column: "HotelId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_RestaurantId",

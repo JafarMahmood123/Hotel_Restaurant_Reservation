@@ -1,4 +1,4 @@
-﻿using System.Xml.Serialization;
+﻿using Hotel_Restaurant_Reservation.Domain.Enums;
 
 namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -23,7 +23,7 @@ public class Restaurant
 
     public int NumberOfTables { get; set; }
 
-    public string PriceLevel { get; set; }
+    public RestaurantPriceLevel PriceLevel { get; set; }
 
     public double MinPrice { get; set; }
 
