@@ -29,6 +29,19 @@ public class Restaurant
 
     public double MaxPrice { get; set; }
 
+    //public double ServiceRating { get; set; }
+
+    //public double FoodRating { get; set; }
+
+    //public int ReviewCount { get; set; }
+
+    //public bool IsActive { get; set; }
+
+    //public DateTime CreatedDate { get; set; }
+
+    //public DateTime LastModifiedDate { get; set; }
+
+
     // Foreign Keys
 
     public Guid LocationId { get; set; }

@@ -19,5 +19,5 @@ public class AddRestaurantRequest
 
     public int NumberOfTables { get; set; }
 
-    public AddLocationRequest addLocationRequest { get; set; }
+    public Guid LocationId { get; set; }
 }

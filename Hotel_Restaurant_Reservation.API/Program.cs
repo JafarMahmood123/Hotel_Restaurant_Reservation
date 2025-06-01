@@ -1,5 +1,7 @@
+using FluentValidation;
 using Hotel_Restaurant_Reservation.API.OptionsSetup;
 using Hotel_Restaurant_Reservation.Application.Abstractions;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
@@ -7,8 +9,6 @@ using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +68,7 @@ builder.Services.AddScoped<IGenericRepository<RestaurantMealType>,  GenericRepos
 builder.Services.AddScoped<IGenericRepository<RestaurantTag>,  GenericRepository<RestaurantTag>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>,  GenericRepository<RestaurantWorkTime>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

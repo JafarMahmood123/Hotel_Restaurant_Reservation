@@ -159,6 +159,10 @@ public static class DomainErrors
 
     public static class Location
     {
+        public static Error NotFound(Guid locationId) => new(
+            "Location.NotFound",
+            $"The location with id = {locationId} is not found.");
+
         public static Error InvalidRequest => new(
             "Location.InvalidRequest",
             "The location request is invalid.");

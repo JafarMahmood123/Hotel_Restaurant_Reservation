@@ -1,28 +1,30 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
-
 public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand, Result<RestaurantResponse>>
 {
     private readonly IGenericRepository<Restaurant> _restaurantRepository;
     private readonly IGenericRepository<Location> _locationRepository;
     private readonly IMapper _mapper;
+    private readonly IValidator<AddRestaurantRequest> _validator;
 
     public AddRestaurantCommandHandler(
         IGenericRepository<Restaurant> restaurantRepository,
         IGenericRepository<Location> locationRepository,
-        IMapper mapper)
+        IMapper mapper,
+        IValidator<AddRestaurantRequest> validator)
     {
         _restaurantRepository = restaurantRepository;
         _locationRepository = locationRepository;
         _mapper = mapper;
+        _validator = validator;
     }
 
     public async Task<Result<RestaurantResponse>> Handle(
@@ -33,24 +35,35 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
         if (request.AddRestaurantRequest == null)
             return Result.Failure<RestaurantResponse>(DomainErrors.Restaurant.InvalidRequest);
 
+        var validationResult = await _validator.ValidateAsync(request.AddRestaurantRequest, cancellationToken);
+        if (!validationResult.IsValid)
+        {
+            return Result.Failure<RestaurantResponse>(new Error(
+                "Validation.Error",
+                string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage))));
+        }
+
         // Handle location
-        var locationResult = await HandleLocation(request.AddRestaurantRequest.addLocationRequest);
+        var locationResult = await HandleLocation(request.AddRestaurantRequest.LocationId);
         if (locationResult.IsFailure)
             return Result.Failure<RestaurantResponse>(locationResult.Error);
 
-        // Create restaurant
+        // Create restaurant with all required properties
         var restaurant = _mapper.Map<Restaurant>(request.AddRestaurantRequest);
         restaurant.Id = Guid.NewGuid();
         restaurant.Location = locationResult.Value;
         restaurant.MinPrice = 0;
         restaurant.MaxPrice = 0;
         restaurant.PriceLevel = RestaurantPriceLevel.NotSet;
-        // Process the price level and add the enum values after adding the dishes.
 
-        // Validate restaurant
-        var validationError = ValidateRestaurant(restaurant);
-        if (validationError != null)
-            return Result.Failure<RestaurantResponse>(validationError);
+        // Initialize rating properties
+        restaurant.StarRating = 0;          // Will be calculated when reviews are added
+        //restaurant.ServiceRating = 0;       // Will be calculated when reviews are added
+        //restaurant.FoodRating = 0;          // Will be calculated when reviews are added
+        //restaurant.ReviewCount = 0;         // No reviews initially
+        //restaurant.IsActive = true;         // New restaurants are active by default
+        //restaurant.CreatedDate = DateTime.UtcNow;
+        //restaurant.LastModifiedDate = DateTime.UtcNow;
 
         // Save restaurant
         restaurant = await _restaurantRepository.AddAsync(restaurant);
@@ -62,35 +75,14 @@ public class AddRestaurantCommandHandler : ICommandHandler<AddRestaurantCommand,
         return Result.Success(response);
     }
 
-    private async Task<Result<Location>> HandleLocation(AddLocationRequest locationRequest)
+    private async Task<Result<Location>> HandleLocation(Guid locationId)
     {
-        if (locationRequest == null)
-            return Result.Failure<Location>(DomainErrors.Location.InvalidRequest);
-
         var existingLocation = await _locationRepository.GetFirstOrDefaultAsync(
-            x => x.CountryId == locationRequest.CountryId &&
-                 x.CityLocalLocationsId == locationRequest.CityLocalLocationsId);
+            x => x.Id == locationId);
 
         if (existingLocation != null)
             return Result.Success(existingLocation);
 
-        var newLocation = _mapper.Map<Location>(locationRequest);
-        newLocation.Id = Guid.NewGuid();
-
-        newLocation = await _locationRepository.AddAsync(newLocation);
-        await _locationRepository.SaveChangesAsync();
-
-        return Result.Success(newLocation);
-    }
-
-    private Error? ValidateRestaurant(Restaurant restaurant)
-    {
-        //if (restaurant.StarRating < 1 || restaurant.StarRating > 5)
-        //    return DomainErrors.Restaurant.InvalidStarRating;
-
-        if (restaurant.NumberOfTables <= 0)
-            return DomainErrors.Restaurant.InvalidTableCount;
-
-        return null;
+        return Result.Failure<Location>(DomainErrors.Location.NotFound(locationId));
     }
 }
