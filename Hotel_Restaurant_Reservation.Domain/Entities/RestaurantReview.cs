@@ -8,6 +8,8 @@ public class RestaurantReview
 
     public Guid CustomerId { get; set; }
 
+    public DateTime ReviewDateTime { get; set; }
+
     public string Description { get; set; }
 
     public double CustomerStarRating { get; set; }
