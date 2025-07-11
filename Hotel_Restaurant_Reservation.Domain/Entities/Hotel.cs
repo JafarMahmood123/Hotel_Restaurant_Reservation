@@ -19,17 +19,17 @@ public class Hotel
 
     // Foreign Keys
 
-    public Guid PropertyTypeId { get; set; }
+    public Guid? PropertyTypeId { get; set; }
 
-    public Guid RoomId { get; set; }
+    public Guid? RoomId { get; set; }
 
-    public Guid HotelRangePricesId { get; set; }
+    public Guid? HotelRangePricesId { get; set; }
 
-    public Guid CurrencyTypeId { get; set; }
+    public Guid? CurrencyTypeId { get; set; }
 
-    public Guid HotelReservationId { get; set; }
+    public Guid? HotelReservationId { get; set; }
 
-    public Guid LocationId { get; set; }
+    public Guid? LocationId { get; set; }
 
     // Navigation Properties
 
