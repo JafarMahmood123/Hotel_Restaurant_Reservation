@@ -189,4 +189,63 @@ public static class DomainErrors
             "WorkTime.ExistingWorkTime",
             $"Work time already exists.");
     }
+
+    public static class Hotel
+    {
+        public static Error InvalidRequest => new(
+            "Restaurant.InvalidRequest",
+            "The restaurant request is invalid.");
+
+        public static Error InvalidStarRating => new(
+            "Restaurant.InvalidStarRating",
+            "Star rating must be between 1 and 5.");
+
+        public static Error InvalidTableCount => new(
+            "Restaurant.InvalidTableCount",
+            "Number of tables must be greater than 0.");
+
+        public static Error DuplicateName => new(
+            "Restaurant.DuplicateName",
+            "A restaurant with this name already exists.");
+
+        public static Error NotFound(Guid id) => new(
+            "Hotel.NotFound",
+            $"Hotel with ID {id} was not found.");
+
+        public static Error NoCuisinesToRemove => new(
+            "Restaurant.NoCuisinesToRemove",
+            "No matching cuisine associations found to remove.");
+
+        public static Error NoCurrencyTypesToRemove => new(
+            "Restaurant.NoCurrencyTypesToRemove",
+            "No matching currency type associations found to remove.");
+
+        public static Error NoDishesToRemove => new(
+            "Restaurant.NoDishesToRemove",
+            "No matching dish associations found to remove.");
+
+        public static Error NoFeaturesToRemove => new(
+           "Restaurant.NoFeaturesToRemove",
+           "No matching feature associations found to remove.");
+
+        public static Error NoMealTypesToRemove => new(
+            "Restaurant.NoMealTypesToRemove",
+            "No matching meal type associations found to remove.");
+
+        public static Error NoTagsToRemove => new(
+            "Restaurant.NoTagsToRemove",
+            "No matching tag associations found to remove.");
+
+        public static Error NoWorkTimesToRemove => new(
+            "Restaurant.NoWorkTimesToRemove",
+            "No matching work time associations found to remove.");
+
+        public static Error NotFoundForFilters => new(
+            "Restaurant.NotFoundForFilters",
+            "No restaurants found matching the specified filters.");
+
+        public static Error NoDishesWithPricesProvided => new(
+        "Restaurant.NoDishesWithPricesProvided",
+        "At least one dish with price must be provided.");
+    }
 }

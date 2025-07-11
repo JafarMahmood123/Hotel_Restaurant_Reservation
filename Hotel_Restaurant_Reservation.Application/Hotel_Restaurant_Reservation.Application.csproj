@@ -31,7 +31,6 @@
 
   <ItemGroup>
     <Folder Include="Implementation\BookingDishes\Queries\" />
-    <Folder Include="Implementation\Hotels\Commands\UpdateHotel\" />
   </ItemGroup>
 
 </Project>

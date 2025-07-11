@@ -3,11 +3,11 @@ using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
 using Hotel_Restaurant_Reservation.Application.DTOs.HotelDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
-using Hotel_Restaurant_Reservation.Presentation.Profiles;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,7 +33,7 @@ public class HotelsController : ApiController
         if (hotel is null)
             return NotFound();
 
-        var hotelResponse = _mapper.Map<HotelProfile>(hotel);
+        var hotelResponse = _mapper.Map<HotelResponse>(hotel);
 
         return Ok(hotelResponse);
     }
@@ -60,6 +60,19 @@ public class HotelsController : ApiController
         var hotel = await Sender.Send(command, cancellationToken);
 
         return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, hotel);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}")]
+    public async Task<IActionResult> UpdateHotel([FromRoute] Guid id, [FromBody] UpdateHotelRequest updateHotelRequest, CancellationToken cancellationToken)
+    {
+        var command = new UpdateHotelCommand(id, updateHotelRequest);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
     }
 
     [HttpDelete]
