@@ -2,6 +2,8 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.AddPropertyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.DeletePropertyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.UpdatePropertyType;
+using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Queries.GetAllPropertyTypes;
+using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Queries.GetPropertyTypeById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,31 @@ public class PropertyTypesController : ApiController
         _mapper = mapper;
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetAllPropertyTypes(CancellationToken cancellationToken)
+    {
+        var query = new GetAllPropertyTypesQuery();
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{id:guid}")]
+    [ActionName(nameof(GetPropertyTypeById))]
+    public async Task<IActionResult> GetPropertyTypeById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetPropertyTypeByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     public async Task<IActionResult> AddPropertyType([FromBody] AddPropertyTypeRequest request, CancellationToken cancellationToken)
     {
@@ -26,7 +53,7 @@ public class PropertyTypesController : ApiController
         {
             return BadRequest(result.Error);
         }
-        return CreatedAtAction(nameof(UpdatePropertyType), new { id = result.Value.Id }, result.Value);
+        return CreatedAtAction(nameof(GetPropertyTypeById), new { id = result.Value.Id }, result.Value);
     }
 
     [HttpPut("{id:guid}")]
