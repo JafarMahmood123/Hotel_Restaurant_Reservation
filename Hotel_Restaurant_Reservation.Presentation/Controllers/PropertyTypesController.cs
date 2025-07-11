@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.AddPropertyType;
+using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.DeletePropertyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.PropertyTypes.Commands.UpdatePropertyType;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -38,5 +39,17 @@ public class PropertyTypesController : ApiController
             return NotFound(result.Error);
         }
         return Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeletePropertyType(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeletePropertyTypeCommand(id);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return NoContent();
     }
 }
