@@ -252,8 +252,12 @@ public static class DomainErrors
 
     public static class PropertyType
     {
+        public static Error NotFound(Guid id) => new(
+        "PropertyType.NotFound",
+       $"PropertyType with the Id {id} was not found.");
+
         public static Error NotFound(string name) => new(
-        "Hotel.NotFound",
-       $"Hotel with ID {name} was not found.");
+        "PropertyType.NotFound",
+       $"PropertyType with the Name {name} was not found.");
     }
 }
