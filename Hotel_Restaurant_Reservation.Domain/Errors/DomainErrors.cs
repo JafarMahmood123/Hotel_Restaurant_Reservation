@@ -1,4 +1,5 @@
-﻿using Hotel_Restaurant_Reservation.Domain.Shared;
+﻿using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 public static class DomainErrors
 {
@@ -247,5 +248,12 @@ public static class DomainErrors
         public static Error NoDishesWithPricesProvided => new(
         "Restaurant.NoDishesWithPricesProvided",
         "At least one dish with price must be provided.");
+    }
+
+    public static class PropertyType
+    {
+        public static Error NotFound(string name) => new(
+        "Hotel.NotFound",
+       $"Hotel with ID {name} was not found.");
     }
 }
