@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\EventRegistrations\Commands\AdcEventRegistration\" />
     <Folder Include="Implementation\EventRegistrations\Commands\DeleteEventRegistration\" />
     <Folder Include="Implementation\EventRegistrations\Commands\UpdateEventRegistration\" />
     <Folder Include="Implementation\EventRegistrations\Queries\GetAllEventRegistrationsByEventId\" />

@@ -70,6 +70,7 @@ builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>,  GenericRepos
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 builder.Services.AddScoped<IGenericRepository<Amenity>, GenericRepository<Amenity>>();
+builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
