@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Events\Commands\UpdateEvent\" />
     <Folder Include="Implementation\Events\Queries\GetAllEvents\" />
     <Folder Include="Implementation\Events\Queries\GetEventById\" />
     <Folder Include="Implementation\HotelReservations\Commands\AddHotelReservation\" />

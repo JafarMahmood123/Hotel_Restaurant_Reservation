@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.AddEvent;
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.DeleteEvent;
+using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.UpdateEvent;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -37,6 +38,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] UpdateEventRequest request, CancellationToken cancellationToken)
+        {
+            var command = new UpdateEventCommand(id, request);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
         }
     }
 }
