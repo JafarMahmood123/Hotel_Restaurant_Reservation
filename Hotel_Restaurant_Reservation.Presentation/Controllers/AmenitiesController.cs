@@ -1,6 +1,7 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.AddAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.DeleteAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.UpdateAmenity;
+using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries.GetAllAmenities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,31 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
             var command = new UpdateAmenityCommand(id, request);
             var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAmenities(CancellationToken cancellationToken)
+        {
+            var query = new GetAllAmenitiesQuery();
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName(nameof(GetAmenityById))]
+        public async Task<IActionResult> GetAmenityById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetAmenityByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {
                 return NotFound(result.Error);
