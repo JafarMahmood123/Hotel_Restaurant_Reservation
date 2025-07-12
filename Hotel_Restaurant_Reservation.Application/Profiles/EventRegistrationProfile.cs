@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventRegistrations.Commands.AddEventRegistration;
+using Hotel_Restaurant_Reservation.Application.Implementation.EventRegistrations.Commands.UpdateEventRegistration;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventRegistrations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -11,5 +12,6 @@ public class EventRegistrationProfile : Profile
     {
         CreateMap<AddEventRegistrationRequest, EventRegistration>();
         CreateMap<EventRegistration, EventRegistrationResponse>();
+        CreateMap<UpdateEventRegistrationRequest, EventRegistration>();
     }
 }
