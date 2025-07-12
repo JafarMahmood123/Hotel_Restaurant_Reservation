@@ -43,6 +43,8 @@ public class Hotel
 
     public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
+    public virtual ICollection<HotelAmenityPrice> HotelAmenitiesPrices { get; set; }
+
     public virtual Location Location { get; set; }
 
     public Hotel()
@@ -50,5 +52,6 @@ public class Hotel
         Rooms = new HashSet<Room>();
         CurrencyType = new HashSet<CurrencyType>();
         HotelReservations = new HashSet<HotelReservation>();
+        HotelAmenitiesPrices = new HashSet<HotelAmenityPrice>();
     }
 }

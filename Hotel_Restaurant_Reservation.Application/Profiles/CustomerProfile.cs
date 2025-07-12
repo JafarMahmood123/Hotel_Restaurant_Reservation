@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CustomerDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
+using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;

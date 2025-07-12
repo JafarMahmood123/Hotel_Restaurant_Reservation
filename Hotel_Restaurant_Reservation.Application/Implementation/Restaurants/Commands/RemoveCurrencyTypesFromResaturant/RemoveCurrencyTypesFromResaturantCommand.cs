@@ -1,5 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.DTOs.CurrencyTypeDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCurrencyTypesFromResaturant;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 

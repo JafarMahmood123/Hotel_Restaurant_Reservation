@@ -2,21 +2,17 @@
 
 public class RoomAmenity
 {
-    // Key Properties
     public Guid Id { get; set; }
-
-    public string Name { get; set; }
-
-    // Foreign Keys
 
     public Guid RoomId { get; set; }
 
-    // Navigation Properties
+    public Guid AmenityId { get; set; }
 
-    public virtual ICollection<Room> Rooms { get; set; }
+    public virtual Room Room { get; set; }
+
+    public virtual Amenity Amenity { get; set; }
 
     public RoomAmenity()
     {
-        Rooms = new HashSet<Room>();
     }
 }

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLcoation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries.GetAllLocations;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries.GetLocationById;
 using Hotel_Restaurant_Reservation.Domain.Entities;

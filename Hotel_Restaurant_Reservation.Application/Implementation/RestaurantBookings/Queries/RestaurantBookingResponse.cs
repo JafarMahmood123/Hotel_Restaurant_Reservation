@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.DTOs.BookingDishDTOs;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;

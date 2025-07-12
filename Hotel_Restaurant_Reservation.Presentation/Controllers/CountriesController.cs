@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CountryDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.DeleteCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetAllCountries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryByName;

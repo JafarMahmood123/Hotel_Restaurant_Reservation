@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
-using Hotel_Restaurant_Reservation.Application.DTOs.HotelDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -51,7 +50,7 @@ public class HotelsController : ApiController
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddHotel(HotelAddRequest hotelAddRequest, CancellationToken cancellationToken)
+    public async Task<IActionResult> AddHotel(AddHotelRequest hotelAddRequest, CancellationToken cancellationToken)
     {
         Hotel requestedHotel = _mapper.Map<Hotel>(hotelAddRequest);
 

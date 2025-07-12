@@ -1,5 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.DTOs.BookingDishDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Queries;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 

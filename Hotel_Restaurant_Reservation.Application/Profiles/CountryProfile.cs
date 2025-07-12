@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CountryDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
