@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\HotelReservations\Commands\AddHotelReservation\" />
     <Folder Include="Implementation\HotelReservations\Commands\DeleteHotelReservation\" />
     <Folder Include="Implementation\HotelReservations\Commands\UpdateHotelReservation\" />
     <Folder Include="Implementation\HotelReservations\Queries\GetAllHotelReservationsByHotelId\" />

@@ -73,6 +73,7 @@ builder.Services.AddScoped<IGenericRepository<Amenity>, GenericRepository<Amenit
 builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 builder.Services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
 builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
+builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

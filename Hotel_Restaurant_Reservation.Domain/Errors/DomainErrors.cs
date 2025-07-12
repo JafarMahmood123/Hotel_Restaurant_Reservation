@@ -233,4 +233,11 @@ public static class DomainErrors
             "Event.NotFound",
             $"The event with the ID '{eventId}' was not found.");
     }
+
+    public static class HotelReservation
+    {
+        public static Error NotFound(Guid hotelReservationId) => new(
+            "HotelReservation.NotFound",
+            $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
+    }
 }
