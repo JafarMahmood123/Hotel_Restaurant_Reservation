@@ -5,6 +5,8 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.Up
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoom;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoomToHotel;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -86,5 +88,20 @@ public class HotelsController : ApiController
             return NotFound();
 
         return Ok(hotelResponse);
+    }
+
+    [HttpPost("{hotelId:guid}/rooms")]
+    public async Task<IActionResult> AddRoomToHotel(Guid hotelId, [FromBody] AddRoomToHotelRequest addRoomRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddRoomToHotelCommand(hotelId, addRoomRequest);
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        // Ideally, you would return a CreatedAtAction result here,
+        // which would point to a GetRoomById endpoint.
+        // For now, returning Ok with the created resource is sufficient.
+        return Ok(result.Value);
     }
 }

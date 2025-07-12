@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Hotels\Commands\AddRoomToHotel\" />
     <Folder Include="Implementation\Hotels\Commands\RemoveRoomFromHotel\" />
     <Folder Include="Implementation\Room\Commands\AddRoom\" />
     <Folder Include="Implementation\Room\Commands\DeleteRoom\" />

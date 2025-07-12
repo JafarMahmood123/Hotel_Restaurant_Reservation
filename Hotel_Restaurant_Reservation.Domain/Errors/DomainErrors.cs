@@ -240,4 +240,11 @@ public static class DomainErrors
             "HotelReservation.NotFound",
             $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
     }
+
+    public static class Room
+    {
+        public static Error NotFound(Guid roomId) => new(
+            "Room.NotFound",
+            $"The room with the ID '{roomId}' was not found.");
+    }
 }
