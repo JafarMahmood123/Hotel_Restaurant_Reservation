@@ -40,7 +40,7 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 });
 
 
-builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
 builder.Services.AddScoped<IGenericRepository<WorkTime>, GenericRepository<WorkTime>>();
 builder.Services.AddScoped<IGenericRepository<MealType>, GenericRepository<MealType>>();
@@ -55,26 +55,25 @@ builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisin
 builder.Services.AddScoped<IGenericRepository<Dish>, GenericRepository<Dish>>();
 builder.Services.AddScoped<IGenericRepository<Customer>, GenericRepository<Customer>>();
 builder.Services.AddScoped<IGenericRepository<BookingDish>, GenericRepository<BookingDish>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantBooking>,  GenericRepository<RestaurantBooking>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantReview>,  GenericRepository<RestaurantReview>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantReview>,  GenericRepository<RestaurantReview>>();
-builder.Services.AddScoped<IGenericRepository<Cuisine>,  GenericRepository<Cuisine>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantCuisine>,  GenericRepository<RestaurantCuisine>>();
-builder.Services.AddScoped<IGenericRepository<CurrencyType>,  GenericRepository<CurrencyType>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantCurrencyType>,  GenericRepository<RestaurantCurrencyType>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantDishPrice>,  GenericRepository<RestaurantDishPrice>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantFeature>,  GenericRepository<RestaurantFeature>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantMealType>,  GenericRepository<RestaurantMealType>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantTag>,  GenericRepository<RestaurantTag>>();
-builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>,  GenericRepository<RestaurantWorkTime>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantBooking>, GenericRepository<RestaurantBooking>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantReview>, GenericRepository<RestaurantReview>>();
+builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantCuisine>, GenericRepository<RestaurantCuisine>>();
+builder.Services.AddScoped<IGenericRepository<CurrencyType>, GenericRepository<CurrencyType>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantCurrencyType>, GenericRepository<RestaurantCurrencyType>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantDishPrice>, GenericRepository<RestaurantDishPrice>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantFeature>, GenericRepository<RestaurantFeature>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantMealType>, GenericRepository<RestaurantMealType>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantTag>, GenericRepository<RestaurantTag>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>, GenericRepository<RestaurantWorkTime>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
-builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
+builder.Services.AddScoped<IGenericRepository<Room>, GenericRepository<Room>>();
 builder.Services.AddScoped<IGenericRepository<Amenity>, GenericRepository<Amenity>>();
-builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 builder.Services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
 builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
-builder.Services.AddScoped<IGenericRepository<Room>, GenericRepository<Room>>();
+builder.Services.AddScoped<IGenericRepository<PropertyType>, GenericRepository<PropertyType>>();
+builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 

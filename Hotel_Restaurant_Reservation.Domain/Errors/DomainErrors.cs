@@ -196,6 +196,10 @@ public static class DomainErrors
         public static Error NotFound(Guid id) => new(
             "Hotel.NotFound",
             $"Hotel with ID {id} was not found.");
+
+        public static Error NotFoundForFilters => new(
+            "Hotel.NotFoundForFilters",
+            "No hotels found matching the specified filters.");
     }
 
     public static class PropertyType
