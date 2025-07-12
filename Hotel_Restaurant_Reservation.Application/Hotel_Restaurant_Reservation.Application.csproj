@@ -27,8 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\EventRegistrations\Queries\GetAllEventRegistrationsByEventId\" />
-    <Folder Include="Implementation\EventRegistrations\Queries\GetAllEventRegistrationsByCustomerId\" />
     <Folder Include="Implementation\Events\Commands\AddEvent\" />
     <Folder Include="Implementation\Events\Commands\DeleteEvent\" />
     <Folder Include="Implementation\Events\Commands\UpdateEvent\" />
