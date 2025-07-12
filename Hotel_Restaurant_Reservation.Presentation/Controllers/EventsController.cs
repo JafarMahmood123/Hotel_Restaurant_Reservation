@@ -1,6 +1,8 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.AddEvent;
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.DeleteEvent;
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.UpdateEvent;
+using Hotel_Restaurant_Reservation.Application.Implementation.Events.Queries.GetAllEvents;
+using Hotel_Restaurant_Reservation.Application.Implementation.Events.Queries.GetEventById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,31 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
             var command = new UpdateEventCommand(id, request);
             var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllEvents(CancellationToken cancellationToken)
+        {
+            var query = new GetAllEventsQuery();
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName(nameof(GetEventById))]
+        public async Task<IActionResult> GetEventById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetEventByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {
                 return NotFound(result.Error);
