@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.AddAmenity;
+using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.UpdateAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -11,5 +12,6 @@ public class AmenityProfile : Profile
     {
         CreateMap<Amenity, AmenityResponse>();
         CreateMap<AddAmenityRequest, Amenity>();
+        CreateMap<UpdateAmenityRequest, Amenity>();
     }
 }
