@@ -1,6 +1,9 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.AddHotelReservation;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.DeleteHotelReservation;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.UpdateHotelReservation;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries.GetAllHotelReservationsByCustomerId;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries.GetAllHotelReservationsByHotelId;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries.GetHotelReservationById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +48,43 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
             var command = new UpdateHotelReservationCommand(id, request);
             var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("customer/{customerId:guid}")]
+        public async Task<IActionResult> GetAllHotelReservationsByCustomerId(Guid customerId, CancellationToken cancellationToken)
+        {
+            var query = new GetAllHotelReservationsByCustomerIdQuery(customerId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("hotel/{hotelId:guid}")]
+        public async Task<IActionResult> GetAllHotelReservationsByHotelId(Guid hotelId, CancellationToken cancellationToken)
+        {
+            var query = new GetAllHotelReservationsByHotelIdQuery(hotelId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName(nameof(GetHotelReservationById))]
+        public async Task<IActionResult> GetHotelReservationById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetHotelReservationByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {
                 return NotFound(result.Error);
