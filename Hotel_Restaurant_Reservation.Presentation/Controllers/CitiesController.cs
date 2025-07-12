@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetAllCities;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityById;
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;

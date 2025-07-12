@@ -23,7 +23,8 @@ builder.Services.AddMediatR(cfg =>
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddApplicationPart(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

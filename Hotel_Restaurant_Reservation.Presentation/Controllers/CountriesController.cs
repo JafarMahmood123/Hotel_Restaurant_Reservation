@@ -1,15 +1,11 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.DeleteCountry;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetAllCountries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryById;
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryByName;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
