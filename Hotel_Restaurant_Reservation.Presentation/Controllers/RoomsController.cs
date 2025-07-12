@@ -4,6 +4,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AssignRoomTypeToRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomTypeFromRoom;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetAllRooms;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetRoomById;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
 {
@@ -11,6 +13,31 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
     {
         public RoomsController(ISender sender) : base(sender)
         {
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllRooms(CancellationToken cancellationToken)
+        {
+            var query = new GetAllRoomsQuery();
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName(nameof(GetRoomById))]
+        public async Task<IActionResult> GetRoomById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetRoomByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
         }
 
         [HttpPut("{id:guid}")]

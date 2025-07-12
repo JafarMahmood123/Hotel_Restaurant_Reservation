@@ -9,6 +9,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoomToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomFromHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetRoomsByHotelId;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -35,6 +36,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
                 return NotFound();
             var hotelResponse = _mapper.Map<HotelResponse>(hotel);
             return Ok(hotelResponse);
+        }
+
+        [HttpGet("{hotelId:guid}/rooms")]
+        public async Task<IActionResult> GetRoomsByHotelId(Guid hotelId, CancellationToken cancellationToken)
+        {
+            var query = new GetRoomsByHotelIdQuery(hotelId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
         }
 
         [HttpGet]
