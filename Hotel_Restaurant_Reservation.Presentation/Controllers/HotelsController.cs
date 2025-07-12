@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoomToHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomFromHotel;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -103,5 +104,19 @@ public class HotelsController : ApiController
         // which would point to a GetRoomById endpoint.
         // For now, returning Ok with the created resource is sufficient.
         return Ok(result.Value);
+    }
+
+    [HttpDelete("{hotelId:guid}/rooms/{roomId:guid}")]
+    public async Task<IActionResult> RemoveRoomFromHotel(Guid hotelId, Guid roomId, CancellationToken cancellationToken)
+    {
+        var command = new RemoveRoomFromHotelCommand(hotelId, roomId);
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return NoContent();
     }
 }
