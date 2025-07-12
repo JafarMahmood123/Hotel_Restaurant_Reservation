@@ -27,10 +27,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Amenities\Commands\AddAmenity\" />
     <Folder Include="Implementation\Amenities\Commands\DeleteAmenity\" />
     <Folder Include="Implementation\Amenities\Commands\UpdateAmenity\" />
-    <Folder Include="Implementation\Amenities\Queries\" />
+    <Folder Include="Implementation\Amenities\Queries\GetAllAmenities\" />
+    <Folder Include="Implementation\Amenities\Queries\GetAmenityById\" />
     <Folder Include="Implementation\EventRegistrations\Commands\AdcEventRegistration\" />
     <Folder Include="Implementation\EventRegistrations\Commands\DeleteEventRegistration\" />
     <Folder Include="Implementation\EventRegistrations\Commands\UpdateEventRegistration\" />

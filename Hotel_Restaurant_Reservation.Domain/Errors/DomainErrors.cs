@@ -208,4 +208,15 @@ public static class DomainErrors
             "PropertyType.NotFound",
             $"PropertyType with the Name {name} was not found.");
     }
+
+    public static class Amenity
+    {
+        public static Error ExistingAmenity(string amenityName) => new(
+            "Amenity.AddAmenity.ExistingAmenity",
+            $"An amenity with the name '{amenityName}' already exists.");
+
+        public static Error NotFound(Guid amenityId) => new(
+            "Amenity.GetAmenity.NotFound",
+            $"An amenity with the Id '{amenityId}' does not exist.");
+    }
 }

@@ -66,4 +66,6 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<Dish> Dishes { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<Amenity> Amenities { get; set; }
 }

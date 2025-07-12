@@ -69,6 +69,7 @@ builder.Services.AddScoped<IGenericRepository<RestaurantTag>,  GenericRepository
 builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>,  GenericRepository<RestaurantWorkTime>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
+builder.Services.AddScoped<IGenericRepository<Amenity>, GenericRepository<Amenity>>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 
