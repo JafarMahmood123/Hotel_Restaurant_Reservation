@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Amenities\Commands\DeleteAmenity\" />
     <Folder Include="Implementation\Amenities\Commands\UpdateAmenity\" />
     <Folder Include="Implementation\Amenities\Queries\GetAllAmenities\" />
     <Folder Include="Implementation\Amenities\Queries\GetAmenityById\" />
