@@ -27,11 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Room\Commands\AddRoom\" />
-    <Folder Include="Implementation\Room\Commands\DeleteRoom\" />
     <Folder Include="Implementation\Room\Commands\AssignRoomTypeToRoom\" />
     <Folder Include="Implementation\Room\Commands\RemoveRoomTypeFromRoom\" />
-    <Folder Include="Implementation\Room\Commands\UpdateRoom\" />
     <Folder Include="Implementation\Room\Queries\GetAllRooms\" />
     <Folder Include="Implementation\Room\Queries\GetRoomById\" />
   </ItemGroup>
