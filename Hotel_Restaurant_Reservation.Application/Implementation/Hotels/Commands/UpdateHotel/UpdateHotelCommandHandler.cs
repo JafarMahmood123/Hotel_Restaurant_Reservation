@@ -9,10 +9,10 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 
 public class UpdateHotelCommandHandler : ICommandHandler<UpdateHotelCommand, Result<HotelResponse>>
 {
-    private readonly IGenericRepository<Hotel> _hotelRepository;
+    private readonly IHotelRepository _hotelRepository;
     private readonly IMapper _mapper;
 
-    public UpdateHotelCommandHandler(IGenericRepository<Hotel> hotelRepository, IMapper mapper)
+    public UpdateHotelCommandHandler(IHotelRepository hotelRepository, IMapper mapper)
     {
         _hotelRepository = hotelRepository;
         _mapper = mapper;

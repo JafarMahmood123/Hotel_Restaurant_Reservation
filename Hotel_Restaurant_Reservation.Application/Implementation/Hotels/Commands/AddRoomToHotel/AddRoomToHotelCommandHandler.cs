@@ -11,10 +11,10 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands
 public class AddRoomToHotelCommandHandler : ICommandHandler<AddRoomToHotelCommand, Result<RoomResponse>>
 {
     private readonly IGenericRepository<Room> _roomRepository;
-    private readonly IGenericRepository<Hotel> _hotelRepository;
+    private readonly IHotelRepository _hotelRepository;
     private readonly IMapper _mapper;
 
-    public AddRoomToHotelCommandHandler(IGenericRepository<Room> roomRepository, IGenericRepository<Hotel> hotelRepository, IMapper mapper)
+    public AddRoomToHotelCommandHandler(IGenericRepository<Room> roomRepository, IHotelRepository hotelRepository, IMapper mapper)
     {
         _roomRepository = roomRepository;
         _hotelRepository = hotelRepository;

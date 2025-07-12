@@ -1,6 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.DTOs.LocationDTOs;
-
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 
 public class AddRestaurantRequest
 {

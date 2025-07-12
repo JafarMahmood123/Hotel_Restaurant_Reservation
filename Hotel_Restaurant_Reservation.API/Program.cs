@@ -68,11 +68,13 @@ builder.Services.AddScoped<IGenericRepository<RestaurantTag>, GenericRepository<
 builder.Services.AddScoped<IGenericRepository<RestaurantWorkTime>, GenericRepository<RestaurantWorkTime>>();
 builder.Services.AddScoped<IRestaurantRespository, RestaurantRepository>();
 builder.Services.AddScoped<IGenericRepository<Room>, GenericRepository<Room>>();
+builder.Services.AddScoped<IGenericRepository<RoomType>, GenericRepository<RoomType>>();
 builder.Services.AddScoped<IGenericRepository<Amenity>, GenericRepository<Amenity>>();
 builder.Services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>();
 builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 builder.Services.AddScoped<IGenericRepository<PropertyType>, GenericRepository<PropertyType>>();
+builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();

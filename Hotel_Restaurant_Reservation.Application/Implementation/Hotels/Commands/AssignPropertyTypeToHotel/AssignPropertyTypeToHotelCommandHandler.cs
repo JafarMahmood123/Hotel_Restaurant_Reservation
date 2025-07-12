@@ -9,11 +9,11 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 
 public class AssignPropertyTypeToHotelCommandHandler : ICommandHandler<AssignPropertyTypeToHotelCommand, Result<PropertyTypeResponse>>
 {
-    private readonly IGenericRepository<Hotel> _hotelRepository;
+    private readonly IHotelRepository _hotelRepository;
     private readonly IGenericRepository<PropertyType> _propertyTypeRepository;
     private readonly IMapper _mapper;
 
-    public AssignPropertyTypeToHotelCommandHandler(IGenericRepository<Hotel> hotelRepository,
+    public AssignPropertyTypeToHotelCommandHandler(IHotelRepository hotelRepository,
         IGenericRepository<PropertyType> propertyTypeRepository, IMapper mapper)
     {
         _hotelRepository = hotelRepository;

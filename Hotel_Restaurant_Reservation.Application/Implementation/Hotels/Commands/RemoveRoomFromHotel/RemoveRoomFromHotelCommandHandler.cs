@@ -8,9 +8,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands
 public class RemoveRoomFromHotelCommandHandler : ICommandHandler<RemoveRoomFromHotelCommand, Result>
 {
     private readonly IGenericRepository<Room> _roomRepository;
-    private readonly IGenericRepository<Hotel> _hotelRepository;
+    private readonly IHotelRepository _hotelRepository;
 
-    public RemoveRoomFromHotelCommandHandler(IGenericRepository<Room> roomRepository, IGenericRepository<Hotel> hotelRepository)
+    public RemoveRoomFromHotelCommandHandler(IGenericRepository<Room> roomRepository, IHotelRepository hotelRepository)
     {
         _roomRepository = roomRepository;
         _hotelRepository = hotelRepository;

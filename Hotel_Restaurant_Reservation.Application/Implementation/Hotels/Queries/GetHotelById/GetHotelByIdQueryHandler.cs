@@ -8,9 +8,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries
 // Need Editing Later
 public class GetHotelByIdQueryHandler : IQueryHandler<GetHotelByIdQuery, Hotel?>
 {
-    private readonly IGenericRepository<Hotel> _genericRepository;
+    private readonly IHotelRepository _genericRepository;
 
-    public GetHotelByIdQueryHandler(IGenericRepository<Hotel> genericRepository)
+    public GetHotelByIdQueryHandler(IHotelRepository genericRepository)
     {
         _genericRepository = genericRepository;
     }

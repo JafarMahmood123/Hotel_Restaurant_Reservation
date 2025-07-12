@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.CurrencyType;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries;
 
 public class CurrencyTypeResponse
 {

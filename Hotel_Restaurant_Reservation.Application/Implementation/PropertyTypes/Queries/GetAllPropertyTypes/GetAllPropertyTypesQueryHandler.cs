@@ -24,4 +24,4 @@ public class GetAllPropertyTypesQueryHandler : IQueryHandler<GetAllPropertyTypes
         return Result.Success(propertyTypeResponses);
     }
 }
-}
+

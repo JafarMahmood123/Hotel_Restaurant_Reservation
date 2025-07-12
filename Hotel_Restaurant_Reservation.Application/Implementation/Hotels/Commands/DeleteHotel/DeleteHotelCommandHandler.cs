@@ -8,10 +8,10 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 
 public class DeleteHotelCommandHandler : ICommandHandler<DeleteHotelCommand, HotelResponse?>
 {
-    private readonly IGenericRepository<Hotel> hotelRepository;
+    private readonly IHotelRepository hotelRepository;
     private readonly IMapper mapper;
 
-    public DeleteHotelCommandHandler(IGenericRepository<Hotel> hotelRepository, IMapper mapper)
+    public DeleteHotelCommandHandler(IHotelRepository hotelRepository, IMapper mapper)
     {
         this.hotelRepository = hotelRepository;
         this.mapper = mapper;

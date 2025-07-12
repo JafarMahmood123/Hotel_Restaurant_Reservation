@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.DeleteAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.UpdateAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries.GetAllAmenities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries.GetAmenityById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

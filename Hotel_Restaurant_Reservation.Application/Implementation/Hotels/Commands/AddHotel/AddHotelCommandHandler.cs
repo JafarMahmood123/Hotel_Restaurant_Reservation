@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Application.DTOs.Hotel;
+﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -8,9 +6,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Command
 
 public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Hotel>
 {
-    private readonly IGenericRepository<Hotel> _genericRepository;
+    private readonly IHotelRepository _genericRepository;
 
-    public AddHotelCommandHandler(IGenericRepository<Hotel> genericRepository)
+    public AddHotelCommandHandler(IHotelRepository genericRepository)
     {
         _genericRepository = genericRepository;
     }

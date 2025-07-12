@@ -6,9 +6,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries
 
 public class GetAllHotelsQueryHandler : IQueryHandler<GetAllHotelsQuery, IEnumerable<Hotel>?>
 {
-    private readonly IGenericRepository<Hotel> _genericRepository;
+    private readonly IHotelRepository _genericRepository;
 
-    public GetAllHotelsQueryHandler(IGenericRepository<Hotel> genericRepository)
+    public GetAllHotelsQueryHandler(IHotelRepository genericRepository)
     {
         _genericRepository = genericRepository;
     }
