@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Events\Commands\AddEvent\" />
     <Folder Include="Implementation\Events\Commands\DeleteEvent\" />
     <Folder Include="Implementation\Events\Commands\UpdateEvent\" />
     <Folder Include="Implementation\Events\Queries\GetAllEvents\" />

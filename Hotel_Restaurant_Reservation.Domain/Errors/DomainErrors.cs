@@ -226,4 +226,11 @@ public static class DomainErrors
             "EventRegistration.NotFound",
             $"The event registration with the ID '{eventRegistrationId}' was not found.");
     }
+
+    public static class Event
+    {
+        public static Error NotFound(Guid eventId) => new(
+            "Event.NotFound",
+            $"The event with the ID '{eventId}' was not found.");
+    }
 }
