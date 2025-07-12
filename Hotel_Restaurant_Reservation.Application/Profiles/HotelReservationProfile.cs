@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.AddHotelReservation;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.UpdateHotelReservation;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -11,5 +12,6 @@ public class HotelReservationProfile : Profile
     {
         CreateMap<AddHotelReservationRequest, HotelReservation>();
         CreateMap<HotelReservation, HotelReservationResponse>();
+        CreateMap<UpdateHotelReservationRequest, HotelReservation>();
     }
 }
