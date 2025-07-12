@@ -219,4 +219,11 @@ public static class DomainErrors
             "Amenity.GetAmenity.NotFound",
             $"An amenity with the Id '{amenityId}' does not exist.");
     }
+
+    public static class EventRegistration
+    {
+        public static Error NotFound(Guid eventRegistrationId) => new(
+            "EventRegistration.NotFound",
+            $"The event registration with the ID '{eventRegistrationId}' was not found.");
+    }
 }
