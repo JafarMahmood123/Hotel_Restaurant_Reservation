@@ -5,6 +5,8 @@ public class Room
     // Key Properties
     public Guid Id { get; set; }
 
+    public int RoomNumber { get; set; }
+
     public int MaxOccupancy { get; set; }
 
     public string Description { get; set; }
@@ -15,28 +17,21 @@ public class Room
 
     public Guid HotelId { get; set; }
 
-    public Guid HotelReservationId { get; set; }
-
-    public Guid RoomAmenitiesId { get; set; }
-
     public Guid RoomTypeId { get; set; }
-
 
 
     // Navigation Properties
 
     public virtual Hotel Hotel { get; set; }
 
-    public virtual ICollection<HotelReservation> HotelReservations { get; set; }
-
     public virtual ICollection<RoomAmenity> RoomAmenities { get; set; }
+
+    public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
     public virtual RoomType RoomType { get; set; }
 
     public Room()
     {
-        HotelReservations = new HashSet<HotelReservation>();
-
         RoomAmenities = new HashSet<RoomAmenity>();
     }
 }

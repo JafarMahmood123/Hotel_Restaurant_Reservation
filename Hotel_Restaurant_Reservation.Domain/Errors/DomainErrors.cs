@@ -205,7 +205,7 @@ public static class DomainErrors
             $"The property type with the ID '{propertyTypeId}' was not found.");
 
         public static Error NotFound(string name) => new(
-        "PropertyType.NotFound",
-       $"PropertyType with the Name {name} was not found.");
+            "PropertyType.NotFound",
+            $"PropertyType with the Name {name} was not found.");
     }
 }

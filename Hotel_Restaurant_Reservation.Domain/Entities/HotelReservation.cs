@@ -6,8 +6,6 @@ public class HotelReservation
     // Key Properties
     public Guid Id { get; set; }
 
-    public int RoomNumber { get; set; }
-
     public DateTime ReservationDateTime { get; set; }
 
     public DateOnly ReceivationStartDate { get; set; }
