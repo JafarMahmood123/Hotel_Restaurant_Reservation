@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Room\Commands\RemoveRoomTypeFromRoom\" />
     <Folder Include="Implementation\Room\Queries\GetAllRooms\" />
     <Folder Include="Implementation\Room\Queries\GetRoomById\" />
   </ItemGroup>

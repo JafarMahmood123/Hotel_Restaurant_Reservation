@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AssignRoomTypeToRoom;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomTypeFromRoom;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
 {
@@ -34,6 +35,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
                 return BadRequest(result.Error);
             }
             return Ok();
+        }
+
+        [HttpDelete("{roomId:guid}/remove-room-type")]
+        public async Task<IActionResult> RemoveRoomTypeFromRoom(Guid roomId, CancellationToken cancellationToken)
+        {
+            var command = new RemoveRoomTypeFromRoomCommand(roomId);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+            return NoContent();
         }
     }
 }
