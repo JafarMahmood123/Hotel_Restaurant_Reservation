@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.AddCurrencyType;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.UpdateCurrencyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
@@ -11,5 +12,6 @@ public class CurrencyTypeProfile : Profile
     {
         CreateMap<CurrencyType, CurrencyTypeResponse>();
         CreateMap<AddCurrencyTypeRequest, CurrencyType>();
+        CreateMap<UpdateCurrencyTypeRequest, CurrencyType>();
     }
 }

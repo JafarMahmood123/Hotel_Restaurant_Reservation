@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.AddCurrencyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.DeleteCurrencyType;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.UpdateCurrencyType;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -35,5 +36,17 @@ public class CurrencyTypesController : ApiController
             return NotFound(result.Error);
         }
         return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateCurrencyType(Guid id, [FromBody] UpdateCurrencyTypeRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateCurrencyTypeCommand(id, request);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
     }
 }
