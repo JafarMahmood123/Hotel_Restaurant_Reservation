@@ -248,7 +248,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 column: "LocationId",
                 principalTable: "Locations",
                 principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.NoAction);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Hotels_HotelRangePrices_HotelRangePricesId",
