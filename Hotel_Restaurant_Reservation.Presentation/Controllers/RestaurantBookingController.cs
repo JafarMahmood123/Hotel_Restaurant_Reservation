@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.DeleteRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.UpdateRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -68,5 +69,17 @@ public class RestaurantBookingController : ApiController
             return NotFound(result.Error);
         }
         return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateRestaurantBooking(Guid id, [FromBody] UpdateRestaurantBookingRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateRestaurantBookingCommand(id, request);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
     }
 }
