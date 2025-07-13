@@ -32,10 +32,14 @@ public class Event
 
     public virtual ICollection<CurrencyType> CurrencyTypes { get; set; }
 
+    public virtual ICollection<EventReview> EventReviews { get; set; }
+
     public Event()
     {
         EventRegistrations = new HashSet<EventRegistration>();
 
         CurrencyTypes = new HashSet<CurrencyType>();
+
+        EventReviews = new HashSet<EventReview>();
     }
 }
