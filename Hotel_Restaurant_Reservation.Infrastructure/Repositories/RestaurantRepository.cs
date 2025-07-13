@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Domain.Abstractions;
+﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

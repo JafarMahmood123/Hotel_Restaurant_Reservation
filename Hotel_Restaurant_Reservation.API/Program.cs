@@ -1,8 +1,8 @@
 using FluentValidation;
 using Hotel_Restaurant_Reservation.API.OptionsSetup;
-using Hotel_Restaurant_Reservation.Application.Abstractions;
+using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
-using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Infrastructure.Authentication;

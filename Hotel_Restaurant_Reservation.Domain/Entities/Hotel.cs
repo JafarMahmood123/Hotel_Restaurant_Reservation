@@ -46,7 +46,7 @@ public class Hotel
     public Hotel()
     {
         Rooms = new HashSet<Room>();
-        CurrencyType = new HashSet<CurrencyType>();
+        HotelCurrencyTypes = new HashSet<HotelCurrencyType>();
         HotelReservations = new HashSet<HotelReservation>();
         HotelAmenitiesPrices = new HashSet<HotelAmenityPrice>();
         HotelReviews = new HashSet<HotelReview>();

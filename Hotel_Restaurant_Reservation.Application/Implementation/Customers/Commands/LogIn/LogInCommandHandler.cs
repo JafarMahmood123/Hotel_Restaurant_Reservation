@@ -1,6 +1,6 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions;
+﻿using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Abstractions;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 

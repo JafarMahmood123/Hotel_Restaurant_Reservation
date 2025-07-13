@@ -1,6 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Domain.Abstractions
+namespace Hotel_Restaurant_Reservation.Application.Abstractions.Repositories
 {
     public interface IHotelRepository : IGenericRepository<Hotel>
     {

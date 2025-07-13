@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions;
+﻿using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
 using Microsoft.Extensions.Options;

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Hotel_Restaurant_Reservation.Domain.Abstractions;
+namespace Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 
 public interface IGenericRepository<TEntity> where TEntity : class
 {
