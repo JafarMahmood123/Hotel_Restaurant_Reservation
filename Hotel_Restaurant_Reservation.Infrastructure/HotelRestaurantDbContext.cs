@@ -70,4 +70,6 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<Event> Events { get; set; }
 
     public DbSet<EventRegistration> EventRegistrations { get; set; }
+
+    public DbSet<RestaurantBooking> RestaurantBookings { get; set; }
 }

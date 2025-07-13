@@ -85,8 +85,18 @@ builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<Ev
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
+builder.Services.AddScoped<DataSeeder>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    var dbContext = scope.ServiceProvider.GetRequiredService<HotelRestaurantDbContext>();
+    await dbContext.Database.MigrateAsync();
+    // This line is changed to call SeedAsync without a path
+    await seeder.SeedAsync();
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

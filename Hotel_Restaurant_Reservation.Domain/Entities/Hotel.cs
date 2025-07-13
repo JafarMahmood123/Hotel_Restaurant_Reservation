@@ -25,14 +25,6 @@ public class Hotel
 
     public Guid? PropertyTypeId { get; set; }
 
-    public Guid? RoomId { get; set; }
-
-    public Guid? HotelRangePricesId { get; set; }
-
-    public Guid? CurrencyTypeId { get; set; }
-
-    public Guid? HotelReservationId { get; set; }
-
     public Guid? LocationId { get; set; }
 
     // Navigation Properties
@@ -41,7 +33,7 @@ public class Hotel
 
     public virtual ICollection<Room> Rooms { get; set; }
 
-    public virtual ICollection<CurrencyType> CurrencyType { get; set; }
+    public virtual ICollection<HotelCurrencyType> HotelCurrencyTypes { get; set; }
 
     public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
