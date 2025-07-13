@@ -265,4 +265,11 @@ public static class DomainErrors
             "EventReview.NotFound",
             $"The event review with the ID '{eventReviewId}' was not found.");
     }
+
+    public static class HotelReview
+    {
+        public static Error NotFound(Guid hotelReviewId) => new(
+            "HotelReview.NotFound",
+            $"The hotel review with the ID '{hotelReviewId}' was not found.");
+    }
 }
