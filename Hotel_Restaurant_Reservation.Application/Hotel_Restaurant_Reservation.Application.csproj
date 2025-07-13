@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\HotelReviews\Commands\UpdateHotelReview\" />
     <Folder Include="Implementation\HotelReviews\Queries\GetAllHotelReviews\" />
     <Folder Include="Implementation\HotelReviews\Queries\GetHotelReviewById\" />
   </ItemGroup>
