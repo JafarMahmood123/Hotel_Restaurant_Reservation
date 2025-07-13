@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\EventReview\Commands\DeleteEventReview\" />
     <Folder Include="Implementation\EventReview\Commands\UpdateEventReview\" />
     <Folder Include="Implementation\EventReview\Queries\GetAllEventReviews\" />
     <Folder Include="Implementation\EventReview\Queries\GetEventReviewById\" />

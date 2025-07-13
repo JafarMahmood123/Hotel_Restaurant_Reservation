@@ -258,4 +258,11 @@ public static class DomainErrors
             "RoomType.NotFound",
             $"The room type with the ID '{roomTypeId}' was not found.");
     }
+
+    public static class EventReview
+    {
+        public static Error NotFound(Guid eventReviewId) => new(
+            "EventReview.NotFound",
+            $"The event review with the ID '{eventReviewId}' was not found.");
+    }
 }
