@@ -82,7 +82,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                     FirstName = $"FirstName{i}",
                     LastName = $"LastName{i}",
                     Email = $"customer{i}@example.com",
-                    Password = "password", // In a real app, hash this!
+                    HashedPassword = "password", // In a real app, hash this!
                     BirthDate = new DateOnly(1990 + i % 30, 1, 1),
                     Age = 30 + i % 10,
                     Role = Roles.Customer,

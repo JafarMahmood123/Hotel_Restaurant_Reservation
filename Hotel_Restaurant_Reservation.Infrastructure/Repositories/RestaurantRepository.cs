@@ -2,7 +2,6 @@
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 

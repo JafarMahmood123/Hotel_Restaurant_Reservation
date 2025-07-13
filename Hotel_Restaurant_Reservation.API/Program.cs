@@ -1,11 +1,13 @@
 using FluentValidation;
 using Hotel_Restaurant_Reservation.API.OptionsSetup;
 using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
+using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
+using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -83,6 +85,7 @@ builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericReposito
 builder.Services.AddScoped<IGenericRepository<HotelReview>, GenericRepository<HotelReview>>();
 builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<EventReview>>();
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
+builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<DataSeeder>();
@@ -94,7 +97,6 @@ using (var scope = app.Services.CreateScope())
     var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     var dbContext = scope.ServiceProvider.GetRequiredService<HotelRestaurantDbContext>();
     await dbContext.Database.MigrateAsync();
-    // This line is changed to call SeedAsync without a path
     await seeder.SeedAsync();
 }
 

@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
@@ -12,11 +13,13 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
 {
     private readonly IGenericRepository<Customer> _customerRepository;
     private readonly IMapper _mapper;
+    private readonly IPasswordHasher _passwordHasher;
 
-    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IMapper mapper)
+    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IMapper mapper, IPasswordHasher passwordHasher)
     {
-        this._customerRepository = customerRepository;
-        this._mapper = mapper;
+        _customerRepository = customerRepository;
+        _mapper = mapper;
+        _passwordHasher = passwordHasher;
     }
 
     public async Task<Result<CustomerResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
@@ -31,6 +34,7 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;
         customer.Role = Roles.Customer;
+        customer.HashedPassword = _passwordHasher.Hash(request.SignUpRequest.Password);
 
         customer = await _customerRepository.AddAsync(customer);
 

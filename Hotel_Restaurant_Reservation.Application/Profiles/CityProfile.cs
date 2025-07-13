@@ -2,7 +2,6 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
-using Hotel_Restaurant_Reservation.Domain.Abstractions;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Profiles;
