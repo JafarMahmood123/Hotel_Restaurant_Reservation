@@ -17,6 +17,10 @@ public class Hotel
 
     public int NumberOfRooms { get; set; }
 
+    public double MinPrice { get; set; }
+
+    public double MaxPrice { get; set; }    
+
     // Foreign Keys
 
     public Guid? PropertyTypeId { get; set; }
@@ -37,13 +41,13 @@ public class Hotel
 
     public virtual ICollection<Room> Rooms { get; set; }
 
-    public virtual HotelRangePrices HotelRangePrices { get; set; }
-
     public virtual ICollection<CurrencyType> CurrencyType { get; set; }
 
     public virtual ICollection<HotelReservation> HotelReservations { get; set; }
 
     public virtual ICollection<HotelAmenityPrice> HotelAmenitiesPrices { get; set; }
+
+    public virtual ICollection<HotelReview> HotelReviews { get; set; }
 
     public virtual Location Location { get; set; }
 
@@ -53,5 +57,6 @@ public class Hotel
         CurrencyType = new HashSet<CurrencyType>();
         HotelReservations = new HashSet<HotelReservation>();
         HotelAmenitiesPrices = new HashSet<HotelAmenityPrice>();
+        HotelReviews = new HashSet<HotelReview>();
     }
 }

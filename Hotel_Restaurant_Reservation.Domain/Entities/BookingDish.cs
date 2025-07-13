@@ -9,4 +9,8 @@ public class BookingDish
     public Guid DishId { get; set; }
 
     public int Quantity { get; set; }
+
+    public virtual Dish Dish { get; set; }
+
+    public virtual RestaurantBooking RestaurantBooking { get; set; }
 }

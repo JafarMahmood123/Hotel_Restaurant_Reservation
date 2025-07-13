@@ -25,20 +25,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
             double? minStarRate,
             double? maxStarRate)
         {
-            IQueryable<Hotel> hotelsQuery = _hotelRestaurantDbContext.Hotels
-                .Include(h => h.Location)
-                    .ThenInclude(l => l.CityLocalLocations)
-                        .ThenInclude(cll => cll.City)
-                .Include(h => h.Location)
-                    .ThenInclude(l => l.CityLocalLocations)
-                        .ThenInclude(cll => cll.LocalLocation)
-                .Include(h => h.Location)
-                    .ThenInclude(l => l.Country)
-                .Include(h => h.PropertyType)
-                .Include(h => h.Rooms)
-                    .ThenInclude(r => r.RoomAmenities)
-                        .ThenInclude(ra => ra.Amenity)
-                .Include(h => h.HotelRangePrices);
+            IQueryable<Hotel> hotelsQuery = _hotelRestaurantDbContext.Hotels;
 
             if (countryId.HasValue)
                 hotelsQuery = hotelsQuery.Where(h => h.Location.CountryId == countryId);
@@ -56,10 +43,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
                 hotelsQuery = hotelsQuery.Where(h => h.Rooms.Any(r => r.RoomAmenities.Any(ra => ra.AmenityId == amenityId)));
 
             if (minPrice.HasValue)
-                hotelsQuery = hotelsQuery.Where(h => h.HotelRangePrices.MinPrice >= minPrice);
+                hotelsQuery = hotelsQuery.Where(h => h.MinPrice >= minPrice);
 
             if (maxPrice.HasValue)
-                hotelsQuery = hotelsQuery.Where(h => h.HotelRangePrices.MaxPrice <= maxPrice);
+                hotelsQuery = hotelsQuery.Where(h => h.MaxPrice <= maxPrice);
 
             if (minStarRate.HasValue)
                 hotelsQuery = hotelsQuery.Where(h => h.StarRate >= minStarRate);

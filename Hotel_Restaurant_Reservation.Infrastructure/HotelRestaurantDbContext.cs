@@ -17,8 +17,6 @@ public class HotelRestaurantDbContext : DbContext
 
     public DbSet<RoomType> RoomTypes { get; set; }
 
-    public DbSet<HotelRangePrices> HotelRangePrices { get; set; }
-
     public DbSet<PropertyType> PropertyTypes { get; set; }
 
     public DbSet<CurrencyType> CurrencyTypes { get; set; }
