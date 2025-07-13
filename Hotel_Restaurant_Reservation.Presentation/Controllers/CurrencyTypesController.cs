@@ -1,4 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.AddCurrencyType;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.DeleteCurrencyType;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +23,17 @@ public class CurrencyTypesController : ApiController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCurrencyType(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteCurrencyTypeCommand(id);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return NoContent();
     }
 }

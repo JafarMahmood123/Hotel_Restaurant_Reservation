@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\CurrencyTypes\Commands\DeleteCurrencyType\" />
     <Folder Include="Implementation\CurrencyTypes\Commands\UpdateCurrencyType\" />
     <Folder Include="Implementation\CurrencyTypes\Queries\GetAllCurrencyTypes\" />
     <Folder Include="Implementation\CurrencyTypes\Queries\GetCurrencyTypeById\" />
