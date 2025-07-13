@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\EventReview\Queries\GetAllEventReviews\" />
     <Folder Include="Implementation\EventReview\Queries\GetEventReviewById\" />
     <Folder Include="Implementation\HotelReviews\Commands\DeleteHotelReview\" />
     <Folder Include="Implementation\HotelReviews\Commands\UpdateHotelReview\" />
