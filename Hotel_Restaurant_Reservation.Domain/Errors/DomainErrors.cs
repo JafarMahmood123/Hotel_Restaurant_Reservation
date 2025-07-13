@@ -64,6 +64,10 @@ public static class DomainErrors
         public static Error LongBookingTime() => new(
             "RestaurantBooking.AddRestaurantBooking.LongBookingTime",
             $"Booking duration cannot exceed 60 minutes.");
+
+        public static Error NotFound(Guid restaurantBookingId) => new(
+            "RestaurantBooking.NotFound",
+            $"The restaurant booking with the ID '{restaurantBookingId}' was not found.");
     }
 
     public static class RestaurantReview

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.DeleteRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -55,5 +56,17 @@ public class RestaurantBookingController : ApiController
         var bookingResponeses = await Sender.Send(command, cancellationToken);
 
         return Ok(bookingResponeses);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteRestaurantBooking(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteRestaurantBookingCommand(id);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return NoContent();
     }
 }
