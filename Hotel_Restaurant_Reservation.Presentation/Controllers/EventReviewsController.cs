@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Commands.DeleteEventReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Commands.UpdateEventReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetAllEventReviews;
+using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetEventReviewById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +55,19 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         public async Task<IActionResult> GetAllEventReviews(CancellationToken cancellationToken)
         {
             var query = new GetAllEventReviewsQuery();
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id:guid}")]
+        [ActionName(nameof(GetEventReviewById))]
+        public async Task<IActionResult> GetEventReviewById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetEventReviewByIdQuery(id);
             var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {
