@@ -27,8 +27,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\CurrencyTypes\Queries\GetAllCurrencyTypes\" />
     <Folder Include="Implementation\CurrencyTypes\Queries\GetCurrencyTypeById\" />
+    <Folder Include="Implementation\EventReview\Commands\DeleteEventReview\" />
+    <Folder Include="Implementation\EventReview\Commands\UpdateEventReview\" />
+    <Folder Include="Implementation\EventReview\Queries\GetAllEventReviews\" />
+    <Folder Include="Implementation\EventReview\Queries\GetEventReviewById\" />
+    <Folder Include="Implementation\HotelReviews\Commands\DeleteHotelReview\" />
+    <Folder Include="Implementation\HotelReviews\Commands\UpdateHotelReview\" />
+    <Folder Include="Implementation\HotelReviews\Queries\GetAllHotelReviews\" />
+    <Folder Include="Implementation\HotelReviews\Queries\GetHotelReviewById\" />
   </ItemGroup>
 
 </Project>
