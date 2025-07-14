@@ -380,5 +380,9 @@ public static class DomainErrors
         public static Error InvalidOldPassword() => new(
             "Customer.ChangePassword.InvalidOldPassword",
             "The old password you entered is incorrect.");
+
+        public static Error NotFound(Guid customerId) => new(
+            "Customer.NotFound",
+            $"The customer with the ID '{customerId}' was not found.");
     }
 }

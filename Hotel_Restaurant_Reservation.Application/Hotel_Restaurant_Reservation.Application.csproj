@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Customers\Commands\DeleteCustomer\" />
     <Folder Include="Implementation\Customers\Commands\UpdateCustomer\" />
   </ItemGroup>
 

@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
@@ -10,11 +10,8 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
 
 public class CustomerController : ApiController
 {
-    private readonly IMapper mapper;
-
-    public CustomerController(ISender sender, IMapper mapper) : base(sender)
+    public CustomerController(ISender sender) : base(sender)
     {
-        this.mapper = mapper;
     }
 
     [HttpPost("LogIn")]
@@ -51,11 +48,4 @@ public class CustomerController : ApiController
     {
         var command = new ChangePasswordCommand(changePasswordRequest);
 
-        var result = await Sender.Send(command, cancellationToken);
-
-        if (result.IsFailure)
-            return BadRequest(result.Error);
-
-        return Ok();
-    }
-}
+        var result = await Sender.Send
