@@ -25,16 +25,33 @@ public class DeleteBookingDishesCommandHandler : ICommandHandler<DeleteBookingDi
             return Result.Failure(DomainErrors.RestaurantBooking.NotFound(request.BookingId));
         }
 
-        var dishesToRemove = await _bookingDishRepository
-            .Where(bd => bd.RestaurantBookingId == request.BookingId && request.Request.DishIds.Contains(bd.DishId))
+        if (DateTime.UtcNow >= booking.ReceiveDateTime.AddMinutes(-15))
+        {
+            return Result.Failure(DomainErrors.RestaurantBooking.DeletionNotAllowed(booking.ReceiveDateTime));
+        }
+
+        var bookingDishes = await _bookingDishRepository
+            .Where(bd => bd.RestaurantBookingId == request.BookingId)
             .ToListAsync(cancellationToken);
 
-        if (!dishesToRemove.Any())
+        var foundDishesToRemove = bookingDishes
+            .Where(bd => request.Request.DishIds.Contains(bd.DishId))
+            .ToList();
+
+        var foundDishIds = foundDishesToRemove.Select(d => d.DishId);
+        var notFoundDishIds = request.Request.DishIds.Except(foundDishIds).ToList();
+
+        if (notFoundDishIds.Any())
+        {
+            return Result.Failure(DomainErrors.BookingDishes.SomeNotFound(notFoundDishIds));
+        }
+
+        if (!foundDishesToRemove.Any())
         {
             return Result.Failure(DomainErrors.BookingDishes.NotFound);
         }
 
-        _bookingDishRepository.RemoveRange(dishesToRemove);
+        _bookingDishRepository.RemoveRange(foundDishesToRemove);
         await _bookingDishRepository.SaveChangesAsync();
 
         return Result.Success();

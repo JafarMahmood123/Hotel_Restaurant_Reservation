@@ -68,6 +68,10 @@ public static class DomainErrors
         public static Error NotFound(Guid restaurantBookingId) => new(
             "RestaurantBooking.NotFound",
             $"The restaurant booking with the ID '{restaurantBookingId}' was not found.");
+
+        public static Error DeletionNotAllowed(DateTime receiveTime) => new(
+            "RestaurantBooking.DeletionNotAllowed",
+            $"Dish deletion is not allowed at or after the delivery time, or within 15 minutes of the delivery time. Delivery time: {receiveTime:yyyy-MM-dd HH:mm}.");
     }
 
     public static class RestaurantReview
@@ -282,5 +286,9 @@ public static class DomainErrors
         public static Error NotFound => new(
             "BookingDishes.NotFound",
             "No matching dishes found in the booking to remove.");
+
+        public static Error SomeNotFound(IEnumerable<Guid> notFoundDishIds) => new(
+            "BookingDishes.SomeNotFound",
+            $"The following dishes were not found in the booking: {string.Join(", ", notFoundDishIds)}");
     }
 }
