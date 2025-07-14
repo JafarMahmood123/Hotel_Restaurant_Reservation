@@ -315,5 +315,9 @@ public static class DomainErrors
         public static Error NotFound(Guid countryId) => new(
             "Country.NotFound",
             $"A country with the ID '{countryId}' was not found.");
+
+        public static Error SameName => new(
+            "Country.SameName",
+            "The new name is the same as the old name.");
     }
 }
