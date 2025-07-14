@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
+using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.DeleteBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.DeleteRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.UpdateRestaurantBooking;
@@ -93,5 +94,17 @@ public class RestaurantBookingController : ApiController
             return NotFound(result.Error);
         }
         return Ok(result.Value);
+    }
+
+    [HttpDelete("{bookingId:guid}/dishes")]
+    public async Task<IActionResult> DeleteDishesFromBooking(Guid bookingId, [FromBody] DeleteBookingDishesRequest request, CancellationToken cancellationToken)
+    {
+        var command = new DeleteBookingDishesCommand(bookingId, request);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return NoContent();
     }
 }

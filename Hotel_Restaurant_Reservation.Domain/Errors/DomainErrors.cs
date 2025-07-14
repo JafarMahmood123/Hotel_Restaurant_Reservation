@@ -276,4 +276,11 @@ public static class DomainErrors
             "HotelReview.NotFound",
             $"The hotel review with the ID '{hotelReviewId}' was not found.");
     }
+
+    public static class BookingDishes
+    {
+        public static Error NotFound => new(
+            "BookingDishes.NotFound",
+            "No matching dishes found in the booking to remove.");
+    }
 }
