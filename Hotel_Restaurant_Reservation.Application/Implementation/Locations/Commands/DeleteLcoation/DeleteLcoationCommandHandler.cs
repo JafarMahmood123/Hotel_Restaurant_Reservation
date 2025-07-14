@@ -1,27 +1,31 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLcoation;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLocation;
 
-public class DeleteLcoationCommandHandler : ICommandHandler<DeleteLcoationCommand, Location?>
+public class DeleteLocationCommandHandler : ICommandHandler<DeleteLocationCommand, Result>
 {
-    private readonly IGenericRepository<Location> genericRepository;
+    private readonly IGenericRepository<Location> _locationRepository;
 
-    public DeleteLcoationCommandHandler(IGenericRepository<Location> genericRepository)
+    public DeleteLocationCommandHandler(IGenericRepository<Location> locationRepository)
     {
-        this.genericRepository = genericRepository;
+        _locationRepository = locationRepository;
     }
 
-    public async Task<Location?> Handle(DeleteLcoationCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteLocationCommand request, CancellationToken cancellationToken)
     {
-        var location = await genericRepository.RemoveAsync(request.Id);
+        var location = await _locationRepository.GetByIdAsync(request.Id);
 
-        if (location == null) 
-            return null;
+        if (location is null)
+        {
+            return Result.Failure(DomainErrors.Location.NotFound(request.Id));
+        }
 
-        await genericRepository.SaveChangesAsync();
+        await _locationRepository.RemoveAsync(request.Id);
+        await _locationRepository.SaveChangesAsync();
 
-        return location;
+        return Result.Success();
     }
 }

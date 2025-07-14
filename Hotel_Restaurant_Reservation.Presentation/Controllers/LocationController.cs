@@ -1,5 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
-using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLcoation;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -42,7 +42,7 @@ public class LocationController : ApiController
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteLocation(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteLcoationCommand(id);
+        var command = new DeleteLocationCommand(id);
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
