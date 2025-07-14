@@ -385,4 +385,11 @@ public static class DomainErrors
             "Customer.NotFound",
             $"The customer with the ID '{customerId}' was not found.");
     }
+
+    public static class Role
+    {
+        public static Error NotFound(Guid roleId) => new(
+            "Role.NotFound",
+            $"The role with the ID '{roleId}' was not found.");
+    }
 }

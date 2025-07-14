@@ -1,4 +1,5 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+﻿// Presentation/Controllers/CustomerController.cs
+using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
@@ -48,4 +49,25 @@ public class CustomerController : ApiController
     {
         var command = new ChangePasswordCommand(changePasswordRequest);
 
-        var result = await Sender.Send
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok();
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteCustomerCommand(id);
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return NoContent();
+    }
+}

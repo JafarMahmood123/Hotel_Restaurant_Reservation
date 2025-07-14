@@ -27,7 +27,7 @@ public class JwtProvider : IJwtProvider
             throw new ArgumentNullException(nameof(JwtOptions.Audience), "JWT Audience is not configured.");
     }
 
-    public string Generate(Customer customer, Roles role)
+    public string Generate(Customer customer, Role role)
     {
         var claims = new List<Claim>
         {

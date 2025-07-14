@@ -10,12 +10,14 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Comm
 public class LogInCommandHandler : ICommandHandler<LogInCommand, Result<string>>
 {
     private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Role> _roleRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly IPasswordHasher _passwordHasher;
 
-    public LogInCommandHandler(IGenericRepository<Customer> customerRepository, IJwtProvider jwtProvider, IPasswordHasher passwordHasher)
+    public LogInCommandHandler(IGenericRepository<Customer> customerRepository, IGenericRepository<Role> roleRepository, IJwtProvider jwtProvider, IPasswordHasher passwordHasher)
     {
         _customerRepository = customerRepository;
+        _roleRepository = roleRepository;
         _jwtProvider = jwtProvider;
         _passwordHasher = passwordHasher;
     }
@@ -31,8 +33,14 @@ public class LogInCommandHandler : ICommandHandler<LogInCommand, Result<string>>
 
         if (!_passwordHasher.Verify(request.LogInRequest.Password, existingCustomer.HashedPassword))
             return Result.Failure<string>(DomainErrors.Customer.IncorrectPassword());
-        
-        string token = _jwtProvider.Generate(existingCustomer, existingCustomer.Role);
+
+        var role = await _roleRepository.GetByIdAsync(existingCustomer.RoleId);
+        if (role is null)
+        {
+            return Result.Failure<string>(DomainErrors.Role.NotFound(existingCustomer.RoleId));
+        }
+
+        string token = _jwtProvider.Generate(existingCustomer, role);
 
         return Result.Success(token);
     }
