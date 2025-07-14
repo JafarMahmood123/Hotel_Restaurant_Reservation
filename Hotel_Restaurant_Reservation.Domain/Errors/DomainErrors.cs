@@ -305,4 +305,15 @@ public static class DomainErrors
             return new Error("BookingDishes.Validation", combinedErrorMessage);
         }
     }
+
+    public static class Country
+    {
+        public static Error ExistingCountry(string name) => new(
+            "Country.ExistingCountry",
+            $"A country with the name '{name}' already exists.");
+
+        public static Error NotFound(Guid countryId) => new(
+            "Country.NotFound",
+            $"A country with the ID '{countryId}' was not found.");
+    }
 }

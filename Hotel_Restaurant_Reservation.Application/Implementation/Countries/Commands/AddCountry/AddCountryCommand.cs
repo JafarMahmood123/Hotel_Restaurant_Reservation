@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
 
-public class AddCountryCommand : ICommand<Country>
+public class AddCountryCommand : ICommand<Result<CountryResponse>>
 {
-    public Country Country { get; set; }
-
-    public AddCountryCommand(Country country)
+    public AddCountryCommand(AddCountryRequest addCountryRequest)
     {
-        Country = country;
+        AddCountryRequest = addCountryRequest;
     }
+
+    public AddCountryRequest AddCountryRequest { get; }
 }
