@@ -1,6 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Domain.Enums;
-
-namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
 public class Customer
 {
@@ -19,15 +17,17 @@ public class Customer
 
     public int Age { get; set; }
 
-    public Roles Role { get; set; }
-
     // Foreign Keys
 
     public Guid LocationId { get; set; }
 
+    public Guid RoleId { get; set; }
+
     // Navigation Properties
 
     public virtual Location Location { get; set; }
+
+    public virtual Role Role { get; set; }
 
     public Customer()
     {

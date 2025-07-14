@@ -1,19 +1,18 @@
-﻿//namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-//public class Role
-//{
-//    // Key Properties
-//    public Guid Id { get; set; }
+public class Role
+{
+    // Key Properties
+    public Guid Id { get; set; }
 
-//    public string Name { get; set; }
+    public string Name { get; set; }
 
-//    // Foreign Keys
 
-//    // Navigation Properties
+    // Navigation Properties
 
-//    public virtual ICollection<Customer> Customer { get; set; }
+    public virtual ICollection<Customer> Customer { get; set; }
 
-//    public Role()
-//    {
-//    }
-//}
+    public Role()
+    {
+    }
+}
