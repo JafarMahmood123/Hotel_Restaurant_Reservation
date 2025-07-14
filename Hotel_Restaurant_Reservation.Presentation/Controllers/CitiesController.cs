@@ -1,8 +1,8 @@
-﻿// Hotel_Restaurant_Reservation.Presentation/Controllers/CitiesController.cs
-using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetAllCities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCitiesByCountryId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
@@ -46,6 +46,18 @@ public class CitiesController : ApiController
     public async Task<IActionResult> GetCityByName(string name, CancellationToken cancellationToken)
     {
         var query = new GetCityByNameQuery(name);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("country/{countryId:guid}")]
+    public async Task<IActionResult> GetCitiesByCountryId(Guid countryId, CancellationToken cancellationToken)
+    {
+        var query = new GetCitiesByCountryIdQuery(countryId);
         var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
