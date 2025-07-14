@@ -1,6 +1,7 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.AddLocalLocations;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.DeleteLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.UpdateLocalLocation;
+using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetAllLocalLocations;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,18 @@ public class LocalLocationController : ApiController
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllLocalLocations(CancellationToken cancellationToken)
+    {
+        var query = new GetAllLocalLocationsQuery();
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
         }
         return Ok(result.Value);
     }
