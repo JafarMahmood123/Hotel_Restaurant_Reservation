@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Comm
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.DeleteRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.UpdateRestaurantBooking;
+using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetAllRestaurantBookingsByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -33,8 +34,7 @@ public class RestaurantBookingController : ApiController
         return Ok(result.Value);
     }
 
-    [HttpGet]
-    [Route("{customerId:guid}")]
+    [HttpGet("customer/{customerId:guid}")]
     public async Task<IActionResult> GetRestaurantBookingByCustomerId(Guid customerId, CancellationToken cancellationToken)
     {
         var query = new GetRestaurantBookingsByCustomerIdQuery(customerId);
@@ -44,6 +44,18 @@ public class RestaurantBookingController : ApiController
         if (!result.Value.Any())
             return NoContent();
 
+        return Ok(result.Value);
+    }
+
+    [HttpGet("restaurant/{restaurantId:guid}")]
+    public async Task<IActionResult> GetAllRestaurantBookingsByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetAllRestaurantBookingsByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
         return Ok(result.Value);
     }
 
