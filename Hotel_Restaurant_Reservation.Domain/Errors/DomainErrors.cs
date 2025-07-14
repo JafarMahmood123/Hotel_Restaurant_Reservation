@@ -391,5 +391,9 @@ public static class DomainErrors
         public static Error NotFound(Guid roleId) => new(
             "Role.NotFound",
             $"The role with the ID '{roleId}' was not found.");
+
+        public static Error CustomerRoleNotFound() => new(
+            "Role.CustomerRoleNotFound",
+            "The default 'Customer' role was not found in the database.");
     }
 }

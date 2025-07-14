@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
@@ -12,12 +11,14 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Comm
 public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<CustomerResponse>>
 {
     private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Role> _roleRepository;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
-    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IMapper mapper, IPasswordHasher passwordHasher)
+    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IGenericRepository<Role> roleRepository, IMapper mapper, IPasswordHasher passwordHasher)
     {
         _customerRepository = customerRepository;
+        _roleRepository = roleRepository;
         _mapper = mapper;
         _passwordHasher = passwordHasher;
     }
@@ -31,9 +32,17 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
         if (existingCustomer != null)
             return Result.Failure<CustomerResponse>(DomainErrors.Customer.SignUpExistingAccount(request.SignUpRequest.Email));
 
+        const string CUSTOMER_ROLE_NAME = "customer";
+
+        var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
+        if (customerRole == null)
+        {
+            return Result.Failure<CustomerResponse>(DomainErrors.Role.CustomerRoleNotFound());
+        }
+
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;
-        customer.Role = Roles.Customer;
+        customer.RoleId = customerRole.Id;
         customer.HashedPassword = _passwordHasher.Hash(request.SignUpRequest.Password);
 
         customer = await _customerRepository.AddAsync(customer);

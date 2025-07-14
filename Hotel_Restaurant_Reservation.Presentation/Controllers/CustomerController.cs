@@ -1,5 +1,4 @@
-﻿// Presentation/Controllers/CustomerController.cs
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
