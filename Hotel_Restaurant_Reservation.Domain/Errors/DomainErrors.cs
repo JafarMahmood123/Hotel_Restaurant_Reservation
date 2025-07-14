@@ -335,6 +335,10 @@ public static class DomainErrors
             "City.NotFound",
             $"A city with the ID '{cityId}' was not found.");
 
+        public static Error NotFoundByName(string name) => new(
+            "City.NotFoundByName",
+            $"A city with the name '{name}' was not found.");
+
         public static Error SameName => new(
             "City.SameName",
             "The new name is the same as the old name.");

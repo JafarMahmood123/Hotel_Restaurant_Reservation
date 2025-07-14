@@ -1,20 +1,33 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 
-public class GetCityByNameQueryHandler : IQueryHandler<GetCityByNameQuery, City?>
+public class GetCityByNameQueryHandler : IQueryHandler<GetCityByNameQuery, Result<CityResponse>>
 {
-    private readonly IGenericRepository<City> genericRepository;
+    private readonly IGenericRepository<City> _cityRepository;
+    private readonly IMapper _mapper;
 
-    public GetCityByNameQueryHandler(IGenericRepository<City> genericRepository)
+    public GetCityByNameQueryHandler(IGenericRepository<City> cityRepository, IMapper mapper)
     {
-        this.genericRepository = genericRepository;
+        _cityRepository = cityRepository;
+        _mapper = mapper;
     }
 
-    public async Task<City?> Handle(GetCityByNameQuery request, CancellationToken cancellationToken)
+    public async Task<Result<CityResponse>> Handle(GetCityByNameQuery request, CancellationToken cancellationToken)
     {
-        return await genericRepository.GetFirstOrDefaultAsync(x => x.Name == request.Name);
+        var city = await _cityRepository.GetFirstOrDefaultAsync(c => c.Name == request.Name);
+
+        if (city is null)
+        {
+            return Result.Failure<CityResponse>(DomainErrors.City.NotFoundByName(request.Name));
+        }
+
+        var cityResponse = _mapper.Map<CityResponse>(city);
+        return Result.Success(cityResponse);
     }
 }

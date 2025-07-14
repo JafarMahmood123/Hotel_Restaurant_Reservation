@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 
-public class GetCityByNameQuery : IQuery<City?>
+public class GetCityByNameQuery : IQuery<Result<CityResponse>>
 {
-    public string Name { get; set; }
-
     public GetCityByNameQuery(string name)
     {
         Name = name;
     }
+
+    public string Name { get; }
 }

@@ -1,8 +1,10 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
+﻿// Hotel_Restaurant_Reservation.Presentation/Controllers/CitiesController.cs
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetAllCities;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,12 +29,23 @@ public class CitiesController : ApiController
         return Ok(result.Value);
     }
 
-    [HttpGet]
-    [Route("{id:guid}")]
+    [HttpGet("{id:guid}")]
     [ActionName(nameof(GetCityById))]
     public async Task<IActionResult> GetCityById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCityByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("name/{name}")]
+    public async Task<IActionResult> GetCityByName(string name, CancellationToken cancellationToken)
+    {
+        var query = new GetCityByNameQuery(name);
         var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
