@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
@@ -43,5 +44,18 @@ public class CustomerController : ApiController
             return BadRequest(result.Error);
 
         return Ok(result.Value);
+    }
+
+    [HttpPost("ChangePassword")]
+    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest, CancellationToken cancellationToken)
+    {
+        var command = new ChangePasswordCommand(changePasswordRequest);
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok();
     }
 }

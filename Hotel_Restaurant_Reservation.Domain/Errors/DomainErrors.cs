@@ -3,21 +3,6 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 public static class DomainErrors
 {
-    public static class Customer
-    {
-        public static Error SignUpExistingAccount(string email) => new(
-            "Customer.SignUp.ExistingAccount",
-            $"The email '{email}' is already associated with an existing account.");
-
-        public static Error LogInUnExistingAccount(string email) => new(
-            "Customer.LogIn.UnExistingAccount",
-            $"No account found with email '{email}'.");
-
-        public static Error IncorrectPassword() => new(
-            "Customer.LogIn.IncorrectPassword",
-            $"Incorrect password.");
-    }
-
     public static class Dish
     {
         public static Error ExistingDish(string dishName) => new(
@@ -376,5 +361,24 @@ public static class DomainErrors
         public static Error NotFound(Guid id) => new(
             "CityLocalLocations.NotFound",
             $"The CityLocalLocations with the ID '{id}' was not found.");
+    }
+
+    public static class Customer
+    {
+        public static Error SignUpExistingAccount(string email) => new(
+            "Customer.SignUp.ExistingAccount",
+            $"The email '{email}' is already associated with an existing account.");
+
+        public static Error LogInUnExistingAccount(string email) => new(
+            "Customer.LogIn.UnExistingAccount",
+            $"No account found with email '{email}'.");
+
+        public static Error IncorrectPassword() => new(
+            "Customer.LogIn.IncorrectPassword",
+            $"Incorrect password.");
+
+        public static Error InvalidOldPassword() => new(
+            "Customer.ChangePassword.InvalidOldPassword",
+            "The old password you entered is incorrect.");
     }
 }
