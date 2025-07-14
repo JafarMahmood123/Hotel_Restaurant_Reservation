@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetAllCountries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,18 @@ public class CountriesController : ApiController
     public async Task<IActionResult> GetCountryById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetCountryByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{name}")]
+    public async Task<IActionResult> GetCountryByName(string name, CancellationToken cancellationToken)
+    {
+        var query = new GetCountryByNameQuery(name);
         var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {

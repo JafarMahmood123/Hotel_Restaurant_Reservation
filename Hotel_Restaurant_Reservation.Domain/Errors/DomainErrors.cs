@@ -316,6 +316,10 @@ public static class DomainErrors
             "Country.NotFound",
             $"A country with the ID '{countryId}' was not found.");
 
+        public static Error NotFoundByName(string name) => new(
+            "Country.NotFoundByName",
+            $"A country with the name '{name}' was not found.");
+
         public static Error SameName => new(
             "Country.SameName",
             "The new name is the same as the old name.");
