@@ -1,52 +1,61 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.AddLocalLocations;
 
-public class AddLocalLocationCommandHandler : ICommandHandler<AddLocalLocationCommand, LocalLocation>
+public class AddLocalLocationCommandHandler : ICommandHandler<AddLocalLocationCommand, Result<LocalLocationResponse>>
 {
-    private readonly IGenericRepository<LocalLocation> localLocationRepository;
-    private readonly IGenericRepository<CityLocalLocations> cityLocalLocationRepository;
+    private readonly IGenericRepository<LocalLocation> _localLocationRepository;
+    private readonly IGenericRepository<City> _cityRepository;
+    private readonly IGenericRepository<CityLocalLocations> _cityLocalLocationRepository;
+    private readonly IMapper _mapper;
 
-    public AddLocalLocationCommandHandler(IGenericRepository<LocalLocation> localLocationRepository,
-        IGenericRepository<CityLocalLocations> cityLocalLocationRepository)
+    public AddLocalLocationCommandHandler(
+        IGenericRepository<LocalLocation> localLocationRepository,
+        IGenericRepository<City> cityRepository,
+        IGenericRepository<CityLocalLocations> cityLocalLocationRepository,
+        IMapper mapper)
     {
-        this.localLocationRepository = localLocationRepository;
-        this.cityLocalLocationRepository = cityLocalLocationRepository;
+        _localLocationRepository = localLocationRepository;
+        _cityRepository = cityRepository;
+        _cityLocalLocationRepository = cityLocalLocationRepository;
+        _mapper = mapper;
     }
 
-    public async Task<LocalLocation> Handle(AddLocalLocationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<LocalLocationResponse>> Handle(AddLocalLocationCommand request, CancellationToken cancellationToken)
     {
-        LocalLocation localLocation = request.LocalLocation;
+        var city = await _cityRepository.GetByIdAsync(request.AddLocalLocationRequest.CityId);
+        if (city is null)
+        {
+            return Result.Failure<LocalLocationResponse>(DomainErrors.City.NotFound(request.AddLocalLocationRequest.CityId));
+        }
 
-        var existingLocation = await localLocationRepository.GetFirstOrDefaultAsync(x=>x.Name == localLocation.Name);
-
+        var localLocation = _mapper.Map<LocalLocation>(request.AddLocalLocationRequest);
+        var existingLocation = await _localLocationRepository.GetFirstOrDefaultAsync(x => x.Name == localLocation.Name);
         if (existingLocation != null)
         {
-            localLocation = existingLocation;
+            return Result.Failure<LocalLocationResponse>(DomainErrors.LocalLocation.ExistingLocalLocation(localLocation.Name));
         }
-        else
+
+        localLocation.Id = Guid.NewGuid();
+        await _localLocationRepository.AddAsync(localLocation);
+        await _localLocationRepository.SaveChangesAsync();
+
+        var cityLocalLocation = new CityLocalLocations
         {
-            localLocation.Id = Guid.NewGuid();
-            localLocation = await localLocationRepository.AddAsync(localLocation);
-            await localLocationRepository.SaveChangesAsync();
-        }
+            Id = Guid.NewGuid(),
+            CityId = request.AddLocalLocationRequest.CityId,
+            LocalLocationId = localLocation.Id
+        };
+        await _cityLocalLocationRepository.AddAsync(cityLocalLocation);
+        await _cityLocalLocationRepository.SaveChangesAsync();
 
-        var existingCityLocalLocation = await cityLocalLocationRepository.GetFirstOrDefaultAsync(x => x.LocalLocationId == localLocation.Id
-        && x.CityId == request.CityId);
 
-        if (existingCityLocalLocation is null)
-        {
-            var cityLocalLocation = new CityLocalLocations();
-            cityLocalLocation.Id = Guid.NewGuid();
-            cityLocalLocation.CityId = request.CityId;
-            cityLocalLocation.LocalLocationId = localLocation.Id;
-
-            await cityLocalLocationRepository.AddAsync(cityLocalLocation);
-            await cityLocalLocationRepository.SaveChangesAsync();
-        }
-
-        return localLocation;
+        var localLocationResponse = _mapper.Map<LocalLocationResponse>(localLocation);
+        return Result.Success(localLocationResponse);
     }
 }

@@ -3,7 +3,5 @@
 public class AddLocalLocationRequest
 {
     public string Name { get; set; }
-
     public Guid CityId { get; set; }
-
 }

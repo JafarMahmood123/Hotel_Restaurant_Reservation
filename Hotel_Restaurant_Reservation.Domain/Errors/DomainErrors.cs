@@ -343,4 +343,15 @@ public static class DomainErrors
             "City.SameName",
             "The new name is the same as the old name.");
     }
+
+    public static class LocalLocation
+    {
+        public static Error ExistingLocalLocation(string name) => new(
+            "LocalLocation.ExistingLocalLocation",
+            $"A local location with the name '{name}' already exists.");
+
+        public static Error NotFound(Guid id) => new(
+            "LocalLocation.NotFound",
+            $"A local location with the ID '{id}' was not found.");
+    }
 }
