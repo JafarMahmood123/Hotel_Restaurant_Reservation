@@ -354,6 +354,10 @@ public static class DomainErrors
             "LocalLocation.NotFound",
             $"A local location with the ID '{id}' was not found.");
 
+        public static Error NotFoundByName(string name) => new(
+            "LocalLocation.NotFoundByName",
+            $"A local location with the name '{name}' was not found.");
+
         public static Error SameName => new(
             "LocalLocation.SameName",
             "The new name is the same as the old name.");

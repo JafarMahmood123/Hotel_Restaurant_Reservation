@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Com
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Commands.UpdateLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetAllLocalLocations;
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetLocalLocationById;
+using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetLocalLocationByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -70,6 +71,18 @@ public class LocalLocationController : ApiController
     public async Task<IActionResult> GetLocalLocationById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetLocalLocationByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("name/{name}")]
+    public async Task<IActionResult> GetLocalLocationByName(string name, CancellationToken cancellationToken)
+    {
+        var query = new GetLocalLocationByNameQuery(name);
         var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
