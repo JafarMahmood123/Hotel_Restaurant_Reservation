@@ -1,5 +1,4 @@
-﻿// Hotel_Restaurant_Reservation.Presentation/Controllers/CountriesController.cs
-using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.AddCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.DeleteCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Commands.UpdateCountry;
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetAllCountries;
@@ -28,8 +27,7 @@ public class CountriesController : ApiController
         return Ok(result.Value);
     }
 
-    [HttpGet]
-    [Route("{id:guid}")]
+    [HttpGet("{id:guid}")]
     [ActionName(nameof(GetCountryById))]
     public async Task<IActionResult> GetCountryById(Guid id, CancellationToken cancellationToken)
     {
