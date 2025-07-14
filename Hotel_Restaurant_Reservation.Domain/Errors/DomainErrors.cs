@@ -353,5 +353,9 @@ public static class DomainErrors
         public static Error NotFound(Guid id) => new(
             "LocalLocation.NotFound",
             $"A local location with the ID '{id}' was not found.");
+
+        public static Error SameName => new(
+            "LocalLocation.SameName",
+            "The new name is the same as the old name.");
     }
 }
