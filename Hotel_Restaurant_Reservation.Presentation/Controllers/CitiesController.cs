@@ -1,4 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetAllCities;
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
@@ -51,5 +53,29 @@ public class CitiesController : ApiController
         }
 
         return CreatedAtAction(nameof(GetCityById), new { id = result.Value.Id }, result.Value);
+    }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> DeleteCity(Guid id, CancellationToken cancellationToken)
+    {
+        var command = new DeleteCityCommand(id);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return NoContent();
+    }
+
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateCity(Guid id, [FromBody] UpdateCityRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateCityCommand(id, request);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
     }
 }

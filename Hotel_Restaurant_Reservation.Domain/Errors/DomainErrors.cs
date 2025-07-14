@@ -334,5 +334,9 @@ public static class DomainErrors
         public static Error NotFound(Guid cityId) => new(
             "City.NotFound",
             $"A city with the ID '{cityId}' was not found.");
+
+        public static Error SameName => new(
+            "City.SameName",
+            "The new name is the same as the old name.");
     }
 }

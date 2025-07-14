@@ -1,17 +1,17 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.UpdateCity;
 
-public class UpdateCityCommand : ICommand<City?>
+public class UpdateCityCommand : ICommand<Result<CityResponse>>
 {
-    public City City { get; set; }
-
-    public Guid Id { get; set; }
-
-    public UpdateCityCommand(Guid id, City city)
+    public UpdateCityCommand(Guid id, UpdateCityRequest updateCityRequest)
     {
         Id = id;
-        City = city;
+        UpdateCityRequest = updateCityRequest;
     }
+
+    public Guid Id { get; }
+    public UpdateCityRequest UpdateCityRequest { get; }
 }
