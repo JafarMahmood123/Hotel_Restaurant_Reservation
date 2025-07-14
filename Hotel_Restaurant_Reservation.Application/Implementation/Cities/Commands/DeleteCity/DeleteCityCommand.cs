@@ -1,14 +1,14 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.DeleteCity;
 
-public class DeleteCityCommand : ICommand<City?>
+public class DeleteCityCommand : ICommand<Result>
 {
-    public Guid Id { get; set; }
-
     public DeleteCityCommand(Guid id)
     {
         Id = id;
     }
+
+    public Guid Id { get; }
 }
