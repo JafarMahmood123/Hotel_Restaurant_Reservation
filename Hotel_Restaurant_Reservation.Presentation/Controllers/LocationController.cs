@@ -1,6 +1,8 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries.GetAllLocations;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries.GetLocationById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -49,5 +51,30 @@ public class LocationController : ApiController
             return NotFound(result.Error);
         }
         return NoContent();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllLocations(CancellationToken cancellationToken)
+    {
+        var query = new GetAllLocationsQuery();
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{id:guid}")]
+    [ActionName(nameof(GetLocationById))]
+    public async Task<IActionResult> GetLocationById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetLocationByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
     }
 }
