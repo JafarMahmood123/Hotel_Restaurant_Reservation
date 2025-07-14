@@ -18,7 +18,7 @@ public class HotelReservation
 
     public Guid HotelId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     public Guid RoomId { get; set; }    
 
@@ -26,7 +26,7 @@ public class HotelReservation
 
     public virtual Hotel Hotel { get; set; }
 
-    public virtual Customer Customer { get; set; }
+    public virtual User User { get; set; }
 
     public virtual Room Room { get; set; }
 }

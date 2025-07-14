@@ -1,6 +1,6 @@
 ﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
-public class Customer
+public class User
 {
     // Key Properties
     public Guid Id { get; set; }
@@ -29,7 +29,7 @@ public class Customer
 
     public virtual Role Role { get; set; }
 
-    public Customer()
+    public User()
     {
     }
 }

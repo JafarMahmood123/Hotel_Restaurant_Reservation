@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 
 public class ChangePasswordRequest
 {

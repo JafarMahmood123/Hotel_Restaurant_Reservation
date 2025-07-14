@@ -1,6 +1,6 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries;
 
-public class CustomerResponse
+public class UserResponse
 {
     public Guid Id { get; set; }
 

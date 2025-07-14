@@ -19,13 +19,13 @@ public class RestaurantBooking
 
     public Guid RestaurantId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     // Navigation Properties
 
     public virtual Restaurant Restaurant { get; set; }
 
-    public virtual Customer Customers { get; set; }
+    public virtual User User { get; set; }
 
     public virtual ICollection<BookingDish> BookingDishes { get; set; }
 

@@ -4,14 +4,14 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 
 public class ChangePasswordCommandHandler : ICommandHandler<ChangePasswordCommand, Result>
 {
-    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Domain.Entities.User> _customerRepository;
     private readonly IPasswordHasher _passwordHasher;
 
-    public ChangePasswordCommandHandler(IGenericRepository<Customer> customerRepository, IPasswordHasher passwordHasher)
+    public ChangePasswordCommandHandler(IGenericRepository<Domain.Entities.User> customerRepository, IPasswordHasher passwordHasher)
     {
         _customerRepository = customerRepository;
         _passwordHasher = passwordHasher;

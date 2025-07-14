@@ -4,5 +4,5 @@ namespace Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 
 public interface IJwtProvider
 {
-    public string Generate(Customer customer, Role role);
+    public string Generate(User customer, Role role);
 }

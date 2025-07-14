@@ -27,6 +27,8 @@ public class Hotel
 
     public Guid? LocationId { get; set; }
 
+    public Guid HotelManagerId { get; set; }
+
     // Navigation Properties
 
     public virtual PropertyType PropertyType { get; set; }
@@ -42,6 +44,8 @@ public class Hotel
     public virtual ICollection<HotelReview> HotelReviews { get; set; }
 
     public virtual Location Location { get; set; }
+
+    public virtual HotelManager HotelManager { get; set; }
 
     public Hotel()
     {

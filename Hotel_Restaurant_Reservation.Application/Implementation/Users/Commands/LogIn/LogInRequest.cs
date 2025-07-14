@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 
 public class LogInRequest
 {

@@ -1,16 +1,18 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.ChangePassword;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.DeleteCustomer;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.User.Customers.Commands.DeleteCustomer;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.UpdateCustomer;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
 
-public class CustomerController : ApiController
+public class UserController : ApiController
 {
-    public CustomerController(ISender sender) : base(sender)
+    public UserController(ISender sender) : base(sender)
     {
     }
 
@@ -43,6 +45,18 @@ public class CustomerController : ApiController
         return Ok(result.Value);
     }
 
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> UpdateCustomer(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateUserCommand(id, request);
+        var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
     [HttpPost("ChangePassword")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest, CancellationToken cancellationToken)
     {
@@ -59,7 +73,7 @@ public class CustomerController : ApiController
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
     {
-        var command = new DeleteCustomerCommand(id);
+        var command = new DeleteUserCommand(id);
         var result = await Sender.Send(command, cancellationToken);
 
         if (result.IsFailure)

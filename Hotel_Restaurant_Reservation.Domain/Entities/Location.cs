@@ -17,7 +17,7 @@ public class Location
 
     public virtual CityLocalLocations CityLocalLocations { get; set; }
 
-    public virtual ICollection<Customer?> Customer { get; set; }
+    public virtual ICollection<User?> Customer { get; set; }
 
     public virtual ICollection<Hotel?> Hotel { get; set; }
 

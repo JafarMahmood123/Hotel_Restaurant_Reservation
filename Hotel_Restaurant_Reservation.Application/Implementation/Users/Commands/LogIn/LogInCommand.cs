@@ -2,7 +2,7 @@
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 
 public class LogInCommand : ICommand<Result<string>>
 {

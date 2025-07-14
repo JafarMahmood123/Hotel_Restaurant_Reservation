@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Validators;
 

@@ -2,20 +2,20 @@
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.SignUp;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
 
-public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<CustomerResponse>>
+public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<UserResponse>>
 {
-    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Domain.Entities.User> _customerRepository;
     private readonly IGenericRepository<Role> _roleRepository;
     private readonly IMapper _mapper;
     private readonly IPasswordHasher _passwordHasher;
 
-    public SignUpCommandHandler(IGenericRepository<Customer> customerRepository, IGenericRepository<Role> roleRepository, IMapper mapper, IPasswordHasher passwordHasher)
+    public SignUpCommandHandler(IGenericRepository<Domain.Entities.User> customerRepository, IGenericRepository<Role> roleRepository, IMapper mapper, IPasswordHasher passwordHasher)
     {
         _customerRepository = customerRepository;
         _roleRepository = roleRepository;
@@ -23,21 +23,21 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
         _passwordHasher = passwordHasher;
     }
 
-    public async Task<Result<CustomerResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserResponse>> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
-        var customer = _mapper.Map<Customer>(request.SignUpRequest);
+        var customer = _mapper.Map<Domain.Entities.User>(request.SignUpRequest);
 
         var existingCustomer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Email == customer.Email);
 
         if (existingCustomer != null)
-            return Result.Failure<CustomerResponse>(DomainErrors.Customer.SignUpExistingAccount(request.SignUpRequest.Email));
+            return Result.Failure<UserResponse>(DomainErrors.Customer.SignUpExistingAccount(request.SignUpRequest.Email));
 
         const string CUSTOMER_ROLE_NAME = "customer";
 
         var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
         if (customerRole == null)
         {
-            return Result.Failure<CustomerResponse>(DomainErrors.Role.CustomerRoleNotFound());
+            return Result.Failure<UserResponse>(DomainErrors.Role.CustomerRoleNotFound());
         }
 
         customer.Id = Guid.NewGuid();
@@ -49,7 +49,7 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<Custom
 
         await _customerRepository.SaveChangesAsync();
 
-        var customerResponse = _mapper.Map<CustomerResponse>(customer);
+        var customerResponse = _mapper.Map<UserResponse>(customer);
 
         return Result.Success(customerResponse);
     }

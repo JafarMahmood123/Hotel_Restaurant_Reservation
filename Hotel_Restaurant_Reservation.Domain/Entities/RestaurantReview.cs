@@ -6,7 +6,7 @@ public class RestaurantReview
 
     public Guid RestaurantId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     public DateTime ReviewDateTime { get; set; }
 
@@ -20,7 +20,7 @@ public class RestaurantReview
 
     public virtual Restaurant Restaurant { get; set; }
 
-    public virtual Customer Customer { get; set; }
+    public virtual User User { get; set; }
 
     public RestaurantReview()
     {

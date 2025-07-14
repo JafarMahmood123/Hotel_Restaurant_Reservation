@@ -5,16 +5,16 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.LogIn;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 
 public class LogInCommandHandler : ICommandHandler<LogInCommand, Result<string>>
 {
-    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Domain.Entities.User> _customerRepository;
     private readonly IGenericRepository<Role> _roleRepository;
     private readonly IJwtProvider _jwtProvider;
     private readonly IPasswordHasher _passwordHasher;
 
-    public LogInCommandHandler(IGenericRepository<Customer> customerRepository, IGenericRepository<Role> roleRepository, IJwtProvider jwtProvider, IPasswordHasher passwordHasher)
+    public LogInCommandHandler(IGenericRepository<Domain.Entities.User> customerRepository, IGenericRepository<Role> roleRepository, IJwtProvider jwtProvider, IPasswordHasher passwordHasher)
     {
         _customerRepository = customerRepository;
         _roleRepository = roleRepository;

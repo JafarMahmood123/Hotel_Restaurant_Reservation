@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Implementation\Customers\Commands\LogOut\**" />
+    <Compile Remove="Implementation\Users\Commands\LogOut\**" />
     <Compile Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
-    <EmbeddedResource Remove="Implementation\Customers\Commands\LogOut\**" />
+    <EmbeddedResource Remove="Implementation\Users\Commands\LogOut\**" />
     <EmbeddedResource Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
-    <None Remove="Implementation\Customers\Commands\LogOut\**" />
+    <None Remove="Implementation\Users\Commands\LogOut\**" />
     <None Remove="Implementation\RestaurantReviews\Commands\DeleteReview\**" />
   </ItemGroup>
 
@@ -27,7 +27,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Customers\Commands\UpdateCustomer\" />
+    <Folder Include="Implementation\Admins\Commands\AddAdmin\" />
+    <Folder Include="Implementation\Admins\Commands\AddManager\" />
   </ItemGroup>
 
 </Project>

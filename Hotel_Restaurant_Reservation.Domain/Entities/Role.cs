@@ -10,7 +10,7 @@ public class Role
 
     // Navigation Properties
 
-    public virtual ICollection<Customer> Customer { get; set; }
+    public virtual ICollection<User> Customer { get; set; }
 
     public Role()
     {

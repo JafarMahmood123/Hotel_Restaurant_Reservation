@@ -18,7 +18,7 @@ public class EventRegistration
 
     // Navigation Properties
 
-    public virtual Customer Customer { get; set; }
+    public virtual User Customer { get; set; }
 
     public virtual Event Event { get; set; }
 

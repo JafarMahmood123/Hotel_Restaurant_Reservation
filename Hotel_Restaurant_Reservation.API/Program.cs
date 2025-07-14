@@ -56,7 +56,7 @@ builder.Services.AddScoped<IGenericRepository<LocalLocation>, GenericRepository<
 builder.Services.AddScoped<IGenericRepository<CityLocalLocations>, GenericRepository<CityLocalLocations>>();
 builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
 builder.Services.AddScoped<IGenericRepository<Dish>, GenericRepository<Dish>>();
-builder.Services.AddScoped<IGenericRepository<Customer>, GenericRepository<Customer>>();
+builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IGenericRepository<BookingDish>, GenericRepository<BookingDish>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantBooking>, GenericRepository<RestaurantBooking>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantReview>, GenericRepository<RestaurantReview>>();

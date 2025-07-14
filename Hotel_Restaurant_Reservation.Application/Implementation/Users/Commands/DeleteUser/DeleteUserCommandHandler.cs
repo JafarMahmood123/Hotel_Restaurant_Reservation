@@ -3,18 +3,18 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Customers.Commands.DeleteCustomer;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 
-public class DeleteCustomerCommandHandler : ICommandHandler<DeleteCustomerCommand, Result>
+public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand, Result>
 {
-    private readonly IGenericRepository<Customer> _customerRepository;
+    private readonly IGenericRepository<Domain.Entities.User> _customerRepository;
 
-    public DeleteCustomerCommandHandler(IGenericRepository<Customer> customerRepository)
+    public DeleteUserCommandHandler(IGenericRepository<Domain.Entities.User> customerRepository)
     {
         _customerRepository = customerRepository;
     }
 
-    public async Task<Result> Handle(DeleteCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
     {
         var customer = await _customerRepository.GetByIdAsync(request.Id);
 

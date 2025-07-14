@@ -384,6 +384,10 @@ public static class DomainErrors
         public static Error NotFound(Guid customerId) => new(
             "Customer.NotFound",
             $"The customer with the ID '{customerId}' was not found.");
+
+        public static Error EmailInUse(string email) => new(
+            "Customer.EmailInUse",
+            $"The email '{email}' is already in use.");
     }
 
     public static class Role

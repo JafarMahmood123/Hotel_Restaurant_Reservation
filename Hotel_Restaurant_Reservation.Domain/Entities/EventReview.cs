@@ -10,6 +10,6 @@
         public double Rating { get; set; }
 
         public virtual Event Event { get; set; }
-        public virtual Customer Customer { get; set; }
+        public virtual User Customer { get; set; }
     }
 }

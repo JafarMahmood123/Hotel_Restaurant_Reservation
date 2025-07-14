@@ -73,10 +73,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
             await _dbContext.SaveChangesAsync();
 
             // Seed Customers
-            var customers = new List<Customer>();
+            var customers = new List<User>();
             for (int i = 0; i < 10; i++)
             {
-                customers.Add(new Customer
+                customers.Add(new User
                 {
                     Id = Guid.NewGuid(),
                     FirstName = $"FirstName{i}",
