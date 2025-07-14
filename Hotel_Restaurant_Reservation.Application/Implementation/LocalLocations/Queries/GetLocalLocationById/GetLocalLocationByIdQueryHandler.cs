@@ -1,20 +1,33 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetLocalLocationById;
 
-public class GetLocalLocationByIdQueryHandler : IQueryHandler<GetLocalLocationByIdQuery, LocalLocation?>
+public class GetLocalLocationByIdQueryHandler : IQueryHandler<GetLocalLocationByIdQuery, Result<LocalLocationResponse>>
 {
-    private readonly IGenericRepository<LocalLocation> genericRepository;
+    private readonly IGenericRepository<LocalLocation> _localLocationRepository;
+    private readonly IMapper _mapper;
 
-    public GetLocalLocationByIdQueryHandler(IGenericRepository<LocalLocation> genericRepository)
+    public GetLocalLocationByIdQueryHandler(IGenericRepository<LocalLocation> localLocationRepository, IMapper mapper)
     {
-        this.genericRepository = genericRepository;
+        _localLocationRepository = localLocationRepository;
+        _mapper = mapper;
     }
 
-    public async Task<LocalLocation?> Handle(GetLocalLocationByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<LocalLocationResponse>> Handle(GetLocalLocationByIdQuery request, CancellationToken cancellationToken)
     {
-        return await genericRepository.GetByIdAsync(request.Id);
+        var localLocation = await _localLocationRepository.GetByIdAsync(request.Id);
+
+        if (localLocation is null)
+        {
+            return Result.Failure<LocalLocationResponse>(DomainErrors.LocalLocation.NotFound(request.Id));
+        }
+
+        var localLocationResponse = _mapper.Map<LocalLocationResponse>(localLocation);
+        return Result.Success(localLocationResponse);
     }
 }
