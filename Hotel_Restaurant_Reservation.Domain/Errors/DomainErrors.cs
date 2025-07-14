@@ -365,6 +365,10 @@ public static class DomainErrors
         public static Error ExistingLocation => new(
             "Location.ExistingLocation",
             "This combination of country and city/local location already exists.");
+
+        public static Error SameLocation => new(
+            "Location.SameLocation",
+            "The new location is the same as the old one.");
     }
 
     public static class CityLocalLocations

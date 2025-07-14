@@ -1,16 +1,17 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;
 
-public class UpdateLocationCommand : ICommand<Location?>
+public class UpdateLocationCommand : ICommand<Result<LocationResponse>>
 {
-    public UpdateLocationCommand(Guid id, Location location)
+    public UpdateLocationCommand(Guid id, UpdateLocationRequest updateLocationRequest)
     {
         Id = id;
-        Location = location;
+        UpdateLocationRequest = updateLocationRequest;
     }
 
     public Guid Id { get; }
-    public Location Location { get; }
+    public UpdateLocationRequest UpdateLocationRequest { get; }
 }
