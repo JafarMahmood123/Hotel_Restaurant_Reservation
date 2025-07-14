@@ -30,6 +30,13 @@ public class UpdateBookingDishesCommandHandler : ICommandHandler<UpdateBookingDi
             return Result.Failure(DomainErrors.RestaurantBooking.NotFound(request.BookingId));
         }
 
+        if (DateTime.UtcNow >= booking.ReceiveDateTime.AddMinutes(-15))
+        {
+            return Result.Failure(DomainErrors.RestaurantBooking.UpdateNotAllowed(booking.ReceiveDateTime));
+        }
+
+        var validationErrors = new List<Error>();
+
         foreach (var dishEntry in request.Request.DishesIdsWithQuantities)
         {
             var dishId = dishEntry.Key;
@@ -37,8 +44,24 @@ public class UpdateBookingDishesCommandHandler : ICommandHandler<UpdateBookingDi
 
             if (await _dishRepository.GetByIdAsync(dishId) is null)
             {
-                return Result.Failure(DomainErrors.Dish.NotFound(dishId));
+                validationErrors.Add(DomainErrors.Dish.NotFound(dishId));
             }
+
+            if (quantity <= 0)
+            {
+                validationErrors.Add(DomainErrors.BookingDishes.InvalidQuantity(dishId));
+            }
+        }
+
+        if (validationErrors.Any())
+        {
+            return Result.Failure(DomainErrors.BookingDishes.Validation(validationErrors));
+        }
+
+        foreach (var dishEntry in request.Request.DishesIdsWithQuantities)
+        {
+            var dishId = dishEntry.Key;
+            var quantity = dishEntry.Value;
 
             var existingBookingDish = await _bookingDishRepository
                 .Where(bd => bd.RestaurantBookingId == request.BookingId && bd.DishId == dishId)
@@ -46,25 +69,7 @@ public class UpdateBookingDishesCommandHandler : ICommandHandler<UpdateBookingDi
 
             if (existingBookingDish != null)
             {
-                if (quantity > 0)
-                {
-                    existingBookingDish.Quantity = quantity;
-                }
-                else
-                {
-                    await _bookingDishRepository.RemoveAsync(existingBookingDish.Id);
-                }
-            }
-            else if (quantity > 0)
-            {
-                var newBookingDish = new BookingDish
-                {
-                    Id = Guid.NewGuid(),
-                    RestaurantBookingId = request.BookingId,
-                    DishId = dishId,
-                    Quantity = quantity
-                };
-                await _bookingDishRepository.AddAsync(newBookingDish);
+                existingBookingDish.Quantity = quantity;
             }
         }
 

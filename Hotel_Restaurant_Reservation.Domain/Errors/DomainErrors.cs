@@ -72,6 +72,10 @@ public static class DomainErrors
         public static Error DeletionNotAllowed(DateTime receiveTime) => new(
             "RestaurantBooking.DeletionNotAllowed",
             $"Dish deletion is not allowed at or after the delivery time, or within 15 minutes of the delivery time. Delivery time: {receiveTime:yyyy-MM-dd HH:mm}.");
+
+        public static Error UpdateNotAllowed(DateTime receiveTime) => new(
+            "RestaurantBooking.UpdateNotAllowed",
+            $"Booking updates are not allowed at or after the delivery time, or within 15 minutes of the delivery time. Delivery time: {receiveTime:yyyy-MM-dd HH:mm}.");
     }
 
     public static class RestaurantReview
@@ -290,5 +294,15 @@ public static class DomainErrors
         public static Error SomeNotFound(IEnumerable<Guid> notFoundDishIds) => new(
             "BookingDishes.SomeNotFound",
             $"The following dishes were not found in the booking: {string.Join(", ", notFoundDishIds)}");
+
+        public static Error InvalidQuantity(Guid dishId) => new(
+            "BookingDishes.InvalidQuantity",
+            $"Invalid quantity for dish with ID '{dishId}'. Quantity must be greater than zero.");
+
+        public static Error Validation(IEnumerable<Error> errors)
+        {
+            var combinedErrorMessage = string.Join("; ", errors.Select(e => e.Message));
+            return new Error("BookingDishes.Validation", combinedErrorMessage);
+        }
     }
 }
