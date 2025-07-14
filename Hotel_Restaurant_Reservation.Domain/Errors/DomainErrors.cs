@@ -324,4 +324,15 @@ public static class DomainErrors
             "Country.SameName",
             "The new name is the same as the old name.");
     }
+
+    public static class City
+    {
+        public static Error ExistingCity(string name, Guid countryId) => new(
+            "City.ExistingCity",
+            $"A city with the name '{name}' already exists in the country with ID '{countryId}'.");
+
+        public static Error NotFound(Guid cityId) => new(
+            "City.NotFound",
+            $"A city with the ID '{cityId}' was not found.");
+    }
 }

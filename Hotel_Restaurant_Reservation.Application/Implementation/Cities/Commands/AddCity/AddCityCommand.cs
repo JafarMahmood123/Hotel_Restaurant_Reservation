@@ -1,16 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
 
-public class AddCityCommand : ICommand<City>
+public class AddCityCommand : ICommand<Result<CityResponse>>
 {
-    public City City { get; set; }
-    public Guid CountryId { get; }
-
-    public AddCityCommand(City city, Guid countryId)
+    public AddCityCommand(AddCityRequest addCityRequest)
     {
-        City = city;
-        CountryId = countryId;
+        AddCityRequest = addCityRequest;
     }
+
+    public AddCityRequest AddCityRequest { get; }
 }

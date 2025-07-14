@@ -1,36 +1,52 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Cities.Commands.AddCity;
 
-public class AddCityCommandHandler : ICommandHandler<AddCityCommand, City>
+public class AddCityCommandHandler : ICommandHandler<AddCityCommand, Result<CityResponse>>
 {
-    private readonly IGenericRepository<City> cityRepository;
+    private readonly IGenericRepository<City> _cityRepository;
+    private readonly IGenericRepository<Country> _countryRepository;
+    private readonly IMapper _mapper;
 
-    public AddCityCommandHandler(IGenericRepository<City> cityRepository)
+    public AddCityCommandHandler(
+        IGenericRepository<City> cityRepository,
+        IGenericRepository<Country> countryRepository,
+        IMapper mapper)
     {
-        this.cityRepository = cityRepository;
+        _cityRepository = cityRepository;
+        _countryRepository = countryRepository;
+        _mapper = mapper;
     }
 
-    public async Task<City> Handle(AddCityCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CityResponse>> Handle(AddCityCommand request, CancellationToken cancellationToken)
     {
-        City city = request.City;
-
-        var existingCity = await cityRepository.GetFirstOrDefaultAsync(x => x.Name == city.Name && x.CountryId == request.CountryId);
-
-        if(existingCity is not null)
+        var country = await _countryRepository.GetByIdAsync(request.AddCityRequest.CountryId);
+        if (country is null)
         {
-            city = existingCity;
-        }
-        else
-        {
-            city.Id = Guid.NewGuid();
-            city.CountryId = request.CountryId;
-            city = await cityRepository.AddAsync(city);
-             await cityRepository.SaveChangesAsync();
+            return Result.Failure<CityResponse>(DomainErrors.Country.NotFound(request.AddCityRequest.CountryId));
         }
 
-        return city;
+        var existingCity = await _cityRepository.GetFirstOrDefaultAsync(
+            x => x.Name == request.AddCityRequest.Name && x.CountryId == request.AddCityRequest.CountryId);
+
+        if (existingCity != null)
+        {
+            return Result.Failure<CityResponse>(DomainErrors.City.ExistingCity(request.AddCityRequest.Name, request.AddCityRequest.CountryId));
+        }
+
+        var city = _mapper.Map<City>(request.AddCityRequest);
+        city.Id = Guid.NewGuid();
+
+        await _cityRepository.AddAsync(city);
+        await _cityRepository.SaveChangesAsync();
+
+        var cityResponse = _mapper.Map<CityResponse>(city);
+
+        return Result.Success(cityResponse);
     }
 }
