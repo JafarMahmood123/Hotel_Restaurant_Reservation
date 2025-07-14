@@ -1,41 +1,59 @@
-﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
 
-public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Location>
+public class AddLocationCommandHandler : ICommandHandler<AddLocationCommand, Result<LocationResponse>>
 {
-    private readonly IGenericRepository<Location> _genericRepository;
+    private readonly IGenericRepository<Location> _locationRepository;
+    private readonly IGenericRepository<Country> _countryRepository;
+    private readonly IGenericRepository<CityLocalLocations> _cityLocalLocationsRepository;
+    private readonly IMapper _mapper;
 
-    public AddLocationCommandHandler(IGenericRepository<Location> genericRepository)
+    public AddLocationCommandHandler(
+        IGenericRepository<Location> locationRepository,
+        IGenericRepository<Country> countryRepository,
+        IGenericRepository<CityLocalLocations> cityLocalLocationsRepository,
+        IMapper mapper)
     {
-        _genericRepository = genericRepository;
+        _locationRepository = locationRepository;
+        _countryRepository = countryRepository;
+        _cityLocalLocationsRepository = cityLocalLocationsRepository;
+        _mapper = mapper;
     }
 
-    public async Task<Location> Handle(AddLocationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<LocationResponse>> Handle(AddLocationCommand request, CancellationToken cancellationToken)
     {
+        if (await _countryRepository.GetByIdAsync(request.AddLocationRequest.CountryId) is null)
+        {
+            return Result.Failure<LocationResponse>(DomainErrors.Country.NotFound(request.AddLocationRequest.CountryId));
+        }
 
-        Location location = request.Location;
+        if (await _cityLocalLocationsRepository.GetByIdAsync(request.AddLocationRequest.CityLocalLocationsId) is null)
+        {
+            return Result.Failure<LocationResponse>(DomainErrors.CityLocalLocations.NotFound(request.AddLocationRequest.CityLocalLocationsId));
+        }
 
-
-        var existingLocation = await _genericRepository.GetFirstOrDefaultAsync(x => x.CityLocalLocationsId == location.CityLocalLocationsId
-        && x.CountryId == location.CountryId);
+        var existingLocation = await _locationRepository.GetFirstOrDefaultAsync(
+            x => x.CountryId == request.AddLocationRequest.CountryId &&
+                 x.CityLocalLocationsId == request.AddLocationRequest.CityLocalLocationsId);
 
         if (existingLocation != null)
         {
-            location = existingLocation;
-        }
-        else
-        {
-            location.Id = Guid.NewGuid();
-            location.CountryId = location.CountryId;
-            location.CityLocalLocationsId = location.CityLocalLocationsId;
-
-            location = await _genericRepository.AddAsync(location);
-            await _genericRepository.SaveChangesAsync();
+            return Result.Failure<LocationResponse>(DomainErrors.Location.ExistingLocation);
         }
 
-        return location;
+        var location = _mapper.Map<Location>(request.AddLocationRequest);
+        location.Id = Guid.NewGuid();
+
+        await _locationRepository.AddAsync(location);
+        await _locationRepository.SaveChangesAsync();
+
+        var locationResponse = _mapper.Map<LocationResponse>(location);
+        return Result.Success(locationResponse);
     }
 }

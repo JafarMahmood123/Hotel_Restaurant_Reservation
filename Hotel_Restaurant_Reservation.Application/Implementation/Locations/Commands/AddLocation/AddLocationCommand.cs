@@ -1,15 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
 
-public class AddLocationCommand : ICommand<Location>
+public class AddLocationCommand : ICommand<Result<LocationResponse>>
 {
-
-    public AddLocationCommand(Location location)
+    public AddLocationCommand(AddLocationRequest addLocationRequest)
     {
-        Location = location;
+        AddLocationRequest = addLocationRequest;
     }
 
-    public Location Location { get; }
+    public AddLocationRequest AddLocationRequest { get; }
 }

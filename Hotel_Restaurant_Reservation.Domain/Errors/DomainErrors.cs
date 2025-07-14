@@ -170,17 +170,6 @@ public static class DomainErrors
         "At least one dish with price must be provided.");
     }
 
-    public static class Location
-    {
-        public static Error NotFound(Guid locationId) => new(
-            "Location.NotFound",
-            $"The location with id = {locationId} is not found.");
-
-        public static Error InvalidRequest => new(
-            "Location.InvalidRequest",
-            "The location request is invalid.");
-    }
-
     public static class Tag
     {
         public static Error NotFound(Guid tagId) => new(
@@ -361,5 +350,27 @@ public static class DomainErrors
         public static Error SameName => new(
             "LocalLocation.SameName",
             "The new name is the same as the old name.");
+    }
+
+    public static class Location
+    {
+        public static Error NotFound(Guid locationId) => new(
+            "Location.NotFound",
+            $"The location with id = {locationId} is not found.");
+
+        public static Error InvalidRequest => new(
+            "Location.InvalidRequest",
+            "The location request is invalid.");
+
+        public static Error ExistingLocation => new(
+            "Location.ExistingLocation",
+            "This combination of country and city/local location already exists.");
+    }
+
+    public static class CityLocalLocations
+    {
+        public static Error NotFound(Guid id) => new(
+            "CityLocalLocations.NotFound",
+            $"The CityLocalLocations with the ID '{id}' was not found.");
     }
 }

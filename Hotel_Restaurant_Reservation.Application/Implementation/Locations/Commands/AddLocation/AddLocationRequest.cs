@@ -3,6 +3,5 @@
 public class AddLocationRequest
 {
     public Guid CountryId { get; set; }
-
     public Guid CityLocalLocationsId { get; set; }
 }
