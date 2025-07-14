@@ -1,5 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.User.Customers.Commands.DeleteCustomer;
-using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
@@ -46,7 +45,7 @@ public class UserController : ApiController
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> UpdateCustomer(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
         var command = new UpdateUserCommand(id, request);
         var result = await Sender.Send(command, cancellationToken);
@@ -71,7 +70,7 @@ public class UserController : ApiController
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> DeleteCustomer(Guid id, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteUserCommand(id);
         var result = await Sender.Send(command, cancellationToken);

@@ -363,30 +363,30 @@ public static class DomainErrors
             $"The CityLocalLocations with the ID '{id}' was not found.");
     }
 
-    public static class Customer
+    public static class User
     {
         public static Error SignUpExistingAccount(string email) => new(
-            "Customer.SignUp.ExistingAccount",
+            "User.SignUp.ExistingAccount",
             $"The email '{email}' is already associated with an existing account.");
 
         public static Error LogInUnExistingAccount(string email) => new(
-            "Customer.LogIn.UnExistingAccount",
+            "User.LogIn.UnExistingAccount",
             $"No account found with email '{email}'.");
 
         public static Error IncorrectPassword() => new(
-            "Customer.LogIn.IncorrectPassword",
+            "User.LogIn.IncorrectPassword",
             $"Incorrect password.");
 
         public static Error InvalidOldPassword() => new(
-            "Customer.ChangePassword.InvalidOldPassword",
+            "User.ChangePassword.InvalidOldPassword",
             "The old password you entered is incorrect.");
 
-        public static Error NotFound(Guid customerId) => new(
-            "Customer.NotFound",
-            $"The customer with the ID '{customerId}' was not found.");
+        public static Error NotFound(Guid userId) => new(
+            "User.NotFound",
+            $"The user with the ID '{userId}' was not found.");
 
         public static Error EmailInUse(string email) => new(
-            "Customer.EmailInUse",
+            "User.EmailInUse",
             $"The email '{email}' is already in use.");
     }
 
