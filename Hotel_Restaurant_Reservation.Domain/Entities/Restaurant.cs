@@ -73,6 +73,7 @@ public class Restaurant
 
     public virtual RestaurantManager? RestaurantManager { get; set; }
 
+    public virtual ICollection<RestaurantImage> RestaurantImages { get; set; }
 
     public Restaurant()
     {

@@ -47,6 +47,8 @@ public class Hotel
 
     public virtual HotelManager? HotelManager { get; set; }
 
+    public virtual ICollection<HotelImage> HotelImages { get; set; }
+
     public Hotel()
     {
         Rooms = new HashSet<Room>();

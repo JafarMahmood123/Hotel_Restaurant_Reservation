@@ -38,6 +38,8 @@ public class Event
 
     public virtual EventManager? EventManager { get; set; }
 
+    public virtual ICollection<EventImage> EventImages { get; set; }
+
     public Event()
     {
         EventRegistrations = new HashSet<EventRegistration>();
