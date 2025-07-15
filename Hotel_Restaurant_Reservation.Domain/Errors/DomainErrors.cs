@@ -172,6 +172,7 @@ public static class DomainErrors
             "No hotels found matching the specified filters.");
 
         public static Error NoImagesProvided => new Error("Hotel.NoImagesProvided", "No images were provided.");
+        public static Error NoImagesFound => new Error("Hotel.NoImagesFound", "No images were found for the hotel.");
     }
 
     public static class PropertyType
