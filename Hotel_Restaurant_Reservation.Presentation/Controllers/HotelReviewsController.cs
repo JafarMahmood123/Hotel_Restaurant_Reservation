@@ -2,6 +2,8 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Commands.DeleteHotelReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Commands.UpdateHotelReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queries.GetAllHotelReviews;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queries.GetAllHotelReviewsByHotelId;
+using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queries.GetAllHotelReviewsByUserId;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queries.GetHotelReviewById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -68,6 +70,30 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         public async Task<IActionResult> GetHotelReviewById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetHotelReviewByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("hotel/{hotelId:guid}")]
+        public async Task<IActionResult> GetAllHotelReviewsByHotelId(Guid hotelId, CancellationToken cancellationToken)
+        {
+            var query = new GetAllHotelReviewsByHotelIdQuery(hotelId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("user/{userId:guid}")]
+        public async Task<IActionResult> GetAllHotelReviewsByUserId(Guid userId, CancellationToken cancellationToken)
+        {
+            var query = new GetAllHotelReviewsByUserIdQuery(userId);
             var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {
