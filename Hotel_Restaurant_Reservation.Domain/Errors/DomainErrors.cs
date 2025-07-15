@@ -78,17 +78,6 @@ public static class DomainErrors
             "Rating cannot exceed 5 stars.");
     }
 
-    public static class CurrencyType
-    {
-        public static Error NotFound(Guid currencyTypeId) => new(
-            "CurrencyType.NotFound",
-            $"Currency type with ID {currencyTypeId} was not found.");
-
-        public static Error NotFound(string currencyCode) => new(
-            "CurrencyType.GetCurrencyType.NotFound",
-            $"Currency type with code '{currencyCode}' does not exist.");
-    }
-
     public static class Restaurant
     {
         public static Error InvalidRequest => new(
@@ -407,5 +396,24 @@ public static class DomainErrors
         public static Error NotFound(Guid cuisineId) => new(
             "Cuisine.NotFound",
             $"The cuisine with the ID '{cuisineId}' was not found.");
+    }
+
+    public static class CurrencyType
+    {
+        public static Error NotFound(Guid currencyTypeId) => new(
+            "CurrencyType.NotFound",
+            $"Currency type with ID {currencyTypeId} was not found.");
+
+        public static Error NotFound(string currencyCode) => new(
+            "CurrencyType.GetCurrencyType.NotFound",
+            $"Currency type with code '{currencyCode}' does not exist.");
+
+        public static Error SameCurrencyCode => new(
+            "CurrencyType.SameCurrencyCode",
+            "The new currency code is the same as the old one.");
+
+        public static Error ExistingCurrencyType(string currencyCode) => new(
+            "CurrencyType.ExistingCurrencyType",
+            $"A currency type with the code '{currencyCode}' already exists.");
     }
 }
