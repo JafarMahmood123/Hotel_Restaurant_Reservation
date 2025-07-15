@@ -168,6 +168,8 @@ public static class DomainErrors
         public static Error NotFoundForFilters => new(
             "Hotel.NotFoundForFilters",
             "No hotels found matching the specified filters.");
+
+        public static Error NoImagesProvided => new Error("Hotel.NoImagesProvided", "No images were provided.");
     }
 
     public static class PropertyType

@@ -32,7 +32,6 @@
     <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfHotel\" />
     <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfEvent\" />
     <Folder Include="Implementation\Images\Commands\UploadUserImages\" />
-    <Folder Include="Implementation\Images\Commands\UploadHotelImages\" />
     <Folder Include="Implementation\Images\Queries\GetRestaurantImages\" />
     <Folder Include="Implementation\Images\Queries\GetHotelImages\" />
     <Folder Include="Implementation\Images\Queries\GetEventImages\" />
