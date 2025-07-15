@@ -4,36 +4,43 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
+using System;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.UpdateHotelReservation;
-
-public class UpdateHotelReservationCommandHandler : ICommandHandler<UpdateHotelReservationCommand, Result<HotelReservationResponse>>
+namespace Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Commands.UpdateHotelReservation
 {
-    private readonly IGenericRepository<HotelReservation> _hotelReservationRepository;
-    private readonly IMapper _mapper;
-
-    public UpdateHotelReservationCommandHandler(IGenericRepository<HotelReservation> hotelReservationRepository, IMapper mapper)
+    public class UpdateHotelReservationCommandHandler : ICommandHandler<UpdateHotelReservationCommand, Result<HotelReservationResponse>>
     {
-        _hotelReservationRepository = hotelReservationRepository;
-        _mapper = mapper;
-    }
+        private readonly IGenericRepository<HotelReservation> _hotelReservationRepository;
+        private readonly IMapper _mapper;
 
-    public async Task<Result<HotelReservationResponse>> Handle(UpdateHotelReservationCommand request, CancellationToken cancellationToken)
-    {
-        var hotelReservation = await _hotelReservationRepository.GetByIdAsync(request.Id);
-
-        if (hotelReservation is null)
+        public UpdateHotelReservationCommandHandler(IGenericRepository<HotelReservation> hotelReservationRepository, IMapper mapper)
         {
-            return Result.Failure<HotelReservationResponse>(DomainErrors.HotelReservation.NotFound(request.Id));
+            _hotelReservationRepository = hotelReservationRepository;
+            _mapper = mapper;
         }
 
-        _mapper.Map(request.UpdateHotelReservationRequest, hotelReservation);
+        public async Task<Result<HotelReservationResponse>> Handle(UpdateHotelReservationCommand request, CancellationToken cancellationToken)
+        {
+            var hotelReservation = await _hotelReservationRepository.GetByIdAsync(request.Id);
 
-        await _hotelReservationRepository.UpdateAsync(request.Id, hotelReservation);
-        await _hotelReservationRepository.SaveChangesAsync();
+            if (hotelReservation is null)
+            {
+                return Result.Failure<HotelReservationResponse>(DomainErrors.HotelReservation.NotFound(request.Id));
+            }
 
-        var hotelReservationResponse = _mapper.Map<HotelReservationResponse>(hotelReservation);
+            if (hotelReservation.ReceivationEndDate < DateOnly.FromDateTime(DateTime.UtcNow))
+            {
+                return Result.Failure<HotelReservationResponse>(DomainErrors.HotelReservation.UpdateNotAllowedPastReservation());
+            }
 
-        return Result.Success(hotelReservationResponse);
+            _mapper.Map(request.UpdateHotelReservationRequest, hotelReservation);
+
+            await _hotelReservationRepository.UpdateAsync(request.Id, hotelReservation);
+            await _hotelReservationRepository.SaveChangesAsync();
+
+            var hotelReservationResponse = _mapper.Map<HotelReservationResponse>(hotelReservation);
+
+            return Result.Success(hotelReservationResponse);
+        }
     }
 }

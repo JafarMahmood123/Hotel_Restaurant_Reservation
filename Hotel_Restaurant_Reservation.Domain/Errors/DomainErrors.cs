@@ -206,13 +206,6 @@ public static class DomainErrors
             $"The event with the ID '{eventId}' was not found.");
     }
 
-    public static class HotelReservation
-    {
-        public static Error NotFound(Guid hotelReservationId) => new(
-            "HotelReservation.NotFound",
-            $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
-    }
-
     public static class Room
     {
         public static Error NotFound(Guid roomId) => new(
@@ -416,4 +409,16 @@ public static class DomainErrors
             "CurrencyType.ExistingCurrencyType",
             $"A currency type with the code '{currencyCode}' already exists.");
     }
+
+    public static class HotelReservation
+    {
+        public static Error NotFound(Guid hotelReservationId) => new(
+            "HotelReservation.NotFound",
+            $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
+
+        public static Error UpdateNotAllowedPastReservation() => new(
+            "HotelReservation.UpdateNotAllowedPastReservation",
+            "Cannot update a reservation that has already ended.");
+    }
+
 }
