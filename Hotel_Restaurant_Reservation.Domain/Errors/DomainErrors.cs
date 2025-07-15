@@ -175,8 +175,10 @@ public static class DomainErrors
             "Hotel.NotFoundForFilters",
             "No hotels found matching the specified filters.");
 
-        public static Error NoImagesProvided => new Error("Hotel.NoImagesProvided", "No images were provided.");
-        public static Error NoImagesFound => new Error("Hotel.NoImagesFound", "No images were found for the hotel.");
+        public static Error NoImagesProvided => new Error(
+            "Hotel.NoImagesProvided", "No images were provided.");
+        public static Error NoImagesFound => new Error(
+            "Hotel.NoImagesFound", "No images were found for the hotel.");
     }
 
     public static class PropertyType
@@ -214,7 +216,8 @@ public static class DomainErrors
             "Event.NotFound",
             $"The event with the ID '{eventId}' was not found.");
 
-        public static Error NoImagesFound => new Error("Event.NoImagesFound", "No images were found for the event.");
+        public static Error NoImagesFound => new Error(
+            "Event.NoImagesFound", "No images were found for the event.");
     }
 
     public static class Room
@@ -375,7 +378,11 @@ public static class DomainErrors
             "User.EmailInUse",
             $"The email '{email}' is already in use.");
 
-        public static Error NoImagesProvided => new Error("User.NoImagesProvided", "No images were provided.");
+        public static Error NoImagesProvided => new Error(
+            "User.NoImagesProvided", "No images were provided.");
+
+        public static Error NoImagesFound => new Error(
+            "User.NoImagesFound", "No images were found for the user.");
 
     }
 

@@ -52,9 +52,9 @@ public class RestaurantsController : ApiController
         minPrice, maxPrice, minStarRating, maxStarRating);
 
         var result = await Sender.Send(query);
-        if (result.IsFailure)   
+        if (result.IsFailure)
             return BadRequest(result.Error);
-        
+
         return Ok(result.Value);
     }
 
@@ -67,7 +67,7 @@ public class RestaurantsController : ApiController
 
         var result = await Sender.Send(query, cancellationToken);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
             return BadRequest(result.Error);
 
         return Ok(result.Value);
@@ -89,7 +89,7 @@ public class RestaurantsController : ApiController
 
     [HttpDelete]
     [Route("{id:guid}")]
-    public async Task<IActionResult> DeleteRestaurant(Guid id,  CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteRestaurant(Guid id, CancellationToken cancellationToken)
     {
         var command = new DeleteRestaurantCommand(id);
 
@@ -110,13 +110,13 @@ public class RestaurantsController : ApiController
         var result = await Sender.Send(command);
         if (result.IsFailure)
             return BadRequest(result.Error);
-        
+
         return Ok(result.Value);
     }
 
     [HttpPost]
     [Route("{restaurantId:guid}/cuisines")]
-    public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, 
+    public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId,
         [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new AddCuisinesToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest);
@@ -131,14 +131,14 @@ public class RestaurantsController : ApiController
 
     [HttpDelete]
     [Route("{restaurantId:guid}/cuisines")]
-    public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId, 
+    public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId,
         [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
     {
         var command = new RemoveCuisinesFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest);
 
         var result = await Sender.Send(command, cancellationToken);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
             return BadRequest(result.Error);
 
         return Ok(result.Value);
@@ -168,7 +168,7 @@ public class RestaurantsController : ApiController
 
         var result = await Sender.Send(command, cancellationToken);
 
-        if (result.IsFailure) 
+        if (result.IsFailure)
             return BadRequest(result.Error);
 
         return Ok(result.Value);
@@ -198,7 +198,7 @@ public class RestaurantsController : ApiController
 
         var result = await Sender.Send(command, cancellationToken);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
             return BadRequest(result.Error);
 
         return Ok(result.Value);
@@ -229,7 +229,7 @@ public class RestaurantsController : ApiController
 
         var result = await Sender.Send(command, cancellationToken);
 
-        if(result.IsFailure)
+        if (result.IsFailure)
             return BadRequest(result.Error);
 
         return Ok(result.Value);
@@ -260,7 +260,7 @@ public class RestaurantsController : ApiController
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
-        
+
         return Ok(result.Value);
     }
 
@@ -317,7 +317,7 @@ public class RestaurantsController : ApiController
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
-        
+
         return Ok(result.Value);
     }
 
@@ -358,3 +358,4 @@ public class RestaurantsController : ApiController
 
         return Ok(result.Value);
     }
+}

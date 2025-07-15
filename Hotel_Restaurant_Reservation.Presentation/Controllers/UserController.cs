@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadUserImages;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetUserImagesByUserId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
@@ -120,6 +121,20 @@ public class UserController : ApiController
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{userId:guid}/images")]
+    public async Task<IActionResult> GetUserImages(Guid userId, CancellationToken cancellationToken)
+    {
+        var query = new GetUserImagesByUserIdQuery(userId);
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
         }
 
         return Ok(result.Value);
