@@ -36,7 +36,7 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<Cuisine> Cuisines { get; set; }
     public DbSet<MealType> MealTypes { get; set; }
     public DbSet<Dish> Dishes { get; set; }
-    public DbSet<User> Customers { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Amenity> Amenities { get; set; }
     public DbSet<Event> Events { get; set; }
     public DbSet<EventRegistration> EventRegistrations { get; set; }

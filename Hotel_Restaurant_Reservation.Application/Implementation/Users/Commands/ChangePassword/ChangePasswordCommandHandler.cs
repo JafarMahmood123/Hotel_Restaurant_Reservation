@@ -23,12 +23,12 @@ public class ChangePasswordCommandHandler : ICommandHandler<ChangePasswordComman
 
         if (customer is null)
         {
-            return Result.Failure(DomainErrors.Customer.LogInUnExistingAccount(request.ChangePasswordRequest.Email));
+            return Result.Failure(DomainErrors.User.LogInUnExistingAccount(request.ChangePasswordRequest.Email));
         }
 
         if (!_passwordHasher.Verify(request.ChangePasswordRequest.OldPassword, customer.HashedPassword))
         {
-            return Result.Failure(DomainErrors.Customer.InvalidOldPassword());
+            return Result.Failure(DomainErrors.User.InvalidOldPassword());
         }
 
         customer.HashedPassword = _passwordHasher.Hash(request.ChangePasswordRequest.NewPassword);

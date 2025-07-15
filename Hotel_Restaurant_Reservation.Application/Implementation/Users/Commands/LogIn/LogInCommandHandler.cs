@@ -29,10 +29,10 @@ public class LogInCommandHandler : ICommandHandler<LogInCommand, Result<string>>
             x => x.Email == request.LogInRequest.Email);
 
         if (existingCustomer == null)
-            return Result.Failure<string>(DomainErrors.Customer.LogInUnExistingAccount(request.LogInRequest.Email));
+            return Result.Failure<string>(DomainErrors.User.LogInUnExistingAccount(request.LogInRequest.Email));
 
         if (!_passwordHasher.Verify(request.LogInRequest.Password, existingCustomer.HashedPassword))
-            return Result.Failure<string>(DomainErrors.Customer.IncorrectPassword());
+            return Result.Failure<string>(DomainErrors.User.IncorrectPassword());
 
         var role = await _roleRepository.GetByIdAsync(existingCustomer.RoleId);
         if (role is null)

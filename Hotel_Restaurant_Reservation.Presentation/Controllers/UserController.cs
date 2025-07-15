@@ -1,5 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.AddAdmin;
-using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
@@ -27,19 +26,6 @@ public class UserController : ApiController
         {
             return NotFound(result.Error);
         }
-
-        return Ok(result.Value);
-    }
-
-    [HttpPost("AddAdmin")]
-    public async Task<IActionResult> AddAdmin([FromBody] AddAdminRequest addAdminRequest, CancellationToken cancellationToken)
-    {
-        var command = new AddAdminCommand(addAdminRequest);
-
-        var result = await Sender.Send(command, cancellationToken);
-
-        if (result.IsFailure)
-            return BadRequest(result.Error);
 
         return Ok(result.Value);
     }

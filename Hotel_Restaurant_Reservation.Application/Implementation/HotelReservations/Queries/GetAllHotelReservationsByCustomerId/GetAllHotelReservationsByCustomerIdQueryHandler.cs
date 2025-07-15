@@ -21,7 +21,7 @@ public class GetAllHotelReservationsByCustomerIdQueryHandler : IQueryHandler<Get
 
     public async Task<Result<IEnumerable<HotelReservationResponse>>> Handle(GetAllHotelReservationsByCustomerIdQuery request, CancellationToken cancellationToken)
     {
-        var hotelReservations = await _hotelReservationRepository.Where(x => x.CustomerId == request.CustomerId).ToListAsync(cancellationToken: cancellationToken);
+        var hotelReservations = await _hotelReservationRepository.Where(x => x.UserId == request.CustomerId).ToListAsync(cancellationToken: cancellationToken);
         var hotelReservationResponses = _mapper.Map<IEnumerable<HotelReservationResponse>>(hotelReservations);
         return Result.Success(hotelReservationResponses);
     }

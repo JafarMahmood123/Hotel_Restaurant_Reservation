@@ -20,7 +20,7 @@ public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand, Resul
 
         if (customer is null)
         {
-            return Result.Failure(DomainErrors.Customer.NotFound(request.Id));
+            return Result.Failure(DomainErrors.User.NotFound(request.Id));
         }
 
         await _customerRepository.RemoveAsync(request.Id);

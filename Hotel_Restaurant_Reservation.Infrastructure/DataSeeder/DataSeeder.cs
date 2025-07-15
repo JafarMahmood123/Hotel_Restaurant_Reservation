@@ -1,4 +1,5 @@
-﻿using Hotel_Restaurant_Reservation.Domain.Entities;
+﻿// In Hotel_Restaurant_Reservation.Infrastructure/DataSeeder/DataSeeder.cs
+using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -25,6 +26,23 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
             }
 
             var random = new Random();
+
+            // Seed Roles
+            var roles = new List<Role>
+            {
+                new Role { Id = Guid.NewGuid(), Name = "Customer" },
+                new Role { Id = Guid.NewGuid(), Name = "EventManager" },
+                new Role { Id = Guid.NewGuid(), Name = "HotelManager" },
+                new Role { Id = Guid.NewGuid(), Name = "RestaurantManager" },
+                new Role { Id = Guid.NewGuid(), Name = "Admin" }
+            };
+            await _dbContext.Roles.AddRangeAsync(roles);
+            await _dbContext.SaveChangesAsync();
+
+            var customerRole = roles.First(r => r.Name == "Customer");
+            var eventManagerRole = roles.First(r => r.Name == "EventManager");
+            var hotelManagerRole = roles.First(r => r.Name == "HotelManager");
+            var restaurantManagerRole = roles.First(r => r.Name == "RestaurantManager");
 
             // Seed Countries
             var countries = new List<Country>();
@@ -85,11 +103,67 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                     HashedPassword = "password", // In a real app, hash this!
                     BirthDate = new DateOnly(1990 + i % 30, 1, 1),
                     Age = 30 + i % 10,
-                    Role = Roles.Customer,
+                    RoleId = customerRole.Id,
                     LocationId = locations[random.Next(locations.Count)].Id
                 });
             }
-            await _dbContext.Customers.AddRangeAsync(customers);
+            await _dbContext.Users.AddRangeAsync(customers);
+            await _dbContext.SaveChangesAsync();
+
+            // Seed Managers
+            var eventManagers = new List<User>();
+            for (int i = 0; i < 2; i++)
+            {
+                eventManagers.Add(new User
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = $"EventManagerFirstName{i}",
+                    LastName = $"EventManagerLastName{i}",
+                    Email = $"eventmanager{i}@example.com",
+                    HashedPassword = "password",
+                    BirthDate = new DateOnly(1980 + i, 1, 1),
+                    Age = 40 + i,
+                    RoleId = eventManagerRole.Id,
+                    LocationId = locations[random.Next(locations.Count)].Id
+                });
+            }
+            await _dbContext.EventManagers.AddRangeAsync(eventManagers);
+
+            var hotelManagers = new List<User>();
+            for (int i = 0; i < 2; i++)
+            {
+                hotelManagers.Add(new User
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = $"HotelManagerFirstName{i}",
+                    LastName = $"HotelManagerLastName{i}",
+                    Email = $"hotelmanager{i}@example.com",
+                    HashedPassword = "password",
+                    BirthDate = new DateOnly(1980 + i, 1, 1),
+                    Age = 40 + i,
+                    RoleId = hotelManagerRole.Id,
+                    LocationId = locations[random.Next(locations.Count)].Id
+                });
+            }
+            await _dbContext.Customers.AddRangeAsync(hotelManagers);
+
+            var restaurantManagers = new List<User>();
+            for (int i = 0; i < 2; i++)
+            {
+                restaurantManagers.Add(new User
+                {
+                    Id = Guid.NewGuid(),
+                    FirstName = $"RestaurantManagerFirstName{i}",
+                    LastName = $"RestaurantManagerLastName{i}",
+                    Email = $"restaurantmanager{i}@example.com",
+                    HashedPassword = "password",
+                    BirthDate = new DateOnly(1980 + i, 1, 1),
+                    Age = 40 + i,
+                    RoleId = restaurantManagerRole.Id,
+                    LocationId = locations[random.Next(locations.Count)].Id
+                });
+            }
+            await _dbContext.Customers.AddRangeAsync(restaurantManagers);
             await _dbContext.SaveChangesAsync();
 
             // Seed PropertyTypes
@@ -103,20 +177,24 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
 
             // Seed Hotels
             var hotels = new List<Hotel>();
-            for (int i = 0; i < 10; i++)
+            foreach (var manager in hotelManagers)
             {
-                hotels.Add(new Hotel
+                for (int i = 0; i < 5; i++)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = $"Hotel {i}",
-                    Url = $"http://hotel{i}.com",
-                    StarRate = random.Next(1, 6),
-                    NumberOfRooms = 0,
-                    Latitude = random.NextDouble() * 180 - 90,
-                    Longitude = random.NextDouble() * 360 - 180,
-                    PropertyTypeId = propertyTypes[random.Next(propertyTypes.Count)].Id,
-                    LocationId = locations[random.Next(locations.Count)].Id
-                });
+                    hotels.Add(new Hotel
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = $"Hotel managed by {manager.FirstName} {i}",
+                        Url = $"http://hotel{manager.Id}{i}.com",
+                        StarRate = random.Next(1, 6),
+                        NumberOfRooms = 0,
+                        Latitude = random.NextDouble() * 180 - 90,
+                        Longitude = random.NextDouble() * 360 - 180,
+                        PropertyTypeId = propertyTypes[random.Next(propertyTypes.Count)].Id,
+                        LocationId = locations[random.Next(locations.Count)].Id,
+                        HotelManagerId = manager.Id
+                    });
+                }
             }
             await _dbContext.Hotels.AddRangeAsync(hotels);
             await _dbContext.SaveChangesAsync();
@@ -195,7 +273,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                 {
                     Id = Guid.NewGuid(),
                     HotelId = hotel.Id,
-                    CustomerId = customers[random.Next(customers.Count)].Id,
+                    UserId = customers[random.Next(customers.Count)].Id,
                     ReviewDateTime = DateTime.UtcNow,
                     Description = $"Review for {hotel.Name}",
                     OverallRating = random.Next(1, 6),
@@ -219,7 +297,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                     ReceivationEndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(random.Next(11, 20))),
                     NumberOfPeople = random.Next(1, 5),
                     HotelId = hotels[random.Next(hotels.Count)].Id,
-                    CustomerId = customers[random.Next(customers.Count)].Id,
+                    UserId = customers[random.Next(customers.Count)].Id,
                     RoomId = rooms[random.Next(rooms.Count)].Id
                 });
             }
@@ -237,20 +315,24 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
 
             // Seed Events
             var events = new List<Event>();
-            for (int i = 0; i < 10; i++)
+            foreach (var manager in eventManagers)
             {
-                events.Add(new Event
+                for (int i = 0; i < 5; i++)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = $"Event {i}",
-                    Description = $"Description for Event {i}",
-                    StartingDateTime = DateTime.UtcNow.AddDays(random.Next(10, 20)),
-                    EndDateTime = DateTime.UtcNow.AddDays(random.Next(21, 30)),
-                    PayToEnter = random.Next(0, 101),
-                    MaxNumberOfRegesters = random.Next(50, 201),
-                    LocationId = locations[random.Next(locations.Count)].Id,
-                    CurrencyTypeId = currencyTypes[random.Next(currencyTypes.Count)].Id
-                });
+                    events.Add(new Event
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = $"Event managed by {manager.FirstName} {i}",
+                        Description = $"Description for Event {i}",
+                        StartingDateTime = DateTime.UtcNow.AddDays(random.Next(10, 20)),
+                        EndDateTime = DateTime.UtcNow.AddDays(random.Next(21, 30)),
+                        PayToEnter = random.Next(0, 101),
+                        MaxNumberOfRegesters = random.Next(50, 201),
+                        LocationId = locations[random.Next(locations.Count)].Id,
+                        CurrencyTypeId = currencyTypes[random.Next(currencyTypes.Count)].Id,
+                        EventManagerId = manager.Id
+                    });
+                }
             }
             await _dbContext.Events.AddRangeAsync(events);
             await _dbContext.SaveChangesAsync();
@@ -263,7 +345,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                 {
                     Id = Guid.NewGuid(),
                     EventId = ev.Id,
-                    CustomerId = customers[random.Next(customers.Count)].Id,
+                    UserId = customers[random.Next(customers.Count)].Id,
                     ReviewDateTime = DateTime.UtcNow,
                     Description = $"Review for {ev.Name}",
                     Rating = random.Next(1, 6)
@@ -281,7 +363,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                     Id = Guid.NewGuid(),
                     RegistrationDateTime = DateTime.UtcNow.AddDays(-random.Next(1, 5)),
                     NumberOfPeople = random.Next(1, 4),
-                    CustomerId = customers[random.Next(customers.Count)].Id,
+                    UserId = customers[random.Next(customers.Count)].Id,
                     EventId = ev.Id
                 });
             }
@@ -351,24 +433,28 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
 
             // Seed Restaurants
             var restaurants = new List<Restaurant>();
-            for (int i = 0; i < 10; i++)
+            foreach (var manager in restaurantManagers)
             {
-                restaurants.Add(new Restaurant
+                for (int i = 0; i < 5; i++)
                 {
-                    Id = Guid.NewGuid(),
-                    Name = $"Restaurant {i}",
-                    Description = $"Description for Restaurant {i}",
-                    Url = $"http://restaurant{i}.com",
-                    PictureUrl = $"http://restaurant{i}.com/pic.jpg",
-                    StarRating = random.Next(1, 6),
-                    Latitude = random.NextDouble() * 180 - 90,
-                    Longitude = random.NextDouble() * 360 - 180,
-                    NumberOfTables = random.Next(5, 21),
-                    PriceLevel = (RestaurantPriceLevel)random.Next(1, 5),
-                    MinPrice = random.Next(10, 21),
-                    MaxPrice = random.Next(50, 101),
-                    LocationId = locations[random.Next(locations.Count)].Id
-                });
+                    restaurants.Add(new Restaurant
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = $"Restaurant managed by {manager.FirstName} {i}",
+                        Description = $"Description for Restaurant {i}",
+                        Url = $"http://restaurant{manager.Id}{i}.com",
+                        PictureUrl = $"http://restaurant{manager.Id}{i}.com/pic.jpg",
+                        StarRating = random.Next(1, 6),
+                        Latitude = random.NextDouble() * 180 - 90,
+                        Longitude = random.NextDouble() * 360 - 180,
+                        NumberOfTables = random.Next(5, 21),
+                        PriceLevel = (RestaurantPriceLevel)random.Next(1, 5),
+                        MinPrice = random.Next(10, 21),
+                        MaxPrice = random.Next(50, 101),
+                        LocationId = locations[random.Next(locations.Count)].Id,
+                        RestaurantManagerId = manager.Id
+                    });
+                }
             }
             await _dbContext.Restaurants.AddRangeAsync(restaurants);
             await _dbContext.SaveChangesAsync();
@@ -423,7 +509,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                 {
                     Id = Guid.NewGuid(),
                     RestaurantId = r.Id,
-                    CustomerId = customers[random.Next(customers.Count)].Id,
+                    UserId = customers[random.Next(customers.Count)].Id,
                     ReviewDateTime = DateTime.UtcNow.AddDays(-random.Next(1, 100)),
                     Description = $"A great place to eat!",
                     CustomerStarRating = random.Next(1, 6),
@@ -445,7 +531,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure
                     NumberOfPeople = random.Next(1, 5),
                     TableNumber = random.Next(1, 20),
                     RestaurantId = restaurants[random.Next(restaurants.Count)].Id,
-                    CustomerId = customers[random.Next(customers.Count)].Id
+                    UserId = customers[random.Next(customers.Count)].Id
                 });
             }
             await _dbContext.RestaurantBookings.AddRangeAsync(restaurantBookings);

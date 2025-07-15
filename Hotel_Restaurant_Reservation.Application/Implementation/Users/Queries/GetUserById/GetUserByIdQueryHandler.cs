@@ -23,7 +23,7 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, Result<Us
 
         if (user is null)
         {
-            return Result.Failure<UserResponse>(DomainErrors.Customer.NotFound(request.Id));
+            return Result.Failure<UserResponse>(DomainErrors.User.NotFound(request.Id));
         }
 
         var userResponse = _mapper.Map<UserResponse>(user);

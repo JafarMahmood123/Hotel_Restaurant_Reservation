@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
-using Hotel_Restaurant_Reservation.Application.Implementation.Customers.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries;
-using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.UpdateCustomer
@@ -25,7 +23,7 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands
 
             if (customer is null)
             {
-                return Result.Failure<UserResponse>(DomainErrors.Customer.NotFound(request.Id));
+                return Result.Failure<UserResponse>(DomainErrors.User.NotFound(request.Id));
             }
 
             _mapper.Map(request.UpdateCustomerRequest, customer);

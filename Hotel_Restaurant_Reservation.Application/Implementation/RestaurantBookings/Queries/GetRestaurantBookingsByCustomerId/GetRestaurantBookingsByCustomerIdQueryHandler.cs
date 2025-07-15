@@ -25,7 +25,7 @@ public class GetRestaurantBookingsByCustomerIdQueryHandler : IQueryHandler<GetRe
     {
         var customerId = request.CustomerId;
 
-        var bookings = await _restaurantBookingRepository.Where(x => x.CustomerId == customerId)
+        var bookings = await _restaurantBookingRepository.Where(x => x.UserId == customerId)
             .Include(x=>x.BookingDishes)
             .ToListAsync();
 
