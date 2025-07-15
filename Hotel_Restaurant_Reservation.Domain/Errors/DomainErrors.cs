@@ -399,6 +399,11 @@ public static class DomainErrors
         public static Error NotExistCuisine(Guid cuisineId) => new(
             "Cuisine.GetCuisine.NotExistCuisine",
             $"Cuisine with ID '{cuisineId}' does not exist.");
+
+        public static Error ExistingCuisine(string cuisineName) => new(
+            "Cuisine.AddCuisine.ExistingCuisine",
+            $"A cuisine with the name '{cuisineName}' already exists.");
+
         public static Error NotFound(Guid cuisineId) => new(
             "Cuisine.NotFound",
             $"The cuisine with the ID '{cuisineId}' was not found.");

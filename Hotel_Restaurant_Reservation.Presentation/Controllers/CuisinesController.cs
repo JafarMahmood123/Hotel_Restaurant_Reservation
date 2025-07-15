@@ -5,7 +5,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
-{
+{   
     public class CuisinesController : ApiController
     {
         public CuisinesController(ISender sender) : base(sender)

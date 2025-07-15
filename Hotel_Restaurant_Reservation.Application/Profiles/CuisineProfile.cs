@@ -3,15 +3,14 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Commands.
 using Hotel_Restaurant_Reservation.Application.Implementation.Cuisines.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
-namespace Hotel_Restaurant_Reservation.Presentation.Profiles;
-
-public class CuisineProfile : Profile
+namespace Hotel_Restaurant_Reservation.Presentation.Profiles
 {
-
-    public CuisineProfile()
+    public class CuisineProfile : Profile
     {
-        CreateMap<AddCuisineRequest, Cuisine>();
-
-        CreateMap<Cuisine, CuisineResponse>();
+        public CuisineProfile()
+        {
+            CreateMap<AddCuisineRequest, Cuisine>();
+            CreateMap<Cuisine, CuisineResponse>();
+        }
     }
 }
