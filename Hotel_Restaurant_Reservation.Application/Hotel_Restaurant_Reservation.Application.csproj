@@ -27,7 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Admins\Commands\AddManager\" />
     <Folder Include="Implementation\Admins\Commands\AssignManagerToHotel\" />
     <Folder Include="Implementation\Admins\Commands\AssignManagerToEvent\" />
     <Folder Include="Implementation\Admins\Commands\AssignManagerToRestaurant\" />

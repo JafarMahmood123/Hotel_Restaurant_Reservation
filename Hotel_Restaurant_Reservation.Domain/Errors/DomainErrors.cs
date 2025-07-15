@@ -403,5 +403,9 @@ public static class DomainErrors
         public static Error AdminRoleNotFound() => new(
             "Role.AdminRoleNotFound",
             "The default 'Admin' role was not found in the database.");
+
+        public static Error ManagerRoleNotFound() => new(
+            "Role.ManagerRoleNotFound",
+            "The default 'Manager' role was not found in the database.");
     }
 }

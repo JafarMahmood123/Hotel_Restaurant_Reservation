@@ -30,19 +30,23 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<UserRe
         var existingCustomer = await _customerRepository.GetFirstOrDefaultAsync(x => x.Email == customer.Email);
 
         if (existingCustomer != null)
-            return Result.Failure<UserResponse>(DomainErrors.Customer.SignUpExistingAccount(request.SignUpRequest.Email));
+            return Result.Failure<UserResponse>(DomainErrors.User.SignUpExistingAccount(request.SignUpRequest.Email));
 
-        const string CUSTOMER_ROLE_NAME = "customer";
-
-        var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
-        if (customerRole == null)
+        if(request.SignUpRequest.RoleId is null)
         {
-            return Result.Failure<UserResponse>(DomainErrors.Role.CustomerRoleNotFound());
+            const string CUSTOMER_ROLE_NAME = "customer";
+
+            var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
+            if (customerRole == null)
+            {
+                return Result.Failure<UserResponse>(DomainErrors.Role.CustomerRoleNotFound());
+            }
+            customer.RoleId = customerRole.Id;
         }
 
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;
-        customer.RoleId = customerRole.Id;
+
         customer.HashedPassword = _passwordHasher.Hash(request.SignUpRequest.Password);
 
         customer = await _customerRepository.AddAsync(customer);

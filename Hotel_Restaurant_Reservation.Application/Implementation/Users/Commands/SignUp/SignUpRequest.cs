@@ -13,7 +13,7 @@ public class SignUpRequest
 
     public DateOnly BirthDate { get; set; }
 
-    // Foreign Keys
-
     public Guid LocationId { get; set; }
+
+    public Guid? RoleId { get; set; }
 }
