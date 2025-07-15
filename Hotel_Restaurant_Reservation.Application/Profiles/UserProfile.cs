@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.AddAdmin;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.UpdateCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries;
@@ -16,8 +15,5 @@ public class UserProfile : Profile
         CreateMap<SignUpRequest, User>();
 
         CreateMap<UpdateUserRequest, User>();
-
-        CreateMap<AddAdminRequest, User>();
-
     }
 }
