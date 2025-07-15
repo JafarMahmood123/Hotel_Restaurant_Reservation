@@ -29,6 +29,8 @@ public class User
 
     public virtual Role Role { get; set; }
 
+    public virtual ICollection<UserImage> UserImages { get; set; }
+
     public User()
     {
     }

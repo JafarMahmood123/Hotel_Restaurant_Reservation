@@ -365,6 +365,9 @@ public static class DomainErrors
         public static Error EmailInUse(string email) => new(
             "User.EmailInUse",
             $"The email '{email}' is already in use.");
+
+        public static Error NoImagesProvided => new Error("User.NoImagesProvided", "No images were provided.");
+
     }
 
     public static class Role
