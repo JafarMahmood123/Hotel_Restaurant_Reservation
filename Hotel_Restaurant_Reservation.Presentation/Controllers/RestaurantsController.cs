@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
@@ -23,6 +24,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Querie
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -314,6 +316,37 @@ public class RestaurantsController : ApiController
         if (result.IsFailure)
             return BadRequest(result.Error);
         
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{restaurantId:guid}/images")]
+    public async Task<IActionResult> UploadRestaurantImages(Guid restaurantId, [FromForm] List<IFormFile> imageFiles, CancellationToken cancellationToken)
+    {
+        if (imageFiles == null || imageFiles.Count == 0)
+        {
+            return BadRequest("No files were uploaded.");
+        }
+
+        var fileUploadDtos = imageFiles.Select(file => new UploadRestaurantImagesRequest
+        {
+            Content = file.OpenReadStream(),
+            FileName = file.FileName,
+            ContentType = file.ContentType
+        }).ToList();
+
+        var command = new UploadRestaurantImagesCommand
+        {
+            RestaurantId = restaurantId,
+            ImageFiles = fileUploadDtos
+        };
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
         return Ok(result.Value);
     }
 }

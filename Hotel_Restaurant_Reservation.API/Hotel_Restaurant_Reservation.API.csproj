@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Hotel_Restaurant_Reservation.Presentation\Hotel_Restaurant_Reservation.Presentation.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
 </Project>
