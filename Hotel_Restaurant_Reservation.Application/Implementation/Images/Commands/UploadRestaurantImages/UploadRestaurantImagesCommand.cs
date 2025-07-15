@@ -7,5 +7,5 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Command
 public class UploadRestaurantImagesCommand : ICommand<Result<List<string>>>
 {
     public Guid RestaurantId { get; set; }
-    public List<UploadRestaurantImagesRequest> ImageFiles { get; set; }
+    public List<UploadImageRequest> ImageFiles { get; set; }
 }
