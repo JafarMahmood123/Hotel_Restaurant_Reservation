@@ -78,13 +78,6 @@ public static class DomainErrors
             "Rating cannot exceed 5 stars.");
     }
 
-    public static class Cuisine
-    {
-        public static Error NotExistCuisine(Guid cuisineId) => new(
-            "Cuisine.GetCuisine.NotExistCuisine",
-            $"Cuisine with ID '{cuisineId}' does not exist.");
-    }
-
     public static class CurrencyType
     {
         public static Error NotFound(Guid currencyTypeId) => new(
@@ -399,5 +392,15 @@ public static class DomainErrors
         public static Error CustomerRoleNotFound() => new(
             "Role.CustomerRoleNotFound",
             "The default 'Customer' role was not found in the database.");
+    }
+
+    public static class Cuisine
+    {
+        public static Error NotExistCuisine(Guid cuisineId) => new(
+            "Cuisine.GetCuisine.NotExistCuisine",
+            $"Cuisine with ID '{cuisineId}' does not exist.");
+        public static Error NotFound(Guid cuisineId) => new(
+            "Cuisine.NotFound",
+            $"The cuisine with the ID '{cuisineId}' was not found.");
     }
 }

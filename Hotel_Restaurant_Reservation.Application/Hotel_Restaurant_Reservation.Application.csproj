@@ -31,6 +31,8 @@
     <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfRestaurant\" />
     <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfHotel\" />
     <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfEvent\" />
+    <Folder Include="Implementation\Cuisines\Queries\GetAllCuisines\" />
+    <Folder Include="Implementation\Cuisines\Queries\GetCuisinesByRestaurantId\" />
     <Folder Include="Implementation\Notifications\" />
   </ItemGroup>
 
