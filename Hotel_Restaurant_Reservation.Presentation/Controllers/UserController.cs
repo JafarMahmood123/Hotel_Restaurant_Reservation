@@ -1,4 +1,6 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadUserImages;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
@@ -6,6 +8,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.Upd
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetUserById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -96,5 +99,29 @@ public class UserController : ApiController
         }
 
         return NoContent();
+    }
+
+    [HttpPost("{userId:guid}/images")]
+    public async Task<IActionResult> UploadUserImages(Guid userId, [FromForm] List<UploadImageRequest> imageFiles, CancellationToken cancellationToken)
+    {
+        if (imageFiles == null || imageFiles.Count == 0)
+        {
+            return BadRequest("No files were uploaded.");
+        }
+
+        var command = new UploadUserImagesCommand
+        {
+            UserId = userId,
+            ImageFiles = imageFiles
+        };
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(result.Value);
     }
 }

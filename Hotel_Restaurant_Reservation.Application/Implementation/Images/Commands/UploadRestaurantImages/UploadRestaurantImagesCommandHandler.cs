@@ -4,53 +4,59 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
-
-public class UploadRestaurantImagesCommandHandler : ICommandHandler<UploadRestaurantImagesCommand, Result<List<string>>>
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage
 {
-    private readonly IRestaurantRespository _restaurantRepository;
-    private readonly IGenericRepository<RestaurantImage> _restaurantImageRepository;
-    private readonly IFileStorageService _fileStorageService;
-
-    public UploadRestaurantImagesCommandHandler(
-        IRestaurantRespository restaurantRepository,
-        IGenericRepository<RestaurantImage> restaurantImageRepository,
-        IFileStorageService fileStorageService)
+    public class UploadRestaurantImagesCommandHandler : ICommandHandler<UploadRestaurantImagesCommand, Result<List<string>>>
     {
-        _restaurantRepository = restaurantRepository;
-        _restaurantImageRepository = restaurantImageRepository;
-        _fileStorageService = fileStorageService;
-    }
+        private readonly IRestaurantRespository _restaurantRepository;
+        private readonly IGenericRepository<RestaurantImage> _restaurantImageRepository;
+        private readonly IFileStorageService _fileStorageService;
 
-    public async Task<Result<List<string>>> Handle(UploadRestaurantImagesCommand request, CancellationToken cancellationToken)
-    {
-        var restaurant = await _restaurantRepository.GetByIdAsync(request.RestaurantId);
-        if (restaurant is null)
+        public UploadRestaurantImagesCommandHandler(
+            IRestaurantRespository restaurantRepository,
+            IGenericRepository<RestaurantImage> restaurantImageRepository,
+            IFileStorageService fileStorageService)
         {
-            return Result.Failure<List<string>>(DomainErrors.Restaurant.NotFound(request.RestaurantId));
+            _restaurantRepository = restaurantRepository;
+            _restaurantImageRepository = restaurantImageRepository;
+            _fileStorageService = fileStorageService;
         }
 
-        var uploadedUrls = new List<string>();
-
-        const string SUBFOLDER_NAME = "restaurants";
-
-        foreach (var imageFile in request.ImageFiles)
+        public async Task<Result<List<string>>> Handle(UploadRestaurantImagesCommand request, CancellationToken cancellationToken)
         {
-            var imageUrl = await _fileStorageService.SaveFileAsync(imageFile, SUBFOLDER_NAME);
-
-            var restaurantImage = new RestaurantImage
+            var restaurant = await _restaurantRepository.GetByIdAsync(request.RestaurantId);
+            if (restaurant is null)
             {
-                Id = Guid.NewGuid(),
-                Url = imageUrl,
-                RestaurantId = request.RestaurantId
-            };
+                return Result.Failure<List<string>>(DomainErrors.Restaurant.NotFound(request.RestaurantId));
+            }
 
-            await _restaurantImageRepository.AddAsync(restaurantImage);
-            uploadedUrls.Add(imageUrl);
+            if (request.ImageFiles == null || !request.ImageFiles.Any())
+            {
+                return Result.Failure<List<string>>(DomainErrors.Restaurant.NoImagesProvided);
+            }
+
+            var uploadedUrls = new List<string>();
+
+            const string SUBFOLDER_NAME = "restaurants";
+
+            foreach (var imageFile in request.ImageFiles)
+            {
+                var imageUrl = await _fileStorageService.SaveFileAsync(imageFile, SUBFOLDER_NAME);
+
+                var restaurantImage = new RestaurantImage
+                {
+                    Id = Guid.NewGuid(),
+                    Url = imageUrl,
+                    RestaurantId = request.RestaurantId
+                };
+
+                await _restaurantImageRepository.AddAsync(restaurantImage);
+                uploadedUrls.Add(imageUrl);
+            }
+
+            await _restaurantRepository.SaveChangesAsync();
+
+            return Result.Success(uploadedUrls);
         }
-
-        await _restaurantRepository.SaveChangesAsync();
-
-        return Result.Success(uploadedUrls);
     }
 }
