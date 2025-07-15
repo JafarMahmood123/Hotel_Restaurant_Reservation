@@ -1,4 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
 using Microsoft.AspNetCore.Hosting;
 
@@ -13,7 +14,7 @@ public class FileStorageService : IFileStorageService
         _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<string> SaveFileAsync(UploadRestaurantImagesRequest file, string subfolder)
+    public async Task<string> SaveFileAsync(UploadImageRequest file, string subfolder)
     {
         const string IMAGES_FOLDER = "images";
 
