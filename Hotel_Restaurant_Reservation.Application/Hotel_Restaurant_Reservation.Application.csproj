@@ -27,8 +27,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Implementation\Admins\Commands\AddAdmin\" />
     <Folder Include="Implementation\Admins\Commands\AddManager\" />
+    <Folder Include="Implementation\Admins\Commands\AssignManagerToHotel\" />
+    <Folder Include="Implementation\Admins\Commands\AssignManagerToEvent\" />
+    <Folder Include="Implementation\Admins\Commands\AssignManagerToRestaurant\" />
+    <Folder Include="Implementation\Admins\Commands\PasswordRecovery\" />
+    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfRestaurant\" />
+    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfHotel\" />
+    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfEvent\" />
   </ItemGroup>
 
 </Project>

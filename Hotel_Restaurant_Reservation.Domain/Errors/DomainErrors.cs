@@ -399,5 +399,9 @@ public static class DomainErrors
         public static Error CustomerRoleNotFound() => new(
             "Role.CustomerRoleNotFound",
             "The default 'Customer' role was not found in the database.");
+
+        public static Error AdminRoleNotFound() => new(
+            "Role.AdminRoleNotFound",
+            "The default 'Admin' role was not found in the database.");
     }
 }

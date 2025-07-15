@@ -27,7 +27,7 @@ public class Hotel
 
     public Guid? LocationId { get; set; }
 
-    public Guid HotelManagerId { get; set; }
+    public Guid? HotelManagerId { get; set; }
 
     // Navigation Properties
 
@@ -45,7 +45,7 @@ public class Hotel
 
     public virtual Location Location { get; set; }
 
-    public virtual HotelManager HotelManager { get; set; }
+    public virtual HotelManager? HotelManager { get; set; }
 
     public Hotel()
     {

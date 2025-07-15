@@ -1,8 +1,10 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.AddAdmin;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.ChangePassword;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.DeleteCustomer;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.UpdateCustomer;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetUserById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +15,33 @@ public class UserController : ApiController
 {
     public UserController(ISender sender) : base(sender)
     {
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
+    {
+        var query = new GetUserByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("AddAdmin")]
+    public async Task<IActionResult> AddAdmin([FromBody] AddAdminRequest addAdminRequest, CancellationToken cancellationToken)
+    {
+        var command = new AddAdminCommand(addAdminRequest);
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 
     [HttpPost("LogIn")]

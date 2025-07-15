@@ -46,7 +46,7 @@ public class Restaurant
 
     public Guid LocationId { get; set; }
 
-    public Guid RestaurantManagerId { get; set; }
+    public Guid? RestaurantManagerId { get; set; }
 
 
     // Navigation Properties
@@ -71,7 +71,7 @@ public class Restaurant
 
     public virtual ICollection<RestaurantBooking> RestaurantBookings { get; set; }
 
-    public virtual RestaurantManager RestaurantManager { get; set; }
+    public virtual RestaurantManager? RestaurantManager { get; set; }
 
 
     public Restaurant()
