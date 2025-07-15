@@ -1,5 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Commands.AddDish;
 using Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Commands.DeleteDish;
+using Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Queries.GetAllDishes;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
                 return NotFound(result.Error);
             }
             return NoContent();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllDishes(CancellationToken cancellationToken)
+        {
+            var query = new GetAllDishesQuery();
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
         }
     }
 }
