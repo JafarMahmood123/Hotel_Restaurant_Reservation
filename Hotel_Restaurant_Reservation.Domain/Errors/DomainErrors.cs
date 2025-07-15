@@ -136,7 +136,11 @@ public static class DomainErrors
         "Restaurant.NoDishesWithPricesProvided",
         "At least one dish with price must be provided.");
 
-        public static Error NoImagesProvided => new Error("Restaurant.NoImagesProvided", "No images were provided.");
+        public static Error NoImagesProvided => new Error(
+            "Restaurant.NoImagesProvided", "No images were provided.");
+
+        public static Error NoImagesFound => new Error(
+            "Restaurant.NoImagesFound", "No images were found for the restaurant.");
     }
 
     public static class Tag

@@ -8,6 +8,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadHotelImages;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetHotelImagesByHotelId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoomToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomFromHotel;
@@ -167,6 +168,20 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             if (result.IsFailure)
             {
                 return BadRequest(result.Error);
+            }
+
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{hotelId:guid}/images")]
+        public async Task<IActionResult> GetHotelImages(Guid hotelId, CancellationToken cancellationToken)
+        {
+            var query = new GetHotelImagesByHotelIdQuery(hotelId);
+            var result = await Sender.Send(query, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
             }
 
             return Ok(result.Value);

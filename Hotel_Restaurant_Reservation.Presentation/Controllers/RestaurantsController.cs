@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
 using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantImagesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
@@ -343,4 +344,17 @@ public class RestaurantsController : ApiController
 
         return Ok(result.Value);
     }
-}
+
+    [HttpGet("{restaurantId:guid}/images")]
+    public async Task<IActionResult> GetRestaurantImages(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetRestaurantImagesByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
