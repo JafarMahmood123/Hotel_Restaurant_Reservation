@@ -416,9 +416,16 @@ public static class DomainErrors
             "HotelReservation.NotFound",
             $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
 
+        public static Error UpdateNotAllowed() => new(
+            "HotelReservation.UpdateNotAllowed",
+            "Hotel reservations cannot be updated.");
+
         public static Error UpdateNotAllowedPastReservation() => new(
             "HotelReservation.UpdateNotAllowedPastReservation",
             "Cannot update a reservation that has already ended.");
-    }
 
+        public static Error DeleteNotAllowedPastReservation() => new(
+            "HotelReservation.DeleteNotAllowedPastReservation",
+            "Cannot delete a reservation that has already ended.");
+    }
 }
