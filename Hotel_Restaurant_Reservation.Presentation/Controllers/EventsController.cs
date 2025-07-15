@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.De
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Commands.UpdateEvent;
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Queries.GetAllEvents;
 using Hotel_Restaurant_Reservation.Application.Implementation.Events.Queries.GetEventById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetEventImages;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -76,6 +77,20 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             {
                 return NotFound(result.Error);
             }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{eventId:guid}/images")]
+        public async Task<IActionResult> GetEventImages(Guid eventId, CancellationToken cancellationToken)
+        {
+            var query = new GetEventImagesByEventIdQuery(eventId);
+            var result = await Sender.Send(query, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+
             return Ok(result.Value);
         }
     }

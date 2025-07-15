@@ -208,6 +208,8 @@ public static class DomainErrors
         public static Error NotFound(Guid eventId) => new(
             "Event.NotFound",
             $"The event with the ID '{eventId}' was not found.");
+
+        public static Error NoImagesFound => new Error("Event.NoImagesFound", "No images were found for the event.");
     }
 
     public static class Room
