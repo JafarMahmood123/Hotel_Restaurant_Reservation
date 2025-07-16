@@ -89,6 +89,7 @@ builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<Ev
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 builder.Services.AddScoped<IGenericRepository<Role>, GenericRepository<Role>>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IGenericRepository<Payment>, GenericRepository<Payment>>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<DataSeeder>();

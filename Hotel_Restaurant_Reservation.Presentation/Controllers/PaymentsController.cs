@@ -1,4 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
+using Hotel_Restaurant_Reservation.Application.Implementation.Payments.Commands.AddPayment;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
             var order = await _payPalService.CaptureOrder(orderId);
             return Ok(order);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddPayment([FromBody] AddPaymentRequest addPaymentRequest, CancellationToken cancellationToken)
+        {
+            var command = new AddPaymentCommand(addPaymentRequest);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+            return Ok(result.Value);
         }
 
         [HttpPost("webhook")]
