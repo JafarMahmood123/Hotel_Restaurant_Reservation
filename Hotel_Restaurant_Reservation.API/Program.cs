@@ -2,12 +2,14 @@ using FluentValidation;
 using Hotel_Restaurant_Reservation.API.OptionsSetup;
 using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
+using Hotel_Restaurant_Reservation.Infrastructure.Payment;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -90,6 +92,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<DataSeeder>();
+builder.Services.AddScoped<IPayPalService, PayPalService>();
 
 var app = builder.Build();
 
