@@ -29,6 +29,8 @@ public class RestaurantBooking
 
     public virtual ICollection<BookingDish> BookingDishes { get; set; }
 
+    public virtual RestaurantBookingPayment RestaurantBookingPayment { get; set; }
+
     public RestaurantBooking()
     {
         BookingDishes = new HashSet<BookingDish>();

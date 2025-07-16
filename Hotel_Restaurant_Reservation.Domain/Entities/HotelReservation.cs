@@ -29,4 +29,6 @@ public class HotelReservation
     public virtual User User { get; set; }
 
     public virtual Room Room { get; set; }
+
+    public virtual HotelReservationPayment HotelReservationPayment { get; set; } 
 }

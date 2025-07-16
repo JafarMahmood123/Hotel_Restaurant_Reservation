@@ -50,4 +50,7 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<HotelReview> HotelReviews { get; set; }
     public DbSet<RestaurantManager> RestaurantManagers { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<HotelReservationPayment> HotelReservationPayments { get; set; }
+    public DbSet<RestaurantBookingPayment> RestaurantBookingPayments { get; set; }
+    public DbSet<EventRegistrationPayment> EventRegistrationPayments { get; set; }
 }

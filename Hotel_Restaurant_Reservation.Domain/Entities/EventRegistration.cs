@@ -22,4 +22,5 @@ public class EventRegistration
 
     public virtual Event Event { get; set; }
 
+    public virtual EventRegistrationPayment EventRegistrationPayment { get; set; } 
 }
