@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetUserById;
 
@@ -19,7 +20,9 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, Result<Us
 
     public async Task<Result<UserResponse>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.Id);
+        var user = await _userRepository.Where(u => u.Id == request.Id)
+                                        .Include(u => u.Role)
+                                        .FirstOrDefaultAsync(cancellationToken);
 
         if (user is null)
         {
