@@ -7,4 +7,6 @@ public class EventRegistrationResponse
     public int NumberOfPeople { get; set; }
     public Guid CustomerId { get; set; }
     public Guid EventId { get; set; }
+    public string PayPalOrderStatus { get; set; }
+    public string PayPalOrderId { get; set; }
 }
