@@ -1,6 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
-using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
 using Microsoft.AspNetCore.Hosting;
 
 namespace Hotel_Restaurant_Reservation.Infrastructure.Storage;

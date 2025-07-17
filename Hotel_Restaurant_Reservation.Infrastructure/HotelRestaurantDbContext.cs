@@ -53,4 +53,9 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<HotelReservationPayment> HotelReservationPayments { get; set; }
     public DbSet<RestaurantBookingPayment> RestaurantBookingPayments { get; set; }
     public DbSet<EventRegistrationPayment> EventRegistrationPayments { get; set; }
+    public DbSet<EventCurrencyType> EventCurrencyTypes { get; set; }
+    public DbSet<EventImage> EventImages { get; set; }
+    public DbSet<HotelImage> HotelImages { get; set; }
+    public DbSet<RestaurantImage> RestaurantImages { get; set; }
+    public DbSet<UserImage> UserImages { get; set; }
 }

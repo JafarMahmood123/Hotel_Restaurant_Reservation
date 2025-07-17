@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
@@ -11,6 +12,7 @@ using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Hotel_Restaurant_Reservation.Infrastructure.Payment;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
+using Hotel_Restaurant_Reservation.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +28,7 @@ builder.Services.AddMediatR(cfg =>
 });
 
 // Add services to the container.
+builder.Services.AddHttpClient();
 
 builder.Services.AddControllers()
     .AddApplicationPart(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
@@ -44,8 +47,9 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelRestaurantReservation"));
 });
 
-
+// Corrected and cleaned up service registrations
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
+builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
 builder.Services.AddScoped<IGenericRepository<WorkTime>, GenericRepository<WorkTime>>();
 builder.Services.AddScoped<IGenericRepository<MealType>, GenericRepository<MealType>>();
@@ -62,7 +66,6 @@ builder.Services.AddScoped<IGenericRepository<User>, GenericRepository<User>>();
 builder.Services.AddScoped<IGenericRepository<BookingDish>, GenericRepository<BookingDish>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantBooking>, GenericRepository<RestaurantBooking>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantReview>, GenericRepository<RestaurantReview>>();
-builder.Services.AddScoped<IGenericRepository<Cuisine>, GenericRepository<Cuisine>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantCuisine>, GenericRepository<RestaurantCuisine>>();
 builder.Services.AddScoped<IGenericRepository<CurrencyType>, GenericRepository<CurrencyType>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantCurrencyType>, GenericRepository<RestaurantCurrencyType>>();
@@ -79,17 +82,21 @@ builder.Services.AddScoped<IGenericRepository<Event>, GenericRepository<Event>>(
 builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
 builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 builder.Services.AddScoped<IGenericRepository<PropertyType>, GenericRepository<PropertyType>>();
-builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
-builder.Services.AddScoped<IGenericRepository<EventRegistration>, GenericRepository<EventRegistration>>();
-builder.Services.AddScoped<IGenericRepository<HotelReview>, GenericRepository<HotelReview>>();
-builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 builder.Services.AddScoped<IGenericRepository<HotelReview>, GenericRepository<HotelReview>>();
 builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<EventReview>>();
-builder.Services.AddScoped<IGenericRepository<HotelReservation>, GenericRepository<HotelReservation>>();
 builder.Services.AddScoped<IGenericRepository<Role>, GenericRepository<Role>>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-builder.Services.AddScoped<IGenericRepository<Payment>, GenericRepository<Payment>>();
+
+builder.Services.AddScoped<IGenericRepository<UserImage>, GenericRepository<UserImage>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantImage>, GenericRepository<RestaurantImage>>();
+builder.Services.AddScoped<IGenericRepository<HotelImage>, GenericRepository<HotelImage>>();
+builder.Services.AddScoped<IGenericRepository<EventImage>, GenericRepository<EventImage>>();
+builder.Services.AddScoped<IGenericRepository<HotelReservationPayment>, GenericRepository<HotelReservationPayment>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantBookingPayment>, GenericRepository<RestaurantBookingPayment>>();
+builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, GenericRepository<EventRegistrationPayment>>();
+builder.Services.AddScoped<IFileStorageService, FileStorageService>();
+
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<DataSeeder>();
