@@ -25,4 +25,6 @@ public class RestaurantBookingResponse
     public Guid CustomerId { get; set; }
 
     public ICollection<BookingDishResponse> BookingDishes { get; set; }
+    public string PayPalOrderStatus { get; set; }
+    public string PayPalOrderId { get; set; }
 }

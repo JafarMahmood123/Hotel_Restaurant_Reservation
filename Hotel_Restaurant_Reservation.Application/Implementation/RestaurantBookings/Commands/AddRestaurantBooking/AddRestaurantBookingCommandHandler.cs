@@ -4,6 +4,8 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
+using PayPalCheckoutSdk.Orders;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 
@@ -11,14 +13,25 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
 {
     private readonly IGenericRepository<RestaurantBooking> _restaurantBookingRepository;
     private readonly IGenericRepository<BookingDish> _bookingDishesRepository;
+    private readonly IGenericRepository<RestaurantDishPrice> _restaurantDishPriceRepository;
+    private readonly IGenericRepository<RestaurantBookingPayment> _restaurantBookingPaymentRepository;
+    private readonly IPayPalService _payPalService;
     private readonly IMapper _mapper;
 
-    public AddRestaurantBookingCommandHandler(IGenericRepository<RestaurantBooking> restaurantBookingRepository,
-        IGenericRepository<BookingDish> bookingDishesRepository, IMapper mapper)
+    public AddRestaurantBookingCommandHandler(
+        IGenericRepository<RestaurantBooking> restaurantBookingRepository,
+        IGenericRepository<BookingDish> bookingDishesRepository,
+        IGenericRepository<RestaurantDishPrice> restaurantDishPriceRepository,
+        IGenericRepository<RestaurantBookingPayment> restaurantBookingPaymentRepository,
+        IPayPalService payPalService,
+        IMapper mapper)
     {
-        this._restaurantBookingRepository = restaurantBookingRepository;
-        this._bookingDishesRepository = bookingDishesRepository;
-        this._mapper = mapper;
+        _restaurantBookingRepository = restaurantBookingRepository;
+        _bookingDishesRepository = bookingDishesRepository;
+        _restaurantDishPriceRepository = restaurantDishPriceRepository;
+        _restaurantBookingPaymentRepository = restaurantBookingPaymentRepository;
+        _payPalService = payPalService;
+        _mapper = mapper;
     }
 
     public async Task<Result<RestaurantBookingResponse>> Handle(AddRestaurantBookingCommand request,
@@ -52,8 +65,16 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
 
 
         var bookingDishes = request.AddRestaurantBookingRequest.AddBookingDishRequest.dishesIdsWithQuantities;
+        decimal totalAmount = 0;
+
         foreach (var bookingDishId in bookingDishes.Keys)
         {
+            var dishPrice = await _restaurantDishPriceRepository.GetFirstOrDefaultAsync(dp => dp.DishId == bookingDishId && dp.RestaurantId == restaurantBooking.RestaurantId);
+            if (dishPrice != null)
+            {
+                totalAmount += (decimal)dishPrice.Price * bookingDishes[bookingDishId];
+            }
+
             var bookingDish = new BookingDish()
             {
                 Id = Guid.NewGuid(),
@@ -68,7 +89,25 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
             restaurantBooking.BookingDishes.Add(bookingDish);
         }
 
+        // Create PayPal order
+        var payPalOrder = await _payPalService.CreateOrder(totalAmount.ToString("F2"), "USD");
+
+        // Create and save payment details
+        var restaurantBookingPayment = new RestaurantBookingPayment
+        {
+            Id = Guid.NewGuid(),
+            RestaurantBookingId = restaurantBooking.Id,
+            Amount = totalAmount,
+            Currency = "USD",
+            OrderId = payPalOrder.Id,
+            Status = payPalOrder.Status
+        };
+        await _restaurantBookingPaymentRepository.AddAsync(restaurantBookingPayment);
+        await _restaurantBookingPaymentRepository.SaveChangesAsync();
+
         var bookingResponse = _mapper.Map<RestaurantBookingResponse>(restaurantBooking);
+        bookingResponse.PayPalOrderId = payPalOrder.Id;
+        bookingResponse.PayPalOrderStatus = payPalOrder.Status;
 
         return Result.Success(bookingResponse);
     }
