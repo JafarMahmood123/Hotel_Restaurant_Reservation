@@ -10,7 +10,7 @@ public class HotelProfile : Profile
 {
     public HotelProfile()
     {
-        CreateMap<Hotel, HotelResponse>().ReverseMap();
+        CreateMap<Hotel, HotelResponse>();
 
         CreateMap<AddHotelRequest, Hotel>();
 

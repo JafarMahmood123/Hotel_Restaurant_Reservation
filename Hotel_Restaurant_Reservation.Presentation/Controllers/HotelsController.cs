@@ -23,11 +23,9 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
 {
     public class HotelsController : ApiController
     {
-        private readonly IMapper _mapper;
 
-        public HotelsController(ISender sender, IMapper mapper) : base(sender)
+        public HotelsController(ISender sender) : base(sender)
         {
-            _mapper = mapper;
         }
 
         [HttpGet("{id:guid}")]
@@ -35,11 +33,14 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         public async Task<IActionResult> GetHotelById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetHotelByIdQuery(id);
-            var hotel = await Sender.Send(query, cancellationToken);
-            if (hotel is null)
-                return NotFound();
-            var hotelResponse = _mapper.Map<HotelResponse>(hotel);
-            return Ok(hotelResponse);
+            var result = await Sender.Send(query, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+
+            return Ok(result.Value);
         }
 
         [HttpGet("{hotelId:guid}/rooms")]
@@ -55,12 +56,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         }
 
         [HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetAllHotel(CancellationToken cancellationToken)
         {
             var query = new GetAllHotelsQuery();
-            var hotels = await Sender.Send(query, cancellationToken);
-            IEnumerable<HotelResponse> hotelResponses = _mapper.Map<IEnumerable<HotelResponse>>(hotels);
-            return Ok(hotelResponses);
+            var result = await Sender.Send(query, cancellationToken);
+
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+
+            return Ok(result.Value);
         }
 
         [HttpGet("filter")]
@@ -97,12 +104,16 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         }
 
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> AddHotel(AddHotelRequest hotelAddRequest, CancellationToken cancellationToken)
         {
-            Hotel requestedHotel = _mapper.Map<Hotel>(hotelAddRequest);
-            var command = new AddHotelCommand(requestedHotel);
-            var hotel = await Sender.Send(command, cancellationToken);
-            return CreatedAtAction(nameof(GetHotelById), new { id = hotel.Id }, hotel);
+            var command = new AddHotelCommand(hotelAddRequest);
+            var result = await Sender.Send(command, cancellationToken);
+
+            if (result.IsFailure)
+                return BadRequest(result.Error);
+
+            return CreatedAtAction(nameof(GetHotelById), new { id = result.Value.Id }, result.Value);
         }
 
         [HttpPut("{id:guid}")]

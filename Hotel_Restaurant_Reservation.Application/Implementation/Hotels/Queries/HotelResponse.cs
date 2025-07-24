@@ -18,20 +18,4 @@ public class HotelResponse
     public double StarRate { get; set; }
 
     public int NumberOfRooms { get; set; }
-
-    // Foreign Keys
-
-    public Guid PropertyTypeId { get; set; }
-
-    public Guid RoomId { get; set; }
-
-    public Guid HotelRangePricesId { get; set; }
-
-    public Guid CurrencyTypeId { get; set; }
-
-    public Guid HotelReservationId { get; set; }
-
-    public Guid ReviewId { get; set; }
-
-    public Guid LocationId { get; set; }
 }

@@ -1,14 +1,15 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 
-public class AddHotelCommand : ICommand<Hotel>
+public class AddHotelCommand : ICommand<Result<HotelResponse>>
 {
-    public Hotel Hotel { get; set; }
+    public AddHotelRequest AddHotelRequest { get; set; }
 
-    public AddHotelCommand(Hotel hotel)
+    public AddHotelCommand(AddHotelRequest addHotelRequest)
     {
-        Hotel = hotel;
+        AddHotelRequest = addHotelRequest;
     }
 }

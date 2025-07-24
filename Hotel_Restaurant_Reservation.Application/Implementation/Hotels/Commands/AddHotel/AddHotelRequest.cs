@@ -6,7 +6,7 @@ public class AddHotelRequest
 
     public string Name { get; set; }
 
-    //public string Description { get; set; }
+    public string Description { get; set; }
 
     public double Latitude { get; set; }
 
@@ -17,6 +17,8 @@ public class AddHotelRequest
     public double StarRate { get; set; }
 
     public int NumberOfRooms { get; set; }
+
+    public Guid LocationId { get; set; }
 
     // Additional Keys
 

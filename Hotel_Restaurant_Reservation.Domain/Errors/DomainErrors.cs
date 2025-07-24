@@ -179,6 +179,10 @@ public static class DomainErrors
             "Hotel.NoImagesProvided", "No images were provided.");
         public static Error NoImagesFound => new Error(
             "Hotel.NoImagesFound", "No images were found for the hotel.");
+
+        public static Error InvalidRequest => new(
+            "Hotel.InvalidRequest",
+            "The hotel request is invalid.");
     }
 
     public static class PropertyType

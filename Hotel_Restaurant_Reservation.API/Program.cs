@@ -27,6 +27,21 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(Hotel_Restaurant_Reservation.Application.AssemplyReference).Assembly);
 });
 
+
+var myAllowSpecificOrigins = "AllowReactApp";
+
+// Add the CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(myAllowSpecificOrigins,
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000") // Assuming your React app runs on port 3000
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 // Add services to the container.
 builder.Services.AddHttpClient();
 
@@ -97,6 +112,8 @@ builder.Services.AddScoped<IGenericRepository<RestaurantBookingPayment>, Generic
 builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, GenericRepository<EventRegistrationPayment>>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
+
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<DataSeeder>();
@@ -119,6 +136,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(myAllowSpecificOrigins);
+
+app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+ 
 app.UseAuthentication();
 
 app.UseAuthorization();

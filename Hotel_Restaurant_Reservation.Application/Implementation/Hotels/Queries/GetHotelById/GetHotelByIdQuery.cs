@@ -1,11 +1,10 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
-using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
+using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 
-
-// Need Editing Later
-public class GetHotelByIdQuery : IQuery<Hotel?> 
+public class GetHotelByIdQuery : IQuery<Result<HotelResponse>>
 {
     public Guid Id { get; set; }
 
