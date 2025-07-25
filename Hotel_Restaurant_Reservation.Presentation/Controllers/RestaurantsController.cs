@@ -24,6 +24,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantDishesByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -349,6 +350,20 @@ public class RestaurantsController : ApiController
     public async Task<IActionResult> GetRestaurantImages(Guid restaurantId, CancellationToken cancellationToken)
     {
         var query = new GetRestaurantImagesByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{restaurantId:guid}/dishes")]
+    public async Task<IActionResult> GetRestaurantDishesByRestaurnatId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetRestaurantDishesByRestaurantIdQuery(restaurantId);
         var result = await Sender.Send(query, cancellationToken);
 
         if (result.IsFailure)

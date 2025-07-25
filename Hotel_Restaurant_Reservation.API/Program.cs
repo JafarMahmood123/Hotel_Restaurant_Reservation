@@ -28,7 +28,7 @@ builder.Services.AddMediatR(cfg =>
 });
 
 
-var myAllowSpecificOrigins = "AllowReactApp";
+var myAllowSpecificOrigins = "AllowAll";
 
 // Add the CORS policy
 builder.Services.AddCors(options =>
@@ -36,9 +36,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(myAllowSpecificOrigins,
         builder =>
         {
-            builder.WithOrigins("http://localhost:3000") // Assuming your React app runs on port 3000
-                   .AllowAnyHeader()
-                   .AllowAnyMethod();
+            builder.WithOrigins(
+                "http://localhost:3000",
+                "http://localhost:8080",
+                "http://192.168.137.1:8080"
+                ).AllowAnyHeader().AllowAnyMethod();
         });
 });
 
@@ -137,8 +139,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(myAllowSpecificOrigins);
-
-app.UseCors(policy => policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
  
 app.UseAuthentication();
 

@@ -18,4 +18,6 @@ public class HotelResponse
     public double StarRate { get; set; }
 
     public int NumberOfRooms { get; set; }
+
+    public string PictureUrl { get; set; }
 }

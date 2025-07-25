@@ -22,9 +22,7 @@ public class RestaurantBookingResponse
 
     public Guid RestaurantId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     public ICollection<BookingDishResponse> BookingDishes { get; set; }
-    public string PayPalOrderStatus { get; set; }
-    public string PayPalOrderId { get; set; }
 }

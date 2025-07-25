@@ -18,7 +18,7 @@ public class AddRestaurantBookingRequest
 
     public Guid RestaurantId { get; set; }
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     public AddBookingDishesRequest AddBookingDishRequest { get; set; }
 }

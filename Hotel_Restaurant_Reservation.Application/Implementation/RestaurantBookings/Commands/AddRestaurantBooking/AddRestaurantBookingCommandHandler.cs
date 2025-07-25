@@ -51,14 +51,14 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
 
         restaurantBooking.Id = Guid.NewGuid();
         restaurantBooking.BookingDateTime = DateTime.Now;
+        restaurantBooking.UserId = request.AddRestaurantBookingRequest.UserId;
 
-        if (restaurantBooking.BookingDurationTime.Minute < 15)
+        if ((restaurantBooking.BookingDurationTime.Minute + restaurantBooking.BookingDurationTime.Hour * 60) < 15)
             return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.ShortBookingTime());
 
 
-        if (restaurantBooking.BookingDurationTime.Minute > 60)
+        if ((restaurantBooking.BookingDurationTime.Minute + restaurantBooking.BookingDurationTime.Hour * 60) > 60)
             return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.LongBookingTime());
-
 
         restaurantBooking = await _restaurantBookingRepository.AddAsync(restaurantBooking);
         await _restaurantBookingRepository.SaveChangesAsync();
@@ -89,25 +89,7 @@ public class AddRestaurantBookingCommandHandler : ICommandHandler<AddRestaurantB
             restaurantBooking.BookingDishes.Add(bookingDish);
         }
 
-        // Create PayPal order
-        var payPalOrder = await _payPalService.CreateOrder(totalAmount.ToString("F2"), "USD");
-
-        // Create and save payment details
-        var restaurantBookingPayment = new RestaurantBookingPayment
-        {
-            Id = Guid.NewGuid(),
-            RestaurantBookingId = restaurantBooking.Id,
-            Amount = totalAmount,
-            Currency = "USD",
-            OrderId = payPalOrder.Id,
-            Status = payPalOrder.Status
-        };
-        await _restaurantBookingPaymentRepository.AddAsync(restaurantBookingPayment);
-        await _restaurantBookingPaymentRepository.SaveChangesAsync();
-
         var bookingResponse = _mapper.Map<RestaurantBookingResponse>(restaurantBooking);
-        bookingResponse.PayPalOrderId = payPalOrder.Id;
-        bookingResponse.PayPalOrderStatus = payPalOrder.Status;
 
         return Result.Success(bookingResponse);
     }

@@ -19,7 +19,9 @@ public class Hotel
 
     public double MinPrice { get; set; }
 
-    public double MaxPrice { get; set; }    
+    public double MaxPrice { get; set; }
+
+    public string? PictureUrl { get; set; }
 
     // Foreign Keys
 
