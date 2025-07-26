@@ -63,6 +63,13 @@ public static class DomainErrors
             $"Booking updates are not allowed at or after the delivery time, or within 15 minutes of the delivery time. Delivery time: {receiveTime:yyyy-MM-dd HH:mm}.");
     }
 
+    public static class Payment
+    {
+        public static Error InsufficientFunds() => new(
+            "RestaurantBooking.InsufficientFunds",
+            $"Insufficient funds.");
+    }
+
     public static class RestaurantReview
     {
         public static Error EmptyDescription => new(

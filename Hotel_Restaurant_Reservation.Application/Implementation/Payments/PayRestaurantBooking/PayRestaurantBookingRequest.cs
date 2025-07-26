@@ -1,8 +1,10 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.PayRestaurantBooking
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Payments.PayRestaurantBooking
 {
     public class PayRestaurantBookingRequest
     {
         public Guid RestaurantBookingId { get; set; }
-        public string CurrencyCode { get; set; }
+        public Guid UserId { get; set; }
+        public Guid CurrencyTypeId { get; set; }
+        public decimal Amount { get; set; }
     }
 }
