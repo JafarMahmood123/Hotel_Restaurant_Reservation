@@ -65,8 +65,12 @@ public static class DomainErrors
 
     public static class Payment
     {
+        public static Error NotFound(Guid id) => new(
+            "Payment.NotFound",
+            $"Payment with ID {id} was not found.");
+
         public static Error InsufficientFunds() => new(
-            "RestaurantBooking.InsufficientFunds",
+            "Payment.InsufficientFunds",
             $"Insufficient funds.");
     }
 

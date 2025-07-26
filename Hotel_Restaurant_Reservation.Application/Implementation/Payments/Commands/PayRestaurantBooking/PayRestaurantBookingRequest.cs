@@ -1,4 +1,4 @@
-﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Payments.PayRestaurantBooking
+﻿namespace Hotel_Restaurant_Reservation.Application.Implementation.Payments.Commands.PayRestaurantBooking
 {
     public class PayRestaurantBookingRequest
     {

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Domain.Shared;
-using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
 using Hotel_Restaurant_Reservation.Domain.Enums;
+using Hotel_Restaurant_Reservation.Domain.Shared;
+using PayPalCheckoutSdk.Orders;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking
 {
@@ -16,7 +17,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
         private readonly IGenericRepository<RestaurantDishPrice> _restaurantDishPriceRepository;
         private readonly IGenericRepository<RestaurantBookingPayment> _restaurantBookingPaymentRepository;
         private readonly IGenericRepository<CurrencyType> _currencyTypeRepository;
-        private readonly ILocalPaymentService _localPaymentService;
         private readonly IMapper _mapper;
 
         public AddRestaurantBookingCommandHandler(
@@ -25,7 +25,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
             IGenericRepository<RestaurantDishPrice> restaurantDishPriceRepository,
             IGenericRepository<RestaurantBookingPayment> restaurantBookingPaymentRepository,
             IGenericRepository<CurrencyType> currencyTypeRepository,
-            ILocalPaymentService localPaymentService,
             IMapper mapper)
         {
             _restaurantBookingRepository = restaurantBookingRepository;
@@ -33,7 +32,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
             _restaurantDishPriceRepository = restaurantDishPriceRepository;
             _restaurantBookingPaymentRepository = restaurantBookingPaymentRepository;
             _currencyTypeRepository = currencyTypeRepository;
-            _localPaymentService = localPaymentService;
             _mapper = mapper;
         }
 
@@ -55,12 +53,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
             restaurantBooking.Id = Guid.NewGuid();
             restaurantBooking.BookingDateTime = DateTime.Now;
             restaurantBooking.UserId = request.AddRestaurantBookingRequest.UserId;
-
-            var currencyType = await _currencyTypeRepository.GetByIdAsync(request.AddRestaurantBookingRequest.CurrencyTypeId);
-            if (currencyType == null)
-            {
-                return Result.Failure<RestaurantBookingResponse>(DomainErrors.CurrencyType.NotFound(request.AddRestaurantBookingRequest.CurrencyTypeId));
-            }
 
             if ((restaurantBooking.BookingDurationTime.Minute + restaurantBooking.BookingDurationTime.Hour * 60) < 15)
                 return Result.Failure<RestaurantBookingResponse>(DomainErrors.RestaurantBooking.ShortBookingTime());
@@ -98,23 +90,17 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
                 restaurantBooking.BookingDishes.Add(bookingDish);
             }
 
-            var orderId = await _localPaymentService.CreateOrder(totalAmount, currencyType.CurrencyCode);
-            var captured = await _localPaymentService.CaptureOrder(orderId);
-
-            if (captured)
+            var restaurantBookingPayment = new RestaurantBookingPayment
             {
-                var restaurantBookingPayment = new RestaurantBookingPayment
-                {
-                    Id = Guid.NewGuid(),
-                    RestaurantBookingId = restaurantBooking.Id,
-                    Amount = totalAmount,
-                    Currency = currencyType.CurrencyCode,
-                    OrderId = orderId,
-                    Status = PaymentStatus.Pending,
-                };
-                await _restaurantBookingPaymentRepository.AddAsync(restaurantBookingPayment);
-                await _restaurantBookingPaymentRepository.SaveChangesAsync();
-            }
+                Id = restaurantBooking.Id,
+                RestaurantBookingId = restaurantBooking.Id,
+                Amount = totalAmount,
+                CurrencyTypeId = null,
+                Status = PaymentStatus.Pending,
+            };
+
+            await _restaurantBookingPaymentRepository.AddAsync(restaurantBookingPayment);
+            await _restaurantBookingPaymentRepository.SaveChangesAsync();
 
             var bookingResponse = _mapper.Map<RestaurantBookingResponse>(restaurantBooking);
 

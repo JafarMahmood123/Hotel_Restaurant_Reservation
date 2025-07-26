@@ -13,7 +13,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
         // Foreign Keys
         public Guid RestaurantId { get; set; }
         public Guid UserId { get; set; }
-        public Guid CurrencyTypeId { get; set; } // Added CurrencyTypeId
         public AddBookingDishesRequest AddBookingDishRequest { get; set; }
     }
 }
