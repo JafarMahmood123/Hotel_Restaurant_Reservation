@@ -461,8 +461,8 @@ public class DataSeeder
         // Seed EventRegistrations
         var eventRegistrations = new List<EventRegistration>
         {
-            new EventRegistration { Id = Guid.NewGuid(), RegistrationDateTime = DateTime.UtcNow, NumberOfPeople = 2, CustomerId = users[0].Id, EventId = events[0].Id },
-            new EventRegistration { Id = Guid.NewGuid(), RegistrationDateTime = DateTime.UtcNow, NumberOfPeople = 1, CustomerId = users[1].Id, EventId = events[1].Id }
+            new EventRegistration { Id = Guid.NewGuid(), RegistrationDateTime = DateTime.UtcNow, NumberOfPeople = 2, UserId = users[0].Id, EventId = events[0].Id },
+            new EventRegistration { Id = Guid.NewGuid(), RegistrationDateTime = DateTime.UtcNow, NumberOfPeople = 1, UserId = users[1].Id, EventId = events[1].Id }
         };
         await _dbContext.EventRegistrations.AddRangeAsync(eventRegistrations);
         await _dbContext.SaveChangesAsync();

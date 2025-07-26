@@ -58,7 +58,7 @@ public class AddEventRegistrationCommandHandler : ICommandHandler<AddEventRegist
             Amount = totalAmount,
             Currency = "USD",
             OrderId = payPalOrder.Id,
-            Status = payPalOrder.Status
+            //Status = payPalOrder.Status
         };
         await _eventRegistrationPaymentRepository.AddAsync(eventRegistrationPayment);
         await _eventRegistrationPaymentRepository.SaveChangesAsync();

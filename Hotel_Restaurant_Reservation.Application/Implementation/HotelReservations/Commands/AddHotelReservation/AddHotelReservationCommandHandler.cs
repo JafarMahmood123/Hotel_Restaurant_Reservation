@@ -59,7 +59,7 @@ public class AddHotelReservationCommandHandler : ICommandHandler<AddHotelReserva
             Amount = totalAmount,
             Currency = "USD",
             OrderId = payPalOrder.Id,
-            Status = payPalOrder.Status
+            //Status = payPalOrder.Status
         };
         await _hotelReservationPaymentRepository.AddAsync(hotelReservationPayment);
         await _hotelReservationPaymentRepository.SaveChangesAsync();

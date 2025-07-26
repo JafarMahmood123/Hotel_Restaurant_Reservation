@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Comm
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Commands.UpdateCurrencyType;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries.GetAllCurrencyTypes;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries.GetCurrencyTypeById;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries.GetCurrencyTypesByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         public async Task<IActionResult> GetCurrencyTypeById(Guid id, CancellationToken cancellationToken)
         {
             var query = new GetCurrencyTypeByIdQuery(id);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpGet("restaurant/{restaurantId:guid}")]
+        public async Task<IActionResult> GetCurrencyTypesByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+        {
+            var query = new GetCurrencyTypesByRestaurantIdQuery(restaurantId);
             var result = await Sender.Send(query, cancellationToken);
             if (result.IsFailure)
             {

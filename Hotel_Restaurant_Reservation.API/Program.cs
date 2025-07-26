@@ -114,7 +114,6 @@ builder.Services.AddScoped<IGenericRepository<RestaurantBookingPayment>, Generic
 builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, GenericRepository<EventRegistrationPayment>>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
-builder.Services.AddScoped<ILocalPaymentService, LocalPaymentService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 

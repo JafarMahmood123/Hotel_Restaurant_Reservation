@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.AddBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.DeleteBookingDishes;
 using Hotel_Restaurant_Reservation.Application.Implementation.BookingDishes.Commands.UpdateBookingDishes;
+using Hotel_Restaurant_Reservation.Application.Implementation.Payments.Commands.PayRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.AddRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.DeleteRestaurantBooking;
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Commands.UpdateRestaurantBooking;
@@ -119,5 +120,18 @@ public class RestaurantBookingController : ApiController
             return BadRequest(result.Error);
         }
         return NoContent();
+    }
+
+    [HttpPost("pay")]
+    public async Task<IActionResult> PayForBooking([FromBody] PayRestaurantBookingRequest payForBookingRequest, CancellationToken cancellationToken)
+    {
+        var command = new PayRestaurantBookingCommand(payForBookingRequest);
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
     }
 }

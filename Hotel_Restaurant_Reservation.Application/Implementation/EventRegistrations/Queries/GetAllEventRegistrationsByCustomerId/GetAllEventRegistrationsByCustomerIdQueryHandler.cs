@@ -21,7 +21,7 @@ public class GetAllEventRegistrationsByCustomerIdQueryHandler : IQueryHandler<Ge
 
     public async Task<Result<IEnumerable<EventRegistrationResponse>>> Handle(GetAllEventRegistrationsByCustomerIdQuery request, CancellationToken cancellationToken)
     {
-        var eventRegistrations = await _eventRegistrationRepository.Where(x => x.CustomerId == request.CustomerId).ToListAsync(cancellationToken: cancellationToken);
+        var eventRegistrations = await _eventRegistrationRepository.Where(x => x.UserId == request.CustomerId).ToListAsync(cancellationToken: cancellationToken);
         var eventRegistrationResponses = _mapper.Map<IEnumerable<EventRegistrationResponse>>(eventRegistrations);
         return Result.Success(eventRegistrationResponses);
     }
