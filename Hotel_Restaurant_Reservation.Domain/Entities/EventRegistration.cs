@@ -12,13 +12,13 @@ public class EventRegistration
 
     // Foreign Keys
 
-    public Guid CustomerId { get; set; }
+    public Guid UserId { get; set; }
 
     public Guid EventId { get; set; }
 
     // Navigation Properties
 
-    public virtual User Customer { get; set; }
+    public virtual User User { get; set; }
 
     public virtual Event Event { get; set; }
 

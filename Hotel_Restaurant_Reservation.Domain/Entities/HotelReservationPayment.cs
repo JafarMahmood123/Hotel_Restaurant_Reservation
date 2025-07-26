@@ -1,4 +1,6 @@
-﻿namespace Hotel_Restaurant_Reservation.Domain.Entities;
+﻿using Hotel_Restaurant_Reservation.Domain.Enums;
+
+namespace Hotel_Restaurant_Reservation.Domain.Entities;
 
 public class HotelReservationPayment
 {
@@ -6,7 +8,7 @@ public class HotelReservationPayment
     public string OrderId { get; set; }
     public decimal Amount { get; set; }
     public string Currency { get; set; }
-    public string Status { get; set; }
+    public PaymentStatus Status { get; set; }
     public Guid HotelReservationId { get; set; }
     public virtual HotelReservation HotelReservation { get; set; }
 }
