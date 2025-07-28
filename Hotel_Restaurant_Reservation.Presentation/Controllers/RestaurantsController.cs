@@ -280,6 +280,18 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [HttpGet]
+    [Route("{restaurantId:guid}/mealTypes")]
+    public async Task<IActionResult> GetMealTypesByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetMealTypesByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     [Route("{restaurantId:guid}/tags")]
     public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId,
