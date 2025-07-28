@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
     public class CuisinesController : ApiController
     {
         public CuisinesController(ISender sender) : base(sender)

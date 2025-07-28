@@ -24,6 +24,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantCuisinesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantDishesByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -138,6 +139,20 @@ public class RestaurantsController : ApiController
         var command = new RemoveCuisinesFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest);
 
         var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    [Route("{restaurantId:guid}/cuisines")]
+    public async Task<IActionResult> GetRestaurantCuisinesByRestaurantId([FromRoute] Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetRestaurantCuisinesByRestaurantIdQuery(restaurantId);
+
+        var result = await Sender.Send(query, cancellationToken);
 
         if (result.IsFailure)
             return BadRequest(result.Error);

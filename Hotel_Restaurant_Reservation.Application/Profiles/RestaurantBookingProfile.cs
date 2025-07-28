@@ -11,7 +11,8 @@ public class RestaurantBookingProfile : Profile
 {
     public RestaurantBookingProfile()
     {
-        CreateMap<RestaurantBooking, RestaurantBookingResponse>();
+        CreateMap<RestaurantBooking, RestaurantBookingResponse>()
+            .ForMember(dest => dest.RestaurantName, opt => opt.MapFrom(src => src.Restaurant.Name));
         CreateMap<AddRestaurantBookingRequest, RestaurantBooking>();
         CreateMap<UpdateRestaurantBookingRequest, RestaurantBooking>();
     }

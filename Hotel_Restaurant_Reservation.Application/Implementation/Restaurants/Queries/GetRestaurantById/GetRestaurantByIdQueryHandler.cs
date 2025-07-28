@@ -8,11 +8,11 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
 
 public class GetRestaurantByIdQueryHandler : IQueryHandler<GetRestaurantByIdQuery, Result<RestaurantResponse>>
 {
-    private readonly IGenericRepository<Restaurant> _restaurantRepository;
+    private readonly IRestaurantRespository _restaurantRepository;
     private readonly IMapper _mapper;
 
     public GetRestaurantByIdQueryHandler(
-        IGenericRepository<Restaurant> restaurantRepository,
+        IRestaurantRespository restaurantRepository,
         IMapper mapper)
     {
         _restaurantRepository = restaurantRepository;

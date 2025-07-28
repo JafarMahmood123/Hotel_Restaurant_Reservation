@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantCuisinesByRestaurantId;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Profiles;
@@ -17,5 +18,10 @@ public class RestaurantProfile : Profile
         CreateMap<AddRestaurantRequest, Restaurant>();
 
         CreateMap<RestaurantUpdateRequest, Restaurant>();
+
+        CreateMap<RestaurantCuisine, GetRestaurantCuisinesByRestaurantIdResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Cuisine.Id))
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Cuisine.Name));
+
     }
 }
