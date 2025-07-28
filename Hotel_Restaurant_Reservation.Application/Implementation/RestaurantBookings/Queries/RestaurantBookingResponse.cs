@@ -18,6 +18,8 @@ public class RestaurantBookingResponse
 
     public int TableNumber { get; set; }
 
+    public string RestaurantName { get; set; }
+
     // Foreign Keys
 
     public Guid RestaurantId { get; set; }

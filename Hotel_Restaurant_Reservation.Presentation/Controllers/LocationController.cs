@@ -1,5 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.AddLocation;
-using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.CheckExistingLocation;
+using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.CheckExistingLocationWithoutLocalLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.DeleteLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.UpdateLocation;
 using Hotel_Restaurant_Reservation.Application.Implementation.Locations.Queries.GetAllLocations;
@@ -80,9 +80,9 @@ public class LocationController : ApiController
     }
 
     [HttpPost("check")]
-    public async Task<IActionResult> CheckExistingLocation(CheckExistingLocationRequest request,  CancellationToken cancellationToken)
+    public async Task<IActionResult> CheckExistingLocationWithoutLocalLocation(CheckExistingLocationWithoutLocalLocationRequest request,  CancellationToken cancellationToken)
     {
-        var command = new CheckExistingLocationCommand(request);
+        var command = new CheckExistingLocationWithoutLocalLocationCommand(request);
             
         var result = await Sender.Send(command, cancellationToken);
 

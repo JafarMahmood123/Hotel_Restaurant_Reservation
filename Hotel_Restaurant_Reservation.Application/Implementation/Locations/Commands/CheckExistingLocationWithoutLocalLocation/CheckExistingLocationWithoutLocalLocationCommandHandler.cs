@@ -3,9 +3,9 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.CheckExistingLocation;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Commands.CheckExistingLocationWithoutLocalLocation;
 
-public class CheckExistingLocationCommandHandler : ICommandHandler<CheckExistingLocationCommand, Result<Guid>>
+public class CheckExistingLocationWithoutLocalLocationCommandHandler : ICommandHandler<CheckExistingLocationWithoutLocalLocationCommand, Result<Guid>>
 {
     private readonly IGenericRepository<Country> _countryRepository;
     private readonly IGenericRepository<City> _cityRepository;
@@ -13,7 +13,7 @@ public class CheckExistingLocationCommandHandler : ICommandHandler<CheckExisting
     private readonly IGenericRepository<Location> _locationRepository;
     private readonly IGenericRepository<CityLocalLocations> _cityLocalLocationRepository;
 
-    public CheckExistingLocationCommandHandler(IGenericRepository<Country> countryRepository, 
+    public CheckExistingLocationWithoutLocalLocationCommandHandler(IGenericRepository<Country> countryRepository, 
         IGenericRepository<City> cityRepository, IGenericRepository<LocalLocation> localLocationRepository,
         IGenericRepository<Location> locationRepository, IGenericRepository<CityLocalLocations> cityLocalLocationRepository)
     {
@@ -24,7 +24,7 @@ public class CheckExistingLocationCommandHandler : ICommandHandler<CheckExisting
         _cityLocalLocationRepository = cityLocalLocationRepository;
     }
 
-    public async Task<Result<Guid>> Handle(CheckExistingLocationCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CheckExistingLocationWithoutLocalLocationCommand request, CancellationToken cancellationToken)
     {
         var country = await _countryRepository.GetByIdAsync(request.CheckExistingLocationRequest.CountryId);
 
@@ -39,23 +39,34 @@ public class CheckExistingLocationCommandHandler : ICommandHandler<CheckExisting
         var localLocation = await _localLocationRepository.GetFirstOrDefaultAsync(x=>x.Name.ToLower() == ("NotSet").ToLower());
 
         if (localLocation == null)
+        {
             localLocation = await _localLocationRepository.AddAsync
                 (new LocalLocation() { Id = Guid.NewGuid(), Name = "NotSet" });
+
+            await _localLocationRepository.SaveChangesAsync();
+        }
 
         var cityLocalLocation = await _cityLocalLocationRepository.GetFirstOrDefaultAsync
             (x => x.CityId == city.Id && x.LocalLocationId == localLocation.Id);
 
         if (cityLocalLocation == null)
+        {
             cityLocalLocation = await _cityLocalLocationRepository.AddAsync
                 (new CityLocalLocations() { Id = Guid.NewGuid(), CityId = city.Id, LocalLocationId = localLocation.Id });
+            await _cityLocalLocationRepository.SaveChangesAsync();
+        }
 
 
         var location = await _locationRepository.GetFirstOrDefaultAsync
             (x => x.CityLocalLocationsId == cityLocalLocation.Id && x.CountryId == country.Id);
 
         if (location == null)
+        {
             location = await _locationRepository.AddAsync
                 (new Location() { Id = Guid.NewGuid(), CountryId = country.Id, CityLocalLocationsId = cityLocalLocation.Id });
+
+            await _locationRepository.SaveChangesAsync();
+        }
 
         return Result.Success(location.Id);
     }

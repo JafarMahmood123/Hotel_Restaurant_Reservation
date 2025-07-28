@@ -16,8 +16,8 @@ public class GetRestaurantBookingsByCustomerIdQueryHandler : IQueryHandler<GetRe
     public GetRestaurantBookingsByCustomerIdQueryHandler(IGenericRepository<RestaurantBooking> restaurantBookingRepository,
         IMapper mapper)
     {
-        this._restaurantBookingRepository = restaurantBookingRepository;
-        this._mapper = mapper;
+        _restaurantBookingRepository = restaurantBookingRepository;
+        _mapper = mapper;
     }
 
     public async Task<Result<IEnumerable<RestaurantBookingResponse>>> Handle(GetRestaurantBookingsByCustomerIdQuery request,
@@ -27,6 +27,7 @@ public class GetRestaurantBookingsByCustomerIdQueryHandler : IQueryHandler<GetRe
 
         var bookings = await _restaurantBookingRepository.Where(x => x.UserId == customerId)
             .Include(x=>x.BookingDishes)
+            .Include(x=>x.Restaurant)
             .ToListAsync();
 
         var bookingRespnses = _mapper.Map<IEnumerable<RestaurantBookingResponse>>(bookings);
