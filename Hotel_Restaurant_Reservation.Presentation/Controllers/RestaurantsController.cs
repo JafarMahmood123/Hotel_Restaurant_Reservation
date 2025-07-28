@@ -27,6 +27,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Querie
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantCuisinesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantDishesByRestaurantId;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetWorkTimesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries.GetTagsByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -368,6 +369,17 @@ public class RestaurantsController : ApiController
     {
         var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest);
         var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet("{restaurantId:guid}/workTimes")]
+    public async Task<IActionResult> GetWorkTimesByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetWorkTimesByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
 

@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Querie
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetFeaturesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetMealTypesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantCuisinesByRestaurantId;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetWorkTimesByRestaurantId;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Profiles;
@@ -37,5 +38,8 @@ public class RestaurantProfile : Profile
         CreateMap<RestaurantFeature, GetFeaturesByRestaurantIdResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.FeatureId))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Feature.Name));
+
+        CreateMap<RestaurantWorkTime, GetWorkTimesByRestaurantIdResponse>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WorkTimeId));
     }
 }
