@@ -23,11 +23,14 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveWorkTimesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetFeaturesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantCuisinesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantDishesByRestaurantId;
+using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries.GetTagsByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -251,6 +254,15 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [HttpGet("{restaurantId}/features")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetFeaturesByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetFeaturesByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
+        return Ok(result.Value);
+    }
+
 
     [HttpPost]
     [Route("{restaurantId:guid}/mealTypes")]
@@ -314,6 +326,19 @@ public class RestaurantsController : ApiController
     {
         var command = new RemoveTagsFromRestaurantCommand(restaurantId, removeTagsFromRestaurantRequest);
         var result = await Sender.Send(command, cancellationToken);
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    [Route("{restaurantId:guid}/tags")]
+    public async Task<IActionResult> GetTagsByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetTagsByRestaurantIdQuery(restaurantId);
+        var result = await Sender.Send(query, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
