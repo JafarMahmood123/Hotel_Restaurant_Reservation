@@ -6,6 +6,6 @@ public class AddHotelReservationRequest
     public Guid CustomerId { get; set; }
     public Guid RoomId { get; set; }
     public int NumberOfPeople { get; set; }
-    public DateOnly ReceivationStartDate { get; set; }
-    public DateOnly ReceivationEndDate { get; set; }
+    public DateOnly ReservationStartDate { get; set; }
+    public DateOnly ReservationEndDate { get; set; }
 }

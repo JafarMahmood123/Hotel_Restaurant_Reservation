@@ -113,6 +113,7 @@ builder.Services.AddScoped<IGenericRepository<EventImage>, GenericRepository<Eve
 builder.Services.AddScoped<IGenericRepository<HotelReservationPayment>, GenericRepository<HotelReservationPayment>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantBookingPayment>, GenericRepository<RestaurantBookingPayment>>();
 builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, GenericRepository<EventRegistrationPayment>>();
+builder.Services.AddScoped<IGenericRepository<RoomAmenity>, GenericRepository<RoomAmenity>>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
 

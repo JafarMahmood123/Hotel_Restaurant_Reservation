@@ -452,6 +452,10 @@ public static class DomainErrors
             "HotelReservation.NotFound",
             $"The hotel reservation with the ID '{hotelReservationId}' was not found.");
 
+        public static Error InvalidNumberOfPeople() => new(
+            "HotelReservation.InvalidNumberOfPeople",
+            $"The hotel reservation has invalid number of people.");
+
         public static Error UpdateNotAllowed() => new(
             "HotelReservation.UpdateNotAllowed",
             "Hotel reservations cannot be updated.");

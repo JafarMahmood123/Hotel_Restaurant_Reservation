@@ -7,10 +7,6 @@ public class RoomType
 
     public string Description { get; set; }
 
-    // Foreign Keys
-
-    public Guid RoomId { get; set; }
-
     // Navigation Properties
 
     public virtual ICollection<Room> Rooms { get; set; }

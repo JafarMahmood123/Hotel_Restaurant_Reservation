@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.Ass
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.RemoveRoomTypeFromRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetAllRooms;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetRoomById;
+using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries.GetAmenitiesByRoomId;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
 {
@@ -74,6 +75,18 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
                 return BadRequest(result.Error);
             }
             return NoContent();
+        }
+
+        [HttpGet("{roomId:guid}/amenities")]
+        public async Task<IActionResult> GetAmenitiesByRoomId(Guid roomId, CancellationToken cancellationToken)
+        {
+            var query = new GetAmenitiesByRoomIdQuery(roomId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return BadRequest(result.Error);
+            }
+            return Ok(result.Value);
         }
     }
 }

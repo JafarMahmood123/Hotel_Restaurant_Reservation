@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetRoomsByHotelId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.AddRoomToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Commands.UpdateRoom;
 using Hotel_Restaurant_Reservation.Application.Implementation.Rooms.Queries;
@@ -13,6 +14,9 @@ public class RoomProfile : Profile
         CreateMap<AddRoomToHotelRequest, Room>();
         CreateMap<Room, RoomResponse>();
         CreateMap<UpdateRoomRequest, Room>();
+
+        CreateMap<Room, GetRoomsByHotelIdResponse>()
+            .ForMember(dest => dest.RoomTypeDescription, opt => opt.MapFrom(src => src.RoomType.Description));
 
     }
 }

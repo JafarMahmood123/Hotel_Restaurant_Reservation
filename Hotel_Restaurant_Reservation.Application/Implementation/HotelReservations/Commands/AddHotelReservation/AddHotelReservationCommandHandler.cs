@@ -13,20 +13,17 @@ public class AddHotelReservationCommandHandler : ICommandHandler<AddHotelReserva
     private readonly IGenericRepository<HotelReservation> _hotelReservationRepository;
     private readonly IGenericRepository<Room> _roomRepository;
     private readonly IGenericRepository<HotelReservationPayment> _hotelReservationPaymentRepository;
-    private readonly IPayPalService _payPalService;
     private readonly IMapper _mapper;
 
     public AddHotelReservationCommandHandler(
         IGenericRepository<HotelReservation> hotelReservationRepository,
         IGenericRepository<Room> roomRepository,
         IGenericRepository<HotelReservationPayment> hotelReservationPaymentRepository,
-        IPayPalService payPalService,
         IMapper mapper)
     {
         _hotelReservationRepository = hotelReservationRepository;
         _roomRepository = roomRepository;
         _hotelReservationPaymentRepository = hotelReservationPaymentRepository;
-        _payPalService = payPalService;
         _mapper = mapper;
     }
 
@@ -35,6 +32,7 @@ public class AddHotelReservationCommandHandler : ICommandHandler<AddHotelReserva
         var hotelReservation = _mapper.Map<HotelReservation>(request.AddHotelReservationRequest);
         hotelReservation.Id = Guid.NewGuid();
         hotelReservation.ReservationDateTime = DateTime.UtcNow;
+        hotelReservation.UserId = request.AddHotelReservationRequest.CustomerId;
 
         var room = await _roomRepository.GetByIdAsync(request.AddHotelReservationRequest.RoomId);
         if (room == null)
@@ -42,32 +40,28 @@ public class AddHotelReservationCommandHandler : ICommandHandler<AddHotelReserva
             return Result.Failure<HotelReservationResponse>(DomainErrors.Room.NotFound(request.AddHotelReservationRequest.RoomId));
         }
 
+        if(request.AddHotelReservationRequest.NumberOfPeople > room.MaxOccupancy)
+        {
+            return Result.Failure<HotelReservationResponse>(DomainErrors.HotelReservation.InvalidNumberOfPeople());
+        }
+
         var numberOfNights = hotelReservation.ReceivationEndDate.DayNumber - hotelReservation.ReceivationStartDate.DayNumber;
         var totalAmount = (decimal)room.Price * numberOfNights;
-
-        // Create PayPal order
-        var payPalOrder = await _payPalService.CreateOrder(totalAmount.ToString("F2"), "USD");
 
         var createdHotelReservation = await _hotelReservationRepository.AddAsync(hotelReservation);
         await _hotelReservationRepository.SaveChangesAsync();
 
-        // Create and save payment details
         var hotelReservationPayment = new HotelReservationPayment
         {
             Id = Guid.NewGuid(),
             HotelReservationId = createdHotelReservation.Id,
             Amount = totalAmount,
-            Currency = "USD",
-            OrderId = payPalOrder.Id,
-            //Status = payPalOrder.Status
+            Status = Domain.Enums.PaymentStatus.Pending,
         };
         await _hotelReservationPaymentRepository.AddAsync(hotelReservationPayment);
         await _hotelReservationPaymentRepository.SaveChangesAsync();
 
         var hotelReservationResponse = _mapper.Map<HotelReservationResponse>(createdHotelReservation);
-        hotelReservationResponse.PayPalOrderId = payPalOrder.Id;
-        hotelReservationResponse.PayPalOrderStatus = payPalOrder.Status;
-
 
         return Result.Success(hotelReservationResponse);
     }

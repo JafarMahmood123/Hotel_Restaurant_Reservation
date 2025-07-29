@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.AddAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Commands.UpdateAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAmenitiesByHotelId;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 
 namespace Hotel_Restaurant_Reservation.Application.Profiles;
