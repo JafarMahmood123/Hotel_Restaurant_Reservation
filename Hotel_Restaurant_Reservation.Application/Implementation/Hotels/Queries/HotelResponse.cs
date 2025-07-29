@@ -19,5 +19,11 @@ public class HotelResponse
 
     public int NumberOfRooms { get; set; }
 
-    public string PictureUrl { get; set; }
+    public double MinPrice { get; set; }
+
+    public double MaxPrice { get; set; }
+
+    public string? PictureUrl { get; set; }
+
+    public Guid? PropertyTypeId { get; set; }
 }

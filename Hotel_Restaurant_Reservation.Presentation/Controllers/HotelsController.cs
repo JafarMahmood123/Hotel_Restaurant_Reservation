@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddAmenityToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAmenitiesByHotelId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetFilteredHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
@@ -55,7 +57,31 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet]
+        [HttpGet("{hotelId:guid}/amenities")]
+        public async Task<IActionResult> GetAmenitiesByHotelId(Guid hotelId, CancellationToken cancellationToken)
+        {
+            var query = new GetAmenitiesByHotelIdQuery(hotelId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
+        [HttpPost("{hotelId:guid}/amenities/{amenityId:guid}")]
+        public async Task<IActionResult> AddAmenityToHotel(Guid hotelId, Guid amenityId,
+            AddAmenityToHotelRequest request, CancellationToken cancellationToken)
+        {
+            var query = new AddAmenityToHotelCommand(request, hotelId, amenityId);
+            var result = await Sender.Send(query, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return Ok(result.Value);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAllHotel(CancellationToken cancellationToken)
         {

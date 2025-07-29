@@ -103,6 +103,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 builder.Services.AddScoped<IGenericRepository<HotelReview>, GenericRepository<HotelReview>>();
 builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<EventReview>>();
 builder.Services.AddScoped<IGenericRepository<Role>, GenericRepository<Role>>();
+builder.Services.AddScoped<IGenericRepository<HotelAmenityPrice>, GenericRepository<HotelAmenityPrice>>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddScoped<IGenericRepository<UserImage>, GenericRepository<UserImage>>();
