@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddAmenityToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AssignPropertyTypeToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries;
@@ -220,6 +221,19 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             {
                 return NotFound(result.Error);
             }
+
+            return Ok(result.Value);
+        }
+
+        [HttpPut("{hotelId:guid}/propertyType/{propertyTypeId:guid}")]
+        public async Task<IActionResult> AssignPropertTypeToHotel(Guid hotelId, Guid propertyTypeId, CancellationToken cancellationToken)
+        {
+            var command = new AssignPropertyTypeToHotelCommand(hotelId, propertyTypeId);
+
+            var result = await Sender.Send(command, cancellationToken);
+
+            if (result.IsFailure) 
+                return BadRequest(result.Error);
 
             return Ok(result.Value);
         }
