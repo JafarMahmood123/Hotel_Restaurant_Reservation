@@ -11,7 +11,8 @@ public class HotelReservationProfile : Profile
     public HotelReservationProfile()
     {
         CreateMap<AddHotelReservationRequest, HotelReservation>();
-        CreateMap<HotelReservation, HotelReservationResponse>();
+        CreateMap<HotelReservation, HotelReservationResponse>()
+            .ForMember(dest => dest.CustomerId, opt => opt.MapFrom(src => src.UserId));
         CreateMap<UpdateHotelReservationRequest, HotelReservation>();
     }
 }

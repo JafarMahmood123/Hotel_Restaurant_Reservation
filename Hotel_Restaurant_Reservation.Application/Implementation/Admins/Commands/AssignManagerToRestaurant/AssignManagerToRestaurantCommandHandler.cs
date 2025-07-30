@@ -24,13 +24,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
                 return Result.Failure(DomainErrors.Restaurant.NotFound(request.RestaurantId));
             }
 
-            var manager = await _userRepository.GetByIdAsync(request.ManagerId);
-            if (manager == null)
-            {
-                return Result.Failure(DomainErrors.User.NotFound(request.ManagerId));
-            }
-
-            restaurant.RestaurantManagerId = request.ManagerId;
             await _restaurantRepository.UpdateAsync(request.RestaurantId, restaurant);
             await _restaurantRepository.SaveChangesAsync();
 

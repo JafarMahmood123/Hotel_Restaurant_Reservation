@@ -42,13 +42,10 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<EventRegistration> EventRegistrations { get; set; }
     public DbSet<RestaurantBooking> RestaurantBookings { get; set; }
     public DbSet<BookingDish> BookingDishes { get; set; }
-    public DbSet<EventManager> EventManagers { get; set; }
     public DbSet<EventReview> EventReviews { get; set; }
     public DbSet<HotelAmenityPrice> HotelAmenityPrices { get; set; }
     public DbSet<HotelCurrencyType> HotelCurrencyTypes { get; set; }
-    public DbSet<HotelManager> HotelManagers { get; set; }
     public DbSet<HotelReview> HotelReviews { get; set; }
-    public DbSet<RestaurantManager> RestaurantManagers { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<HotelReservationPayment> HotelReservationPayments { get; set; }
     public DbSet<RestaurantBookingPayment> RestaurantBookingPayments { get; set; }

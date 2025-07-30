@@ -10,6 +10,4 @@ public class HotelReservationResponse
     public Guid HotelId { get; set; }
     public Guid CustomerId { get; set; }
     public Guid RoomId { get; set; }
-    public string PayPalOrderStatus { get; set; }
-    public string PayPalOrderId { get; set; }
 }

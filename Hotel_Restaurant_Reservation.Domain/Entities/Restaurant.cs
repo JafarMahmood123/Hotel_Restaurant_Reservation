@@ -29,24 +29,10 @@ public class Restaurant
 
     public double MaxPrice { get; set; }
 
-    //public double ServiceRating { get; set; }
-
-    //public double FoodRating { get; set; }
-
-    //public int ReviewCount { get; set; }
-
-    //public bool IsActive { get; set; }
-
-    //public DateTime CreatedDate { get; set; }
-
-    //public DateTime LastModifiedDate { get; set; }
-
 
     // Foreign Keys
 
     public Guid LocationId { get; set; }
-
-    public Guid? RestaurantManagerId { get; set; }
 
 
     // Navigation Properties
@@ -70,8 +56,6 @@ public class Restaurant
     public virtual Location Location { get; set; }
 
     public virtual ICollection<RestaurantBooking> RestaurantBookings { get; set; }
-
-    public virtual RestaurantManager? RestaurantManager { get; set; }
 
     public virtual ICollection<RestaurantImage> RestaurantImages { get; set; }
 

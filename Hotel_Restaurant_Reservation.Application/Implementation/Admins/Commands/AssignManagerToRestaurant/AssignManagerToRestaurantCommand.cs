@@ -6,6 +6,5 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
     public class AssignManagerToRestaurantCommand : ICommand<Result>
     {
         public Guid RestaurantId { get; set; }
-        public Guid ManagerId { get; set; }
     }
 }

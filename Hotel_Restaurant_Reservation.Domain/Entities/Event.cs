@@ -24,8 +24,6 @@ public class Event
 
     public Guid CurrencyTypeId { get; set; }
 
-    public Guid? EventManagerId { get; set; }
-
     // Navigation Properties
 
     public virtual ICollection<EventRegistration> EventRegistrations { get; set; }
@@ -35,8 +33,6 @@ public class Event
     public virtual ICollection<CurrencyType> CurrencyTypes { get; set; }
 
     public virtual ICollection<EventReview> EventReviews { get; set; }
-
-    public virtual EventManager? EventManager { get; set; }
 
     public virtual ICollection<EventImage> EventImages { get; set; }
 

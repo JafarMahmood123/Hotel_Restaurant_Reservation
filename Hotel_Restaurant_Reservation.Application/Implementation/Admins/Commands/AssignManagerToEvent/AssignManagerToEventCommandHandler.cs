@@ -24,13 +24,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Events.Command
                 return Result.Failure(DomainErrors.Event.NotFound(request.EventId));
             }
 
-            var manager = await _userRepository.GetByIdAsync(request.ManagerId);
-            if (manager == null)
-            {
-                return Result.Failure(DomainErrors.User.NotFound(request.ManagerId));
-            }
-
-            anEvent.EventManagerId = request.ManagerId;
             await _eventRepository.UpdateAsync(request.EventId, anEvent);
             await _eventRepository.SaveChangesAsync();
 
