@@ -1,4 +1,4 @@
-﻿using Hotel_Restaurant_Reservation.Application.Implementation.Recommendations;
+﻿using Hotel_Restaurant_Reservation.Application.Implementation.Recommendations.Queries.GetRecommendedRestaurantsBasedOnUserId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
