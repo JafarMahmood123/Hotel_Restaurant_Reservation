@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.API.OptionsSetup;
 using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
+using Hotel_Restaurant_Reservation.Application.Abstractions.Recommendation;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
@@ -11,6 +12,7 @@ using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Hotel_Restaurant_Reservation.Infrastructure.Payment;
+using Hotel_Restaurant_Reservation.Infrastructure.Recommendations;
 using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 using Hotel_Restaurant_Reservation.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -116,6 +118,7 @@ builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, Generic
 builder.Services.AddScoped<IGenericRepository<RoomAmenity>, GenericRepository<RoomAmenity>>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
+builder.Services.AddScoped<IRecommendationService, RecommendationService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 
