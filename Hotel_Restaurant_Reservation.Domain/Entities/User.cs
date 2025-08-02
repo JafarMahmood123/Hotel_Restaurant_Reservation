@@ -10,7 +10,6 @@
         public string HashedPassword { get; set; }
         public DateOnly BirthDate { get; set; }
         public int Age { get; set; }
-        public decimal Balance { get; set; }
 
         // Foreign Keys
         public Guid LocationId { get; set; }

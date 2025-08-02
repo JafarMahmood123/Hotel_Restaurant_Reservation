@@ -10,15 +10,9 @@ public class AddHotelRequestValidator : AbstractValidator<AddHotelRequest>
             .MaximumLength(100).WithMessage("Name must not exceed 100 characters.");
 
         RuleFor(x => x.Url)
-            .NotEmpty().WithMessage("URL is required.")
             .Must(uri => Uri.TryCreate(uri, UriKind.Absolute, out _))
-            .WithMessage("A valid URL is required.");
-
-        RuleFor(x => x.StarRate)
-            .InclusiveBetween(1, 5).WithMessage("Star rate must be between 1 and 5.");
-
-        RuleFor(x => x.NumberOfRooms)
-            .GreaterThan(0).WithMessage("Number of rooms must be greater than 0.");
+            .WithMessage("A valid URL is required.")
+            .When(x => !string.IsNullOrWhiteSpace(x.Url));
 
         RuleFor(x => x.Latitude)
             .InclusiveBetween(-90, 90).WithMessage("Latitude must be between -90 and 90.");

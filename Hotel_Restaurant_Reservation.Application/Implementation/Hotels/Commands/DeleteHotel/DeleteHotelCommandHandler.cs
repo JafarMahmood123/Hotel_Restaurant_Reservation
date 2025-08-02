@@ -26,6 +26,8 @@ public class DeleteHotelCommandHandler : ICommandHandler<DeleteHotelCommand, Hot
         if (hotel == null) 
             return null;
 
+        await hotelRepository.SaveChangesAsync();
+
         return mapper.Map<HotelResponse>(hotel);
     }
 }

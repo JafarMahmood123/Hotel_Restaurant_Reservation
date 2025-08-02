@@ -2,7 +2,6 @@
 
 public class SignUpRequest
 {
-
     public string FirstName { get; set; }
 
     public string LastName { get; set; }
@@ -14,6 +13,4 @@ public class SignUpRequest
     public DateOnly BirthDate { get; set; }
 
     public Guid LocationId { get; set; }
-
-    public Guid? RoleId { get; set; }
 }

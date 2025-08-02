@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.Del
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.LogIn;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.SignUp;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Commands.UpdateCustomer;
+using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetAllUsers;
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetUserById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
@@ -24,6 +25,20 @@ public class UserController : ApiController
     public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(id);
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
+    {
+        var query = new GetAllUsersQuery();
         var result = await Sender.Send(query, cancellationToken);
 
         if (result.IsFailure)

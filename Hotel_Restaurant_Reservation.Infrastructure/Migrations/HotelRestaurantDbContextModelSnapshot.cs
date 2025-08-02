@@ -178,9 +178,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CurrencyTypeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -361,6 +358,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Latitude")
                         .HasColumnType("float");
@@ -1075,9 +1076,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Balance")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<DateOnly>("BirthDate")
                         .HasColumnType("date");
 
@@ -1220,7 +1218,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.EventCurrencyType", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.CurrencyType", "CurrencyType")
-                        .WithMany()
+                        .WithMany("EventCurrencyTypes")
                         .HasForeignKey("CurrencyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1333,7 +1331,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.HotelCurrencyType", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.CurrencyType", "CurrencyType")
-                        .WithMany()
+                        .WithMany("HotelCurrencyTypes")
                         .HasForeignKey("CurrencyTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1734,6 +1732,10 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.CurrencyType", b =>
                 {
+                    b.Navigation("EventCurrencyTypes");
+
+                    b.Navigation("HotelCurrencyTypes");
+
                     b.Navigation("RestaurantCurrencyTypes");
                 });
 

@@ -29,9 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Implementation\Admins\Commands\PasswordRecovery\" />
-    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfRestaurant\" />
-    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfHotel\" />
-    <Folder Include="Implementation\Admins\Commands\ReplaceTheManagerOfEvent\" />
     <Folder Include="Implementation\Notifications\" />
   </ItemGroup>
 

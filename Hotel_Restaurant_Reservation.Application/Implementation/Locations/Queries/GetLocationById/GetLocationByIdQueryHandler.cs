@@ -10,11 +10,15 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Locations.Quer
 public class GetLocationByIdQueryHandler : IQueryHandler<GetLocationByIdQuery, Result<LocationResponse>>
 {
     private readonly IGenericRepository<Location> _locationRepository;
+    private readonly IGenericRepository<CityLocalLocations> _cityLocalLocationsRepository;
     private readonly IMapper _mapper;
 
-    public GetLocationByIdQueryHandler(IGenericRepository<Location> locationRepository, IMapper mapper)
+    public GetLocationByIdQueryHandler(IGenericRepository<Location> locationRepository,
+        IGenericRepository<CityLocalLocations> cityLocalLocationsRepository,
+        IMapper mapper)
     {
         _locationRepository = locationRepository;
+        _cityLocalLocationsRepository = cityLocalLocationsRepository;
         _mapper = mapper;
     }
 
@@ -27,7 +31,16 @@ public class GetLocationByIdQueryHandler : IQueryHandler<GetLocationByIdQuery, R
             return Result.Failure<LocationResponse>(DomainErrors.Location.NotFound(request.Id));
         }
 
-        var locationResponse = _mapper.Map<LocationResponse>(location);
+        var cityLocalLocaton = await _cityLocalLocationsRepository.GetByIdAsync(location.CityLocalLocationsId);
+
+        var locationResponse = new LocationResponse()
+        {
+            Id = location.Id,
+            CountryId = location.CountryId,
+            CityId = cityLocalLocaton.CityId,
+            LocalLocationId = cityLocalLocaton.LocalLocationId,
+        };
+
         return Result.Success(locationResponse);
     }
 }

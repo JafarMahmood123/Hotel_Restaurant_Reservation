@@ -38,7 +38,7 @@ public class GetRecommendedRestaurantsBasedOnUserIdQueryHandler
 
         var stillRequiredRestaurants = 50 - restaurants.Count;
 
-        var restaurantCompletion = await _restaurantRespository.GetAllAsync();
+        var restaurantCompletion = await _restaurantRespository.Take(stillRequiredRestaurants);
         restaurantCompletion = restaurantCompletion.Take(stillRequiredRestaurants);
 
         var restaurantCompletionResponse = _mapper.Map<List<RestaurantResponse>>(restaurantCompletion);

@@ -60,14 +60,6 @@ public class PayRestaurantBookingCommandHandler : ICommandHandler<PayRestaurantB
                 (DomainErrors.Payment.NotFound(command.Request.CurrencyTypeId));
         }
 
-        if (user.Balance < payment.Amount)
-        {
-            return Result.Failure<RestaurantBookingPaymentResponse>
-                (DomainErrors.Payment.InsufficientFunds());
-        }
-
-        user.Balance -= payment.Amount;
-
         payment.CurrencyTypeId = command.Request.CurrencyTypeId;
         payment.Status = PaymentStatus.Paid;
 

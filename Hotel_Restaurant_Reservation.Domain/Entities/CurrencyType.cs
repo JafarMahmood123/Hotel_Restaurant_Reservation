@@ -12,6 +12,8 @@ public class CurrencyType
     // Key Properties
 
     public virtual ICollection<RestaurantCurrencyType> RestaurantCurrencyTypes { get; set; }
+    public virtual ICollection<HotelCurrencyType> HotelCurrencyTypes { get; set; }
+    public virtual ICollection<EventCurrencyType> EventCurrencyTypes { get; set; }
 
     public CurrencyType()
     {

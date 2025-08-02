@@ -13,6 +13,8 @@ public class Hotel
 
     public string Url { get; set; }
 
+    public string Description { get; set; }
+
     public double StarRate { get; set; }
 
     public int NumberOfRooms { get; set; }

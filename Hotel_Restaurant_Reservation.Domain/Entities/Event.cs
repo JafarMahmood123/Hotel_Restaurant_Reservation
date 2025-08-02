@@ -22,8 +22,6 @@ public class Event
 
     public Guid LocationId { get; set; }
 
-    public Guid CurrencyTypeId { get; set; }
-
     // Navigation Properties
 
     public virtual ICollection<EventRegistration> EventRegistrations { get; set; }

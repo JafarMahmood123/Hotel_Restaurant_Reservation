@@ -36,7 +36,17 @@ public class CheckExistingLocationWithoutLocalLocationCommandHandler : ICommandH
         if (city == null)
             return Result.Failure<Guid>(DomainErrors.City.NotFound(request.CheckExistingLocationRequest.CityId));
 
-        var localLocation = await _localLocationRepository.GetFirstOrDefaultAsync(x=>x.Name.ToLower() == ("NotSet").ToLower());
+        var localLocation = new LocalLocation();
+
+        if (request.CheckExistingLocationRequest.LocalLocationId == null)
+        {
+            localLocation = await _localLocationRepository.GetFirstOrDefaultAsync(x => x.Name.ToLower() == ("NotSet").ToLower());
+        }
+        else
+        {
+            localLocation = await _localLocationRepository.GetFirstOrDefaultAsync(x => x.Id == request.CheckExistingLocationRequest.LocalLocationId);
+        }
+
 
         if (localLocation == null)
         {

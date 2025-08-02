@@ -32,17 +32,14 @@ public class SignUpCommandHandler : ICommandHandler<SignUpCommand, Result<UserRe
         if (existingCustomer != null)
             return Result.Failure<UserResponse>(DomainErrors.User.SignUpExistingAccount(request.SignUpRequest.Email));
 
-        if(request.SignUpRequest.RoleId is null)
-        {
-            const string CUSTOMER_ROLE_NAME = "customer";
+        const string CUSTOMER_ROLE_NAME = "customer";
 
-            var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
-            if (customerRole == null)
-            {
-                return Result.Failure<UserResponse>(DomainErrors.Role.CustomerRoleNotFound());
-            }
-            customer.RoleId = customerRole.Id;
+        var customerRole = await _roleRepository.GetFirstOrDefaultAsync(r => r.Name.ToUpper().Equals(CUSTOMER_ROLE_NAME.ToUpper()));
+        if (customerRole == null)
+        {
+            return Result.Failure<UserResponse>(DomainErrors.Role.CustomerRoleNotFound());
         }
+        customer.RoleId = customerRole.Id;
 
         customer.Id = Guid.NewGuid();
         customer.Age = DateTime.Now.Year - customer.BirthDate.Year;

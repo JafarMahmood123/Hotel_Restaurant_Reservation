@@ -23,4 +23,6 @@ public interface IGenericRepository<TEntity> where TEntity : class
     public IEnumerable<TEntity> RemoveRange(IEnumerable<TEntity> entities);
 
     public Task SaveChangesAsync();
+
+    public Task<IEnumerable<TEntity>> Take(int number);
 }

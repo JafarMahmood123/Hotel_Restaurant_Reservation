@@ -31,6 +31,8 @@ public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Result<Ho
         AddHotelCommand request,
         CancellationToken cancellationToken)
     {
+
+
         // Validate request
         if (request.AddHotelRequest == null)
             return Result.Failure<HotelResponse>(DomainErrors.Hotel.InvalidRequest);
@@ -54,6 +56,8 @@ public class AddHotelCommandHandler : ICommandHandler<AddHotelCommand, Result<Ho
         hotel.Location = locationResult.Value;
         hotel.MinPrice = 0;
         hotel.MaxPrice = 0;
+        hotel.NumberOfRooms = 0;
+        hotel.StarRate = 0;
 
         // Save hotel
         hotel = await _hotelRepository.AddAsync(hotel);

@@ -2,7 +2,9 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AddHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.AssignPropertyTypeToHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.DeleteHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.RemoveAmenityFromHotel;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotel;
+using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotelAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAmenitiesByHotelId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetFilteredHotels;
@@ -77,6 +79,31 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
                 return NotFound(result.Error);
             }
             return Ok(result.Value);
+        }
+
+        [HttpDelete("{hotelId:guid}/amenities/{amenityId:guid}")]
+        public async Task<IActionResult> RemoveAmenityFromHotel(Guid hotelId, Guid amenityId, CancellationToken cancellationToken)
+        {
+            var command = new RemoveAmenityFromHotelCommand(hotelId, amenityId);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return NoContent();
+        }
+
+        [HttpPut("{hotelId:guid}/amenities/{amenityId:guid}")]
+        public async Task<IActionResult> UpdateHotelAmenity(Guid hotelId, Guid amenityId,
+            [FromBody] double newPrice, CancellationToken cancellationToken)
+        {
+            var command = new UpdateHotelAmenityCommand(hotelId, amenityId, newPrice);
+            var result = await Sender.Send(command, cancellationToken);
+            if (result.IsFailure)
+            {
+                return NotFound(result.Error);
+            }
+            return NoContent();
         }
 
         [HttpGet]

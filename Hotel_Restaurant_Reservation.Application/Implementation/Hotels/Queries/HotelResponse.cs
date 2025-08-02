@@ -25,5 +25,7 @@ public class HotelResponse
 
     public string? PictureUrl { get; set; }
 
+    public Guid LocationId { get; set; }
+
     public Guid? PropertyTypeId { get; set; }
 }

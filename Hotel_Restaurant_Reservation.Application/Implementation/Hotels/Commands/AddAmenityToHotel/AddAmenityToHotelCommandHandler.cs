@@ -23,6 +23,14 @@ public class AddAmenityToHotelCommandHandler : ICommandHandler<AddAmenityToHotel
 
     public async Task<Result<GetAmenitiesByHotelIdResponse>> Handle(AddAmenityToHotelCommand request, CancellationToken cancellationToken)
     {
+        var existingHotelAmenity = await _hotelAmenityRepository.GetFirstOrDefaultAsync(x => x.HotelId == request.HotelId
+        && x.AmenityId == request.AmenityId);
+
+        if(existingHotelAmenity != null)
+        {
+            return Result.Failure<GetAmenitiesByHotelIdResponse>(DomainErrors.Hotel.ExistingAmenity);
+        }
+
         var hotelAmenity = new HotelAmenityPrice();
 
         hotelAmenity.Id = Guid.NewGuid();
@@ -33,9 +41,9 @@ public class AddAmenityToHotelCommandHandler : ICommandHandler<AddAmenityToHotel
         hotelAmenity = await _hotelAmenityRepository.AddAsync(hotelAmenity);
 
         await _hotelAmenityRepository.SaveChangesAsync();
-
         var result = _mapper.Map<GetAmenitiesByHotelIdResponse>(hotelAmenity);
 
         return Result.Success(result);
+
     }
 }

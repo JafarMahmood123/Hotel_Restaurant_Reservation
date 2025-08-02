@@ -100,4 +100,9 @@ public class GenericRepository<TEntity> : IGenericRepository<TEntity> where TEnt
 
         return entity;
     }
+
+    public async Task<IEnumerable<TEntity>> Take(int number)
+    {
+        return await _dbSet.Take(number).ToListAsync();
+    }
 }

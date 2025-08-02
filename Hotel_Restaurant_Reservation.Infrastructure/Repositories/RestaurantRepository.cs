@@ -126,4 +126,9 @@ public class RestaurantRepository : IRestaurantRespository
         var filteredRestaurants = hotelRestaurantDbContext.Restaurants.Where(predicate);
         return filteredRestaurants;
     }
+
+    public async Task<IEnumerable<Restaurant>> Take(int number)
+    {
+        return await hotelRestaurantDbContext.Restaurants.Take(number).ToListAsync();
+    }
 }

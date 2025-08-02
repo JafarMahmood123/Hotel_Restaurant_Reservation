@@ -188,12 +188,21 @@ public static class DomainErrors
 
         public static Error NoImagesProvided => new Error(
             "Hotel.NoImagesProvided", "No images were provided.");
+
         public static Error NoImagesFound => new Error(
             "Hotel.NoImagesFound", "No images were found for the hotel.");
 
         public static Error InvalidRequest => new(
             "Hotel.InvalidRequest",
             "The hotel request is invalid.");
+
+        public static Error ExistingAmenity => new(
+            "Hotel.ExistingAmenity",
+            "The hotel already have this amenity.");
+
+        public static Error DontHaveAmenity => new(
+            "Hotel.DontHaveAmenity",
+            "The hotel don't have this amenity.");
     }
 
     public static class PropertyType
@@ -247,6 +256,10 @@ public static class DomainErrors
         public static Error NotFound(Guid roomTypeId) => new(
             "RoomType.NotFound",
             $"The room type with the ID '{roomTypeId}' was not found.");
+
+        public static Error ExistRoomType(string description) => new(
+            "RoomType.ExistRoomType",
+            $"The room type with the name {description} already exist.");
     }
 
     public static class EventReview
@@ -373,6 +386,10 @@ public static class DomainErrors
             "User.SignUp.ExistingAccount",
             $"The email '{email}' is already associated with an existing account.");
 
+        public static Error AddAdminExistingAccount(string email) => new(
+            "User.AddAdmin.ExistingAccount",
+            $"The email '{email}' is already associated with an existing account.");
+
         public static Error LogInUnExistingAccount(string email) => new(
             "User.LogIn.UnExistingAccount",
             $"No account found with email '{email}'.");
@@ -410,6 +427,10 @@ public static class DomainErrors
         public static Error CustomerRoleNotFound() => new(
             "Role.CustomerRoleNotFound",
             "The default 'Customer' role was not found in the database.");
+
+        public static Error AdminRoleNotFound() => new(
+            "Role.AdminRoleNotFound",
+            "The default 'Admin' role was not found in the database.");
     }
 
     public static class Cuisine
