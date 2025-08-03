@@ -22,11 +22,16 @@ public class GetWorkTimesByRestaurantIdQueryHandler : IQueryHandler<GetWorkTimes
 
     public async Task<Result<IEnumerable<GetWorkTimesByRestaurantIdResponse>>> Handle(GetWorkTimesByRestaurantIdQuery request, CancellationToken cancellationToken)
     {
-        var restaurantWorkTime = await _restaurantWorkTimeRepository.Where(x => x.RestaurantId == request.RestaurantId)
-            .Include(x => x.WorkTime).ToListAsync();
+        var restaurantWorkTimes = await _restaurantWorkTimeRepository.Where(x => x.RestaurantId == request.RestaurantId)
+            .Include(x => x.WorkTime)
+            .ToListAsync(cancellationToken);
 
-        var result = _mapper.Map<List<GetWorkTimesByRestaurantIdResponse>>(restaurantWorkTime);
+        // Select the nested WorkTime objects before mapping
+        var workTimes = restaurantWorkTimes.Select(rwt => rwt.WorkTime);
 
-        return Result.Success((IEnumerable<GetWorkTimesByRestaurantIdResponse>)result);
+        // Now map the correct collection
+        var result = _mapper.Map<IEnumerable<GetWorkTimesByRestaurantIdResponse>>(workTimes);
+
+        return Result.Success(result);
     }
 }

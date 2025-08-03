@@ -26,14 +26,17 @@ public class AddWorkTimeCommandHandler : ICommandHandler<AddWorkTimeCommand, Res
     {
         var workTime = _mapper.Map<WorkTime>(request.AddWorkTimeRequest);
 
-        // Check for overlapping work times
         var existingWorkTime = await _workTimeRepository.GetFirstOrDefaultAsync(
             x => x.Day == workTime.Day && workTime.OpenHour == x.OpenHour && workTime.CloseHour== x.CloseHour);
 
-        if (existingWorkTime != null)
+        if (existingWorkTime == null)
         {
-            return Result.Failure<WorkTimeResponse>(
-                DomainErrors.WorkTime.ExistingWorkTime());
+            workTime.Id = Guid.NewGuid();
+
+            workTime = await _workTimeRepository.AddAsync(workTime);
+            await _workTimeRepository.SaveChangesAsync();
+
+            return Result.Success(_mapper.Map<WorkTimeResponse>(workTime));
         }
 
         workTime.Id = Guid.NewGuid();

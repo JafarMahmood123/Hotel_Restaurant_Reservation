@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveCuisinesFromRestaurant;
 
 public class RemoveCuisinesFromRestaurantCommandHandler
-    : ICommandHandler<RemoveCuisinesFromRestaurantCommand, Result<List<CuisineResponse>>>
+    : ICommandHandler<RemoveCuisinesFromRestaurantCommand, Result<CuisineResponse>>
 {
     private readonly IGenericRepository<RestaurantCuisine> _restaurantCuisineRepository;
     private readonly IGenericRepository<Cuisine> _cuisineRepository;
@@ -25,43 +25,33 @@ public class RemoveCuisinesFromRestaurantCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<List<CuisineResponse>>> Handle(
-        RemoveCuisinesFromRestaurantCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result<CuisineResponse>> Handle(RemoveCuisinesFromRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var cuisineIds = request.RemoveCuisineFromRestaurantRequest.Ids;
+        var cuisineId = request.CuisineId;
 
-        // Verify all cuisines exist
-        var cuisines = new List<Cuisine>();
-        foreach (var cuisineId in cuisineIds)
+        var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
+        if (cuisine == null)
         {
-            var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
-            if (cuisine == null)
-            {
-                return Result.Failure<List<CuisineResponse>>(
-                    DomainErrors.Cuisine.NotExistCuisine(cuisineId));
-            }
-            cuisines.Add(cuisine);
+            return Result.Failure<CuisineResponse>(
+                DomainErrors.Cuisine.NotExistCuisine(cuisineId));
         }
 
-        // Get all existing associations
-        var restaurantCuisines = await _restaurantCuisineRepository
-            .Where(x => x.RestaurantId == restaurantId && cuisineIds.Contains(x.CuisineId))
-            .ToListAsync();
 
-        if (!restaurantCuisines.Any())
+        var restaurantCuisines = await _restaurantCuisineRepository
+            .GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId && x.CuisineId == cuisineId);
+
+        if (restaurantCuisines == null)
         {
-            return Result.Failure<List<CuisineResponse>>(
+            return Result.Failure<CuisineResponse>(
                 DomainErrors.Restaurant.NoCuisinesToRemove);
         }
 
         // Remove associations
-        _restaurantCuisineRepository.RemoveRange(restaurantCuisines);
+        await _restaurantCuisineRepository.RemoveAsync(restaurantCuisines.Id);
         await _restaurantCuisineRepository.SaveChangesAsync();
 
-        // Map to response DTOs
-        var response = _mapper.Map<List<CuisineResponse>>(cuisines);
+        var response = _mapper.Map<CuisineResponse>(cuisine);
         return Result.Success(response);
     }
 }

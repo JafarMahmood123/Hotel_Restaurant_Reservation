@@ -269,8 +269,8 @@ public class DataSeeder
         // Seed WorkTimes
         var workTimes = new List<WorkTime>
         {
-            new WorkTime { Id = Guid.NewGuid(), Day = DayOfWeek.Monday, OpenHour = new TimeOnly(9, 0), CloseHour = new TimeOnly(22, 0) },
-            new WorkTime { Id = Guid.NewGuid(), Day = DayOfWeek.Tuesday, OpenHour = new TimeOnly(9, 0), CloseHour = new TimeOnly(22, 0) },
+            new WorkTime { Id = Guid.NewGuid(), Day = "Monday", OpenHour = new TimeOnly(9, 0), CloseHour = new TimeOnly(22, 0) },
+            new WorkTime { Id = Guid.NewGuid(), Day = "Tuesday", OpenHour = new TimeOnly(9, 0), CloseHour = new TimeOnly(22, 0) },
         };
         await _dbContext.WorkTimes.AddRangeAsync(workTimes);
         await _dbContext.SaveChangesAsync();
@@ -285,12 +285,12 @@ public class DataSeeder
         await _dbContext.SaveChangesAsync();
 
         // Seed RestaurantDishPrices
-        var restaurantDishPrices = new List<RestaurantDishPrice>
+        var restaurantDishPrices = new List<RestaurantDish>
         {
-            new RestaurantDishPrice { Id = Guid.NewGuid(), RestaurantId = restaurants[0].Id, DishId = dishes[0].Id, Price = 20 },
-            new RestaurantDishPrice { Id = Guid.NewGuid(), RestaurantId = restaurants[1].Id, DishId = dishes[1].Id, Price = 10 }
+            new RestaurantDish { Id = Guid.NewGuid(), RestaurantId = restaurants[0].Id, DishId = dishes[0].Id, Price = 20 },
+            new RestaurantDish { Id = Guid.NewGuid(), RestaurantId = restaurants[1].Id, DishId = dishes[1].Id, Price = 10 }
         };
-        await _dbContext.RestaurantDishPrices.AddRangeAsync(restaurantDishPrices);
+        await _dbContext.RestaurantDishPrices.AddRangeAsync();
         await _dbContext.SaveChangesAsync();
 
         // Seed RestaurantFeatures

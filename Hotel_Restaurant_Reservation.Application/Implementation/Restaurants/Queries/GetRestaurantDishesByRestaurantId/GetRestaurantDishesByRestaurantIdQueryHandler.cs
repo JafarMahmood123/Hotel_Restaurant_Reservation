@@ -9,10 +9,10 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
 public class GetRestaurantDishesByRestaurantIdQueryHandler : ICommandHandler<GetRestaurantDishesByRestaurantIdQuery, Result<IEnumerable<RestaurantDishResponse>>>
 {
     private readonly IRestaurantRespository _restaurantRepository;
-    private readonly IGenericRepository<RestaurantDishPrice> _restaurantDishPrice;
+    private readonly IGenericRepository<RestaurantDish> _restaurantDishPrice;
 
     public GetRestaurantDishesByRestaurantIdQueryHandler(IRestaurantRespository restaurantRepository,
-        IGenericRepository<RestaurantDishPrice> restaurantDishPrice)
+        IGenericRepository<RestaurantDish> restaurantDishPrice)
     {
         _restaurantRepository = restaurantRepository;
         _restaurantDishPrice = restaurantDishPrice;
@@ -38,9 +38,9 @@ public class GetRestaurantDishesByRestaurantIdQueryHandler : ICommandHandler<Get
             dishResponses.Add(new RestaurantDishResponse {
                 Id = dishWithInfo.Dish.Id,
                 Name = dishWithInfo.Dish.Name,
-                Description = dishWithInfo.Dish.Description,
+                Description = dishWithInfo.Description,
                 Price = dishWithInfo.Price,
-                PictureUrl = dishWithInfo.Dish.PictureUrl,
+                PictureUrl = dishWithInfo.PictureUrl,
                 RestaurantId = dishWithInfo.RestaurantId,
             });
         }

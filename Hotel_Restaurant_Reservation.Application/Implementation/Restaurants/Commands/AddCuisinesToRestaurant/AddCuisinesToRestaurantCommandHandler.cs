@@ -7,7 +7,7 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 
-public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisinesToRestaurantCommand, Result<List<CuisineResponse>>>
+public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisinesToRestaurantCommand, Result<CuisineResponse>>
 {
     private readonly IGenericRepository<Cuisine> _cuisineRepository;
     private readonly IGenericRepository<RestaurantCuisine> _restaurantCuisineRepository;
@@ -21,45 +21,36 @@ public class AddCuisinesToRestaurantCommandHandler : ICommandHandler<AddCuisines
         this._mapper = mapper;
     }
 
-    public async Task<Result<List<CuisineResponse>>> Handle(AddCuisinesToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CuisineResponse>> Handle(AddCuisinesToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
 
-        var cuisineIds = request.AddCuisineToRestaurantRequest.Ids;
+        var cuisineId = request.CuisineId;
 
-        List<Cuisine> cuisines = new List<Cuisine>();
+        var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
 
-        foreach (var cuisineId in cuisineIds)
-        {
-            var cuisine = await _cuisineRepository.GetByIdAsync(cuisineId);
+        if (cuisine == null)
+            return Result.Failure<CuisineResponse>(DomainErrors.Cuisine.NotExistCuisine(cuisineId));
 
-            if (cuisine == null)
-                return Result.Failure<List<CuisineResponse>>(DomainErrors.Cuisine.NotExistCuisine(cuisineId));
-
-            cuisines.Add(cuisine);
-        }
-
-        foreach (var cuisineId in cuisineIds)
-        {
-            var restaurantCuisine = await _restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
+        var restaurantCuisine = await _restaurantCuisineRepository.GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId
             && x.CuisineId == cuisineId);
 
-            if (restaurantCuisine == null)
-            {
-                restaurantCuisine = new RestaurantCuisine()
-                {
-                    Id = Guid.NewGuid(),
-                    CuisineId = cuisineId,
-                    RestaurantId = restaurantId
-                };
-
-                await _restaurantCuisineRepository.AddAsync(restaurantCuisine);
-                await _restaurantCuisineRepository.SaveChangesAsync();
-            }
-            
+        if (restaurantCuisine != null)
+        {
+            return Result.Failure<CuisineResponse>(DomainErrors.Restaurant.AlreadyHaveCuisine);
         }
 
-        var cuisineResponses = _mapper.Map<List<CuisineResponse>>(cuisines);
+        restaurantCuisine = new RestaurantCuisine()
+        {
+            Id = Guid.NewGuid(),
+            CuisineId = cuisineId,
+            RestaurantId = restaurantId
+        };
+
+        await _restaurantCuisineRepository.AddAsync(restaurantCuisine);
+        await _restaurantCuisineRepository.SaveChangesAsync();
+
+        var cuisineResponses = _mapper.Map<CuisineResponse>(cuisine);
 
         return Result.Success(cuisineResponses);
     }

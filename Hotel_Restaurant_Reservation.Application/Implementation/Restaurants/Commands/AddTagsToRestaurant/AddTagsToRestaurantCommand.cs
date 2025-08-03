@@ -4,16 +4,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddTagsToRestaurant;
 
-public class AddTagsToRestaurantCommand : ICommand<Result<List<TagResponse>>>
+public class AddTagsToRestaurantCommand : ICommand<Result<TagResponse>>
 {
-    public AddTagsToRestaurantCommand(
-        Guid restaurantId,
-        AddTagsToRestaurantRequest addTagsToRestaurantRequest)
+    public AddTagsToRestaurantCommand(Guid restaurantId, Guid tagId)
     {
         RestaurantId = restaurantId;
-        AddTagsToRestaurantRequest = addTagsToRestaurantRequest;
+        TagId = tagId;
     }
 
     public Guid RestaurantId { get; }
-    public AddTagsToRestaurantRequest AddTagsToRestaurantRequest { get; }
+    public Guid TagId { get; }
 }

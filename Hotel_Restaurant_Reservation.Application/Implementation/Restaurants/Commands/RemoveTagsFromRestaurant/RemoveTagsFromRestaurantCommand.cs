@@ -4,16 +4,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
 
-public class RemoveTagsFromRestaurantCommand : ICommand<Result<List<TagResponse>>>
+public class RemoveTagsFromRestaurantCommand : ICommand<Result>
 {
-    public RemoveTagsFromRestaurantCommand(
-        Guid restaurantId,
-        RemoveTagsFromRestaurantRequest request)
+    public RemoveTagsFromRestaurantCommand(Guid restaurantId, Guid tagId)
     {
         RestaurantId = restaurantId;
-        Request = request;
+        TagId = tagId;
     }
 
     public Guid RestaurantId { get; }
-    public RemoveTagsFromRestaurantRequest Request { get; }
+    public Guid TagId { get; }
 }

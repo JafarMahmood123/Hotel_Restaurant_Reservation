@@ -176,7 +176,7 @@ internal static class RestaurantSeeder
                 }
             }
 
-            RestaurantDishPrice restaurantDishPrice = new RestaurantDishPrice()
+            RestaurantDish restaurantDishPrice = new RestaurantDish()
             {
                 Price = price,
                 RestaurantId = restaurant.Id,
@@ -496,18 +496,18 @@ internal static class RestaurantSeeder
             {
                 TimeOnly openHour = TimeOnly.Parse(workTimeField.OpenHours);
                 TimeOnly closeHour = TimeOnly.Parse(workTimeField.CloseHours);
-                DayOfWeek day = (DayOfWeek)i;
+                //DayOfWeek day = (DayOfWeek)i;
 
 
                 WorkTime workTime = new WorkTime()
                 {
                     Id = Guid.NewGuid(),
-                    Day = day,
+                    //Day = day,
                     OpenHour = openHour,
                     CloseHour = closeHour,
                 };
 
-                var existingWorkTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => x.Day == day && x.OpenHour == openHour
+                var existingWorkTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => /*x.Day == day &&*/ x.OpenHour == openHour
                 && x.CloseHour == closeHour);
 
                 if (existingWorkTime is not null)

@@ -4,16 +4,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
 
-public class RemoveMealTypesFromRestaurantCommand : ICommand<Result<List<MealTypeResponse>>>
+public class RemoveMealTypesFromRestaurantCommand : ICommand<Result<MealTypeResponse>>
 {
-    public RemoveMealTypesFromRestaurantCommand(
-        Guid restaurantId,
-        RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest)
+    public RemoveMealTypesFromRestaurantCommand(Guid restaurantId, Guid mealTypeId)
     {
         RestaurantId = restaurantId;
-        RemoveMealTypesFromRestaurantRequest = removeMealTypesFromRestaurantRequest;
+        MealTypeId = mealTypeId;
     }
 
     public Guid RestaurantId { get; }
-    public RemoveMealTypesFromRestaurantRequest RemoveMealTypesFromRestaurantRequest { get; }
+    public Guid MealTypeId { get; }
 }

@@ -152,6 +152,26 @@ public static class DomainErrors
 
         public static Error NoImagesFound => new Error(
             "Restaurant.NoImagesFound", "No images were found for the restaurant.");
+
+        public static Error AlreadyHaveCuisine => new Error(
+            "Restaurant.AlreadyHaveCuisine",
+            "This restaurant already have this cuisine.");
+
+        public static Error AlreadyHaveMealType=> new Error(
+            "Restaurant.AlreadyHaveMealType",
+            "This restaurant already have this feature.");
+
+        public static Error AlreadyHaveTag => new Error(
+            "Restaurant.AlreadyHaveTag",
+            "This restaurant already have this tag.");
+
+        public static Error DishAlreadyExists => new Error(
+            "Restaurant.DishAlreadyExists",
+            "This restaurant already have this dish.");
+
+        public static Error DontHaveDish => new Error(
+           "Restaurant.DontHaveDish",
+           "This restaurant don't have this dish.");
     }
 
     public static class Tag

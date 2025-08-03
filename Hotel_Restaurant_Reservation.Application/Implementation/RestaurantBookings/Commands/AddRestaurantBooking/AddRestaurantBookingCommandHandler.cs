@@ -14,7 +14,7 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
     {
         private readonly IGenericRepository<RestaurantBooking> _restaurantBookingRepository;
         private readonly IGenericRepository<BookingDish> _bookingDishesRepository;
-        private readonly IGenericRepository<RestaurantDishPrice> _restaurantDishPriceRepository;
+        private readonly IGenericRepository<RestaurantDish> _restaurantDishPriceRepository;
         private readonly IGenericRepository<RestaurantBookingPayment> _restaurantBookingPaymentRepository;
         private readonly IGenericRepository<CurrencyType> _currencyTypeRepository;
         private readonly IMapper _mapper;
@@ -22,7 +22,7 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBook
         public AddRestaurantBookingCommandHandler(
             IGenericRepository<RestaurantBooking> restaurantBookingRepository,
             IGenericRepository<BookingDish> bookingDishesRepository,
-            IGenericRepository<RestaurantDishPrice> restaurantDishPriceRepository,
+            IGenericRepository<RestaurantDish> restaurantDishPriceRepository,
             IGenericRepository<RestaurantBookingPayment> restaurantBookingPaymentRepository,
             IGenericRepository<CurrencyType> currencyTypeRepository,
             IMapper mapper)

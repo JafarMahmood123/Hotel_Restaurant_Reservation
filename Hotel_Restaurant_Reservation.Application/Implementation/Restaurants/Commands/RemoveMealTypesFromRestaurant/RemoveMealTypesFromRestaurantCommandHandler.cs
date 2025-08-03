@@ -4,20 +4,19 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
-using Microsoft.EntityFrameworkCore;
+
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveMealTypesFromRestaurant;
 
 public class RemoveMealTypesFromRestaurantCommandHandler
-    : ICommandHandler<RemoveMealTypesFromRestaurantCommand, Result<List<MealTypeResponse>>>
+    : ICommandHandler<RemoveMealTypesFromRestaurantCommand, Result<MealTypeResponse>>
 {
     private readonly IGenericRepository<RestaurantMealType> _restaurantMealTypeRepository;
     private readonly IGenericRepository<MealType> _mealTypeRepository;
     private readonly IMapper _mapper;
 
     public RemoveMealTypesFromRestaurantCommandHandler(
-        IGenericRepository<RestaurantMealType> restaurantMealTypeRepository,
-        IGenericRepository<MealType> mealTypeRepository,
+        IGenericRepository<RestaurantMealType> restaurantMealTypeRepository, IGenericRepository<MealType> mealTypeRepository,
         IMapper mapper)
     {
         _restaurantMealTypeRepository = restaurantMealTypeRepository;
@@ -25,43 +24,36 @@ public class RemoveMealTypesFromRestaurantCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<List<MealTypeResponse>>> Handle(
+    public async Task<Result<MealTypeResponse>> Handle(
         RemoveMealTypesFromRestaurantCommand request,
         CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var mealTypeIds = request.RemoveMealTypesFromRestaurantRequest.Ids;
+        var mealTypeId = request.MealTypeId;
 
-        // Verify all meal types exist
-        var mealTypes = new List<MealType>();
-        foreach (var mealTypeId in mealTypeIds)
+        var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
+        if (mealType == null)
         {
-            var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
-            if (mealType == null)
-            {
-                return Result.Failure<List<MealTypeResponse>>(
-                    DomainErrors.MealType.NotFound(mealTypeId));
-            }
-            mealTypes.Add(mealType);
+            return Result.Failure<MealTypeResponse>(
+                DomainErrors.MealType.NotFound(mealTypeId));
         }
 
         // Get all existing associations
         var restaurantMealTypes = await _restaurantMealTypeRepository
-            .Where(x => x.RestaurantId == restaurantId && mealTypeIds.Contains(x.MealTypeId))
-            .ToListAsync();
+            .GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId && mealTypeId == x.MealTypeId);
 
-        if (!restaurantMealTypes.Any())
+        if (restaurantMealTypes == null)
         {
-            return Result.Failure<List<MealTypeResponse>>(
+            return Result.Failure<MealTypeResponse>(
                 DomainErrors.Restaurant.NoMealTypesToRemove);
         }
 
         // Remove associations
-        _restaurantMealTypeRepository.RemoveRange(restaurantMealTypes);
+        await _restaurantMealTypeRepository.RemoveAsync(restaurantMealTypes.Id);
         await _restaurantMealTypeRepository.SaveChangesAsync();
 
         // Map to response DTOs
-        var response = _mapper.Map<List<MealTypeResponse>>(mealTypes);
+        var response = _mapper.Map<MealTypeResponse>(mealType);
         return Result.Success(response);
     }
 }

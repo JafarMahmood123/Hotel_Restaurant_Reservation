@@ -6,14 +6,10 @@ public class Dish
 
     public string? Name { get; set; }
 
-    public string? Description { get; set; }
-
-    public string? PictureUrl { get; set; }
-
-    public virtual ICollection<RestaurantDishPrice> RestaurantDishPrice { get; set; }
+    public virtual ICollection<RestaurantDish> RestaurantDishPrice { get; set; }
 
     public Dish()
     {
-        RestaurantDishPrice = new HashSet<RestaurantDishPrice>();
+        RestaurantDishPrice = new HashSet<RestaurantDish>();
     }
 }

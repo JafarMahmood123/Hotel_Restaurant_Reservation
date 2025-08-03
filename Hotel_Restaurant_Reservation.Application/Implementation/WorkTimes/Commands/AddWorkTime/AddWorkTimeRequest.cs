@@ -2,7 +2,7 @@
 
 public class AddWorkTimeRequest
 {
-    public DayOfWeek Day { get; set; }
+    public string Day { get; set; }
 
     public TimeOnly OpenHour { get; set; }
 

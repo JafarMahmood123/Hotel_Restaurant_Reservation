@@ -4,14 +4,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 
-public class AddMealTypesToRestaurantCommand : ICommand<Result<List<MealTypeResponse>>>
+public class AddMealTypesToRestaurantCommand : ICommand<Result<MealTypeResponse>>
 {
-    public AddMealTypesToRestaurantCommand(Guid restaurantId, AddMealTypesToRestaurantRequest addMealTypeToRestaurantRequest)
+    public AddMealTypesToRestaurantCommand(Guid restaurantId, Guid mealTypeId)
     {
         RestaurantId = restaurantId;
-        AddMealTypeToRestaurantRequest = addMealTypeToRestaurantRequest;
+        MealTypeId = mealTypeId;
     }
 
     public Guid RestaurantId { get; }
-    public AddMealTypesToRestaurantRequest AddMealTypeToRestaurantRequest { get; }
+    public Guid MealTypeId { get; }
 }

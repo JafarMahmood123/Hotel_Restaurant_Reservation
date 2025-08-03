@@ -8,15 +8,13 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddTagsToRestaurant;
 
 public class AddTagsToRestaurantCommandHandler
-    : ICommandHandler<AddTagsToRestaurantCommand, Result<List<TagResponse>>>
+    : ICommandHandler<AddTagsToRestaurantCommand, Result<TagResponse>>
 {
     private readonly IGenericRepository<Tag> _tagRepository;
     private readonly IGenericRepository<RestaurantTag> _restaurantTagRepository;
     private readonly IMapper _mapper;
 
-    public AddTagsToRestaurantCommandHandler(
-        IGenericRepository<Tag> tagRepository,
-        IGenericRepository<RestaurantTag> restaurantTagRepository,
+    public AddTagsToRestaurantCommandHandler(IGenericRepository<Tag> tagRepository, IGenericRepository<RestaurantTag> restaurantTagRepository,
         IMapper mapper)
     {
         _tagRepository = tagRepository;
@@ -24,49 +22,38 @@ public class AddTagsToRestaurantCommandHandler
         _mapper = mapper;
     }
 
-    public async Task<Result<List<TagResponse>>> Handle(
-        AddTagsToRestaurantCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result<TagResponse>> Handle(AddTagsToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var tagIds = request.AddTagsToRestaurantRequest.Ids;
+        var tagId = request.TagId;
 
-        List<Tag> tags = new();
-
-        // Verify all tags exist
-        foreach (var tagId in tagIds)
+        var tag = await _tagRepository.GetByIdAsync(tagId);
+        if (tag == null)
         {
-            var tag = await _tagRepository.GetByIdAsync(tagId);
-            if (tag == null)
-            {
-                return Result.Failure<List<TagResponse>>(
-                    DomainErrors.Tag.NotFound(tagId));
-            }
-            tags.Add(tag);
+            return Result.Failure<TagResponse>(
+                DomainErrors.Tag.NotFound(tagId));
         }
 
-        // Create new restaurant-tag associations
-        foreach (var tagId in tagIds)
-        {
-            var existingAssociation = await _restaurantTagRepository.GetFirstOrDefaultAsync(
+        var existingAssociation = await _restaurantTagRepository.GetFirstOrDefaultAsync(
                 x => x.RestaurantId == restaurantId && x.TagId == tagId);
 
-            if (existingAssociation == null)
-            {
-                var newAssociation = new RestaurantTag
-                {
-                    Id = Guid.NewGuid(),
-                    RestaurantId = restaurantId,
-                    TagId = tagId
-                };
-
-                await _restaurantTagRepository.AddAsync(newAssociation);
-                await _restaurantTagRepository.SaveChangesAsync();
-            }            
+        if (existingAssociation != null)
+        {
+            
         }
 
+        var newAssociation = new RestaurantTag
+        {
+            Id = Guid.NewGuid(),
+            RestaurantId = restaurantId,
+            TagId = tagId
+        };
+
+        await _restaurantTagRepository.AddAsync(newAssociation);
+        await _restaurantTagRepository.SaveChangesAsync();
+
         // Map to response DTOs
-        var response = _mapper.Map<List<TagResponse>>(tags);
+        var response = _mapper.Map<TagResponse>(tag);
 
         return Result.Success(response);
     }

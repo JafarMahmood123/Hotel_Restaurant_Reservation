@@ -4,16 +4,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
 
-public class AddFeaturesToRestaurantCommand : ICommand<Result<List<FeatureResponse>>>
+public class AddFeaturesToRestaurantCommand : ICommand<Result<FeatureResponse>>
 {
-    public AddFeaturesToRestaurantCommand(
-        Guid restaurantId,
-        AddFeaturesToRestaurantRequest request)
+    public AddFeaturesToRestaurantCommand(Guid restaurantId, Guid featureId)
     {
         RestaurantId = restaurantId;
-        Request = request;
+        FeatureId = featureId;
     }
 
     public Guid RestaurantId { get; }
-    public AddFeaturesToRestaurantRequest Request { get; }
+    public Guid FeatureId { get; }
 }

@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Hotel_Restaurant_Reservation.Application.DTOs.CuisineDTOs;
-using Hotel_Restaurant_Reservation.Application.DTOs.FeatureDTOs;
+using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries.GetCurrencyTypesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantImagesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishesToRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddDishToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddFeaturesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
@@ -22,6 +22,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Comman
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveTagsFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveWorkTimesFromRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurant;
+using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.UpdateRestaurantDish;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetFeaturesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetRestaurantById;
@@ -32,7 +33,6 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries.GetTa
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -121,11 +121,11 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}/cuisines")]
-    public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddCuisineToRestaurantRequest addCuisineToRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/cuisines/{cuisineId:guid}")]
+    public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid cuisineId,
+        CancellationToken cancellationToken)
     {
-        var command = new AddCuisinesToRestaurantCommand(restaurantId, addCuisineToRestaurantRequest);
+        var command = new AddCuisinesToRestaurantCommand(restaurantId, cuisineId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -136,11 +136,11 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/cuisines")]
-    public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveCuisineFromRestaurantRequest removeCuisineFromRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/cuisines/{cuisineId:guid}")]
+    public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid cuisineId,
+        CancellationToken cancellationToken)
     {
-        var command = new RemoveCuisinesFromRestaurantCommand(restaurantId, removeCuisineFromRestaurantRequest);
+        var command = new RemoveCuisinesFromRestaurantCommand(restaurantId, cuisineId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -194,12 +194,26 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [HttpGet]
+    [Route("{restaurantId:guid}/currencyTypes")]
+    public async Task<IActionResult> GetCurrencyTypesByRestaurantId([FromRoute] Guid restaurantId, CancellationToken cancellationToken)
+    {
+        var query = new GetCurrencyTypesByRestaurantIdQuery(restaurantId);
+
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return Ok(result.Value);
+    }
+
     [HttpPost]
     [Route("{restaurantId:guid}/dishes")]
     public async Task<IActionResult> AddDishesWithPricesToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddDishesWithPricesToRestaurantRequest addDishesWithPricesToRestaurantRequest, CancellationToken cancellationToken)
+        [FromBody] AddDishToRestaurantRequest addDishToRestaurantRequest, CancellationToken cancellationToken)
     {
-        var command = new AddDishesToRestaurantCommand(restaurantId, addDishesWithPricesToRestaurantRequest);
+        var command = new AddDishToRestaurantCommand(restaurantId, addDishToRestaurantRequest);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -210,26 +224,40 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/dishes")]
-    public async Task<IActionResult> RemoveDishesWithPricesFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveDishesFromRestaurantRequest removeDishesWithPricesFormRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/dishes/{dishId:guid}")]
+    public async Task<IActionResult> RemoveDishFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid dishId,
+        CancellationToken cancellationToken)
     {
-        var command = new RemoveDishesFromRestaurantCommand(restaurantId, removeDishesWithPricesFormRestaurantRequest);
+        var command = new RemoveDishFromRestaurantCommand(restaurantId, dishId);
 
         var result = await Sender.Send(command, cancellationToken);
 
         if (result.IsFailure)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return NoContent();
+    }
+
+    [HttpPut]
+    [Route("{restaurantId:guid}/dishes/{dishId:guid}")]
+    public async Task<IActionResult> UpdateRestaurantDish([FromRoute] Guid restaurantId, [FromRoute] Guid dishId,
+        [FromBody] UpdateRestaurantDishRequest request, CancellationToken cancellationToken)
+    {
+        var command = new UpdateRestaurantDishCommand(restaurantId, dishId, request);
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+            return BadRequest(result.Error);
+
+        return NoContent();
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}/features")]
-    public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddFeaturesToRestaurantRequest addFeaturesToRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/features/{featureId:guid}")]
+    public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid featureId, CancellationToken cancellationToken)
     {
-        var command = new AddFeaturesToRestaurantCommand(restaurantId, addFeaturesToRestaurantRequest);
+        var command = new AddFeaturesToRestaurantCommand(restaurantId, featureId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -241,11 +269,11 @@ public class RestaurantsController : ApiController
 
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/features")]
-    public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveFeaturesFromRestaurantRequest removeFeaturesFromRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/features/{featureId:guid}")]
+    public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid featureId,
+        CancellationToken cancellationToken)
     {
-        var command = new RemoveFeaturesFromRestaurantCommand(restaurantId, removeFeaturesFromRestaurantRequest);
+        var command = new RemoveFeaturesFromRestaurantCommand(restaurantId, featureId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -257,7 +285,7 @@ public class RestaurantsController : ApiController
 
     [HttpGet("{restaurantId}/features")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetFeaturesByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetFeatureByRestaurantId([FromRoute] Guid restaurantId, CancellationToken cancellationToken)
     {
         var query = new GetFeaturesByRestaurantIdQuery(restaurantId);
         var result = await Sender.Send(query, cancellationToken);
@@ -266,11 +294,10 @@ public class RestaurantsController : ApiController
 
 
     [HttpPost]
-    [Route("{restaurantId:guid}/mealTypes")]
-    public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddMealTypesToRestaurantRequest addMealTypesToRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/mealTypes/{mealTypeId:guid}")]
+    public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid mealTypeId, CancellationToken cancellationToken)
     {
-        var command = new AddMealTypesToRestaurantCommand(restaurantId, addMealTypesToRestaurantRequest);
+        var command = new AddMealTypesToRestaurantCommand(restaurantId, mealTypeId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -281,11 +308,11 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/mealTypes")]
-    public async Task<IActionResult> RemoveMealTypesFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveMealTypesFromRestaurantRequest removeMealTypesFromRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/mealTypes/{mealTypeId:guid}")]
+    public async Task<IActionResult> RemoveMealTypesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid mealTypeId,
+        CancellationToken cancellationToken)
     {
-        var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, removeMealTypesFromRestaurantRequest);
+        var command = new RemoveMealTypesFromRestaurantCommand(restaurantId, mealTypeId);
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
@@ -306,11 +333,10 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}/tags")]
-    public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddTagsToRestaurantRequest addTagsToRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/tags/{tagId:guid}")]
+    public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid tagId, CancellationToken cancellationToken)
     {
-        var command = new AddTagsToRestaurantCommand(restaurantId, addTagsToRestaurantRequest);
+        var command = new AddTagsToRestaurantCommand(restaurantId, tagId);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -321,17 +347,17 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/tags")]
-    public async Task<IActionResult> RemoveTagsFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveTagsFromRestaurantRequest removeTagsFromRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/tags/{tagId:guid}")]
+    public async Task<IActionResult> RemoveTagFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid tagId
+        , CancellationToken cancellationToken)
     {
-        var command = new RemoveTagsFromRestaurantCommand(restaurantId, removeTagsFromRestaurantRequest);
+        var command = new RemoveTagsFromRestaurantCommand(restaurantId, tagId);
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
         {
             return BadRequest(result.Error);
         }
-        return Ok(result.Value);
+        return NoContent();
     }
 
     [HttpGet]
@@ -348,11 +374,10 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}/workTimes")]
-    public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] AddWorkTimesToRestaurantRequest addworkTimeToRestaurantRequest, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/workTimes/{workTimeId:guid}")]
+    public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid workTimeId, CancellationToken cancellationToken)
     {
-        var command = new AddWorkTimesToRestaurantCommand(restaurantId, addworkTimeToRestaurantRequest);
+        var command = new AddWorkTimesToRestaurantCommand(restaurantId, workTimeId);
 
         var result = await Sender.Send(command, cancellationToken);
 

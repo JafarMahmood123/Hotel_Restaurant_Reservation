@@ -158,13 +158,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PictureUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -360,7 +354,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Latitude")
@@ -802,14 +795,20 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.ToTable("RestaurantCurrencyTypes");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantDishPrice", b =>
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantDish", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("DishId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PictureUrl")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
@@ -1139,8 +1138,9 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Property<TimeOnly>("CloseHour")
                         .HasColumnType("time");
 
-                    b.Property<int>("Day")
-                        .HasColumnType("int");
+                    b.Property<string>("Day")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<TimeOnly>("OpenHour")
                         .HasColumnType("time");
@@ -1513,7 +1513,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                     b.Navigation("Restaurant");
                 });
 
-            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantDishPrice", b =>
+            modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Entities.RestaurantDish", b =>
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Dish", "Dish")
                         .WithMany("RestaurantDishPrice")

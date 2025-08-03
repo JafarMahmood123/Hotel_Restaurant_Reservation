@@ -9,59 +9,45 @@ using Microsoft.EntityFrameworkCore;
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.RemoveFeaturesFromRestaurant;
 
 public class RemoveFeaturesFromRestaurantCommandHandler
-    : ICommandHandler<RemoveFeaturesFromRestaurantCommand, Result<List<FeatureResponse>>>
+    : ICommandHandler<RemoveFeaturesFromRestaurantCommand, Result<FeatureResponse>>
 {
     private readonly IGenericRepository<RestaurantFeature> _restaurantFeatureRepository;
     private readonly IGenericRepository<Feature> _featureRepository;
     private readonly IMapper _mapper;
 
     public RemoveFeaturesFromRestaurantCommandHandler(
-        IGenericRepository<RestaurantFeature> restaurantFeatureRepository,
-        IGenericRepository<Feature> featureRepository,
-        IMapper mapper)
+        IGenericRepository<RestaurantFeature> restaurantFeatureRepository, IGenericRepository<Feature> featureRepository, IMapper mapper)
     {
         _restaurantFeatureRepository = restaurantFeatureRepository;
         _featureRepository = featureRepository;
         _mapper = mapper;
     }
 
-    public async Task<Result<List<FeatureResponse>>> Handle(
-        RemoveFeaturesFromRestaurantCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Result<FeatureResponse>> Handle(RemoveFeaturesFromRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var featureIds = request.RemoveFeaturesFromRestaurantRequest.Ids;
+        var featureId = request.FeatureId;
 
-        // Verify all features exist
-        var features = new List<Feature>();
-        foreach (var featureId in featureIds)
+        var feature = await _featureRepository.GetByIdAsync(featureId);
+        if (feature == null)
         {
-            var feature = await _featureRepository.GetByIdAsync(featureId);
-            if (feature == null)
-            {
-                return Result.Failure<List<FeatureResponse>>(
-                    DomainErrors.Feature.NotFound(featureId));
-            }
-            features.Add(feature);
+            return Result.Failure<FeatureResponse>(
+                DomainErrors.Feature.NotFound(featureId));
         }
 
-        // Get all existing associations
-        var restaurantFeatures = await _restaurantFeatureRepository
-            .Where(x => x.RestaurantId == restaurantId && featureIds.Contains(x.FeatureId))
-            .ToListAsync();
+        var restaurantFeature = await _restaurantFeatureRepository
+            .GetFirstOrDefaultAsync(x => x.RestaurantId == restaurantId && featureId == x.FeatureId);
 
-        if (!restaurantFeatures.Any())
+        if (restaurantFeature == null)
         {
-            return Result.Failure<List<FeatureResponse>>(
+            return Result.Failure<FeatureResponse>(
                 DomainErrors.Restaurant.NoFeaturesToRemove);
         }
 
-        // Remove associations
-        _restaurantFeatureRepository.RemoveRange(restaurantFeatures);
+        await _restaurantFeatureRepository.RemoveAsync(restaurantFeature.Id);
         await _restaurantFeatureRepository.SaveChangesAsync();
 
-        // Map to response DTOs
-        var response = _mapper.Map<List<FeatureResponse>>(features);
+        var response = _mapper.Map<FeatureResponse>(feature);
         return Result.Success(response);
     }
 }

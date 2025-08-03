@@ -26,7 +26,7 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<RestaurantCuisine> RestaurantCuisines { get; set; }
     public DbSet<RestaurantFeature> RestaurantFeatures { get; set; }
     public DbSet<RestaurantMealType> RestaurantMealTypes { get; set; }
-    public DbSet<RestaurantDishPrice> RestaurantDishPrices { get; set; }
+    public DbSet<RestaurantDish> RestaurantDishPrices { get; set; }
     public DbSet<RestaurantTag> RestaurantTags { get; set; }
     public DbSet<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
     public DbSet<RestaurantCurrencyType> RestaurantCurrencyTypes { get; set; }

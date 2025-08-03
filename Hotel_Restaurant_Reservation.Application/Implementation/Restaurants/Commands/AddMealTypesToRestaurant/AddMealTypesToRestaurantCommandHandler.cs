@@ -7,15 +7,14 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddMealTypesToRestaurant;
 
-public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTypesToRestaurantCommand, Result<List<MealTypeResponse>>>
+public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTypesToRestaurantCommand, Result<MealTypeResponse>>
 {
     private readonly IGenericRepository<MealType> _mealTypeRepository;
     private readonly IGenericRepository<RestaurantMealType> _restaurantMealTypeRepository;
     private readonly IMapper _mapper;
 
     public AddMealTypesToRestaurantCommandHandler(
-        IGenericRepository<MealType> mealTypeRepository,
-        IGenericRepository<RestaurantMealType> restaurantMealTypeRepository,
+        IGenericRepository<MealType> mealTypeRepository, IGenericRepository<RestaurantMealType> restaurantMealTypeRepository,
         IMapper mapper)
     {
         _mealTypeRepository = mealTypeRepository;
@@ -23,49 +22,36 @@ public class AddMealTypesToRestaurantCommandHandler : ICommandHandler<AddMealTyp
         _mapper = mapper;
     }
 
-    public async Task<Result<List<MealTypeResponse>>> Handle(AddMealTypesToRestaurantCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MealTypeResponse>> Handle(AddMealTypesToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var mealTypeIds = request.AddMealTypeToRestaurantRequest.Ids;
+        var mealTypeId = request.MealTypeId;
 
-        List<MealType> mealTypes = new List<MealType>();
+        var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
 
-        // Verify all meal types exist
-        foreach (var mealTypeId in mealTypeIds)
-        {
-            var mealType = await _mealTypeRepository.GetByIdAsync(mealTypeId);
+        if (mealType == null)
+            return Result.Failure<MealTypeResponse>(DomainErrors.MealType.NotFound(mealTypeId));
 
-            if (mealType == null)
-                return Result.Failure<List<MealTypeResponse>>(DomainErrors.MealType.NotFound(mealTypeId));
-
-            mealTypes.Add(mealType);
-        }
-
-        // Add new restaurant-meal type associations
-
-        foreach (var mealTypeId in mealTypeIds)
-        {
-            var existingAssociation = await _restaurantMealTypeRepository.GetFirstOrDefaultAsync(
+        var existingAssociation = await _restaurantMealTypeRepository.GetFirstOrDefaultAsync(
                 x => x.RestaurantId == restaurantId && x.MealTypeId == mealTypeId);
 
-            if (existingAssociation == null)
-            {
-                var newAssociation = new RestaurantMealType()
-                {
-                    Id = Guid.NewGuid(),
-                    MealTypeId = mealTypeId,
-                    RestaurantId = restaurantId
-                };
-
-                await _restaurantMealTypeRepository.AddAsync(newAssociation);
-                await _restaurantMealTypeRepository.SaveChangesAsync();
-            }
+        if (existingAssociation != null)
+        {
+            
         }
 
-        
+        var newAssociation = new RestaurantMealType()
+        {
+            Id = Guid.NewGuid(),
+            MealTypeId = mealTypeId,
+            RestaurantId = restaurantId
+        };
+
+        await _restaurantMealTypeRepository.AddAsync(newAssociation);
+        await _restaurantMealTypeRepository.SaveChangesAsync();
 
         // Map to response DTOs
-        var mealTypeResponses = _mapper.Map<List<MealTypeResponse>>(mealTypes);
+        var mealTypeResponses = _mapper.Map<MealTypeResponse>(mealType);
 
         return Result.Success(mealTypeResponses);
     }
