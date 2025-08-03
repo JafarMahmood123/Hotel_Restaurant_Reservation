@@ -109,7 +109,7 @@ public class RestaurantsController : ApiController
 
     [HttpPut]
     [Route("{id:guid}")]
-    public async Task<IActionResult> UpdateRestaurant([FromRoute] Guid id, [FromBody] RestaurantUpdateRequest restaurantUpdateRequest,
+    public async Task<IActionResult> UpdateRestaurant([FromRoute] Guid id, [FromBody] UpdateRestaurantRequest restaurantUpdateRequest,
         CancellationToken cancellationToken)
     {
         var command = new UpdateRestaurantCommand(id, restaurantUpdateRequest);

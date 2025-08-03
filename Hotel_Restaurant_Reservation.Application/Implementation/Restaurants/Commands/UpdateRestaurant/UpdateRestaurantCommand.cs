@@ -6,12 +6,12 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
 
 public class UpdateRestaurantCommand : ICommand<Result<RestaurantResponse>>
 {
-    public UpdateRestaurantCommand(Guid id, RestaurantUpdateRequest restaurantUpdateRequest)
+    public UpdateRestaurantCommand(Guid id, UpdateRestaurantRequest restaurantUpdateRequest)
     {
         Id = id;
         RestaurantUpdateRequest = restaurantUpdateRequest;
     }
 
     public Guid Id { get; }
-    public RestaurantUpdateRequest RestaurantUpdateRequest { get; }
+    public UpdateRestaurantRequest RestaurantUpdateRequest { get; }
 }

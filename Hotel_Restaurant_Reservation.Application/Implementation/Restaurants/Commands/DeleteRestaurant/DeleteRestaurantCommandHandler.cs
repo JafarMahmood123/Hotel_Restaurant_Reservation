@@ -35,6 +35,7 @@ public class DeleteRestaurantCommandHandler : ICommandHandler<DeleteRestaurantCo
         }
 
         restaurant = await _restaurantRepository.RemoveAsync(restaurantId);
+        await _restaurantRepository.SaveChangesAsync();
 
         var restaurantResponse = _mapper.Map<RestaurantResponse>(restaurant);
 

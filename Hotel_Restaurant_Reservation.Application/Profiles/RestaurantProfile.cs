@@ -21,7 +21,7 @@ public class RestaurantProfile : Profile
 
         CreateMap<AddRestaurantRequest, Restaurant>();
 
-        CreateMap<RestaurantUpdateRequest, Restaurant>();
+        CreateMap<UpdateRestaurantRequest, Restaurant>();
 
         CreateMap<RestaurantCuisine, GetRestaurantCuisinesByRestaurantIdResponse>()
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Cuisine.Id))

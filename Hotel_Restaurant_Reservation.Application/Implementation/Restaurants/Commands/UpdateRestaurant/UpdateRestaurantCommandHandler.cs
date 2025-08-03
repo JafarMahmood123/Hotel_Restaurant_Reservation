@@ -55,7 +55,7 @@ public class UpdateRestaurantCommandHandler
         return Result.Success(response);
     }
 
-    private Error? ValidateRestaurantUpdate(RestaurantUpdateRequest request)
+    private Error? ValidateRestaurantUpdate(UpdateRestaurantRequest request)
     {
         //if (request.StarRating < 1 || request.StarRating > 5)
         //{
