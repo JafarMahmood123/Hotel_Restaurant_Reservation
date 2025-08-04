@@ -39,7 +39,7 @@ public class RestaurantProfile : Profile
             .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.FeatureId))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Feature.Name));
 
-        CreateMap<RestaurantWorkTime, GetWorkTimesByRestaurantIdResponse>()
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.WorkTimeId));
+        //CreateMap<RestaurantWorkTime, GetWorkTimesByRestaurantIdResponse>()
+        //    .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
     }
 }

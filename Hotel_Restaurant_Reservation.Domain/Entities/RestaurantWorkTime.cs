@@ -6,17 +6,17 @@ public class RestaurantWorkTime
 
     public Guid Id { get; set; }
 
-    // Foreign Keys
+    public string Day { get; set; }
+
+    public TimeOnly OpenHour { get; set; }
+
+    public TimeOnly CloseHour { get; set; }
 
     public Guid RestaurantId { get; set; }
-
-    public Guid WorkTimeId { get; set; }
 
     // Navigation Properties
 
     public virtual Restaurant Restaurant { get; set; }
-
-    public virtual WorkTime WorkTime { get; set; }
 
     public RestaurantWorkTime()
     {

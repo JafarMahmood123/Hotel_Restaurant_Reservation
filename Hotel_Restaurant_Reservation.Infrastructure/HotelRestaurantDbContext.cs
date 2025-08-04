@@ -30,7 +30,6 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<RestaurantTag> RestaurantTags { get; set; }
     public DbSet<RestaurantWorkTime> RestaurantWorkTimes { get; set; }
     public DbSet<RestaurantCurrencyType> RestaurantCurrencyTypes { get; set; }
-    public DbSet<WorkTime> WorkTimes { get; set; }
     public DbSet<Feature> Features { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Cuisine> Cuisines { get; set; }

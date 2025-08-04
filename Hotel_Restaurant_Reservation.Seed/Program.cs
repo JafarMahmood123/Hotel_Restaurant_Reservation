@@ -2,9 +2,9 @@
 
 string path = "D:\\Project\\Restaurant\\cleaned_restaurant_data.csv";
 
-RestaurantSeeder.Path = path;
+//RestaurantSeeder.Path = path;
 
-RestaurantSeeder.Insert();
+//RestaurantSeeder.Insert();
 
 //string path = "D:\\Project\\customers\\customer_profiles_with_roles.csv";
 

@@ -70,7 +70,6 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
-builder.Services.AddScoped<IGenericRepository<WorkTime>, GenericRepository<WorkTime>>();
 builder.Services.AddScoped<IGenericRepository<MealType>, GenericRepository<MealType>>();
 builder.Services.AddScoped<IGenericRepository<Feature>, GenericRepository<Feature>>();
 builder.Services.AddScoped<IGenericRepository<Location>, GenericRepository<Location>>();
@@ -124,17 +123,17 @@ builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
 
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-builder.Services.AddScoped<DataSeeder>();
+//builder.Services.AddScoped<DataSeeder>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+    //var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     var dbContext = scope.ServiceProvider.GetRequiredService<HotelRestaurantDbContext>();
     await dbContext.Database.MigrateAsync();
-    await seeder.SeedAsync();
+    //await seeder.SeedAsync();
 }
 
 // Configure the HTTP request pipeline.

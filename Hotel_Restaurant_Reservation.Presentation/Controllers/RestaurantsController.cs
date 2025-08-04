@@ -374,10 +374,11 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost]
-    [Route("{restaurantId:guid}/workTimes/{workTimeId:guid}")]
-    public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid workTimeId, CancellationToken cancellationToken)
+    [Route("{restaurantId:guid}/workTimes")]
+    public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId, [FromBody] AddWorkTimesToRestaurantRequest request
+        , CancellationToken cancellationToken)
     {
-        var command = new AddWorkTimesToRestaurantCommand(restaurantId, workTimeId);
+        var command = new AddWorkTimesToRestaurantCommand(restaurantId, request);
 
         var result = await Sender.Send(command, cancellationToken);
 
@@ -388,16 +389,15 @@ public class RestaurantsController : ApiController
     }
 
     [HttpDelete]
-    [Route("{restaurantId:guid}/workTimes")]
-    public async Task<IActionResult> RemoveWorkTimeTFromRestaurant([FromRoute] Guid restaurantId,
-        [FromBody] RemoveWorkTimesFromRestaurantRequest removeworkTimeFromRestaurantRequest, CancellationToken cancellationToken)
+    [Route("workTimes/{workTimeId:guid}")]
+    public async Task<IActionResult> RemoveWorkTimeTFromRestaurant([FromRoute] Guid workTimeId, CancellationToken cancellationToken)
     {
-        var command = new RemoveWorkTimesFromRestaurantCommand(restaurantId, removeworkTimeFromRestaurantRequest);
+        var command = new RemoveWorkTimesFromRestaurantCommand(workTimeId);
         var result = await Sender.Send(command, cancellationToken);
         if (result.IsFailure)
             return BadRequest(result.Error);
 
-        return Ok(result.Value);
+        return NoContent();
     }
 
     [HttpGet("{restaurantId:guid}/workTimes")]

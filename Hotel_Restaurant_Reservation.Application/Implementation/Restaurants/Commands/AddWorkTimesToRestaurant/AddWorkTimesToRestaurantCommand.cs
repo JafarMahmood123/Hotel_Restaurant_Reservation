@@ -6,12 +6,12 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
 
 public class AddWorkTimesToRestaurantCommand : ICommand<Result<List<WorkTimeResponse>>>
 {
-    public AddWorkTimesToRestaurantCommand(Guid restaurantId, Guid workTimeId)
+    public AddWorkTimesToRestaurantCommand(Guid restaurantId, AddWorkTimesToRestaurantRequest addWorkTimesToRestaurantRequest)
     {
         RestaurantId = restaurantId;
-        WorkTimeId = workTimeId;
+        AddWorkTimesToRestaurantRequest = addWorkTimesToRestaurantRequest;
     }
 
     public Guid RestaurantId { get; }
-    public Guid WorkTimeId { get; }
+    public AddWorkTimesToRestaurantRequest AddWorkTimesToRestaurantRequest { get; }
 }

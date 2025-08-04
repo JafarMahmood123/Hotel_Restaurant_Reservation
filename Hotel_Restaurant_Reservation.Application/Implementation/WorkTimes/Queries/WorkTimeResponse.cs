@@ -4,7 +4,7 @@ public class WorkTimeResponse
 {
     public Guid Id { get; set; }
 
-    public DayOfWeek Day { get; set; }
+    public string Day { get; set; }
 
     public TimeOnly OpenHour { get; set; }
 

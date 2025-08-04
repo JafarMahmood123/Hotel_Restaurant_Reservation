@@ -4,7 +4,7 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetWorkTimesByRestaurantId;
 
-public class GetWorkTimesByRestaurantIdQuery : IQuery<Result<IEnumerable<GetWorkTimesByRestaurantIdResponse>>>
+public class GetWorkTimesByRestaurantIdQuery : IQuery<Result<IEnumerable<WorkTimeResponse>>>
 {
     public GetWorkTimesByRestaurantIdQuery(Guid restaurantId)
     {

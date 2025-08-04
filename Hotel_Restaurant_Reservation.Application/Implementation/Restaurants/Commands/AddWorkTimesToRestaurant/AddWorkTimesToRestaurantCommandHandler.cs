@@ -11,20 +11,16 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Co
 public class AddWorkTimesToRestaurantCommandHandler
     : ICommandHandler<AddWorkTimesToRestaurantCommand, Result<List<WorkTimeResponse>>>
 {
-    // You need a repository for Restaurants to perform the validation
     private readonly IGenericRepository<Restaurant> _restaurantRepository;
-    private readonly IGenericRepository<WorkTime> _workTimeRepository;
     private readonly IGenericRepository<RestaurantWorkTime> _restaurantWorkTimeRepository;
     private readonly IMapper _mapper;
 
     public AddWorkTimesToRestaurantCommandHandler(
-        IGenericRepository<Restaurant> restaurantRepository, // Add this to your constructor
-        IGenericRepository<WorkTime> workTimeRepository,
+        IGenericRepository<Restaurant> restaurantRepository,
         IGenericRepository<RestaurantWorkTime> restaurantWorkTimeRepository,
         IMapper mapper)
     {
-        _restaurantRepository = restaurantRepository; // And assign it here
-        _workTimeRepository = workTimeRepository;
+        _restaurantRepository = restaurantRepository;
         _restaurantWorkTimeRepository = restaurantWorkTimeRepository;
         _mapper = mapper;
     }
@@ -32,96 +28,94 @@ public class AddWorkTimesToRestaurantCommandHandler
     public async Task<Result<List<WorkTimeResponse>>> Handle(AddWorkTimesToRestaurantCommand request, CancellationToken cancellationToken)
     {
         var restaurantId = request.RestaurantId;
-        var workTimeId = request.WorkTimeId;
 
-        // =================================================================
-        // BUG FIX: VALIDATE YOUR INPUTS FIRST
-        // =================================================================
-
-        // 1. Check if the Restaurant exists
+        // --- 1. Validation ---
         var restaurant = await _restaurantRepository.GetByIdAsync(restaurantId);
         if (restaurant == null)
         {
-            // Fail early with a clear error instead of crashing the database
             return Result.Failure<List<WorkTimeResponse>>(
                 DomainErrors.Restaurant.NotFound(restaurantId));
         }
 
-        // 2. Check if the WorkTime exists
-        var workTime = await _workTimeRepository.GetByIdAsync(workTimeId);
-        if (workTime == null)
-        {
-            return Result.Failure<List<WorkTimeResponse>>(
-                DomainErrors.WorkTime.NotFound(workTimeId));
-        }
+        // --- 2. Prepare Data for Merging ---
+        var timeSlotToAdd = _mapper.Map<RestaurantWorkTime>(request.AddWorkTimesToRestaurantRequest);
+        timeSlotToAdd.RestaurantId = restaurantId;
 
-        // --- Your existing logic continues here ---
+        // --- 3. Isolate the Operation to a Single Day ---
 
-        var restaurantWorkTimes = await _restaurantWorkTimeRepository.Where(
-            x => x.RestaurantId == restaurantId)
-            .Include(x => x.WorkTime)
-            .Select(x => x.WorkTime)
+        // Fetch only the work times for the specific day being modified.
+        var sameDayWorkTimes = await _restaurantWorkTimeRepository
+            .Where(wt => wt.RestaurantId == restaurantId && wt.Day == timeSlotToAdd.Day)
             .ToListAsync(cancellationToken);
 
-        // ... rest of your complex merging logic ...
+        // This list will be used for the merge logic.
+        var listToMerge = new List<RestaurantWorkTime>(sameDayWorkTimes) { timeSlotToAdd };
 
-        // NOTE: The rest of your merging logic is highly complex and may contain other bugs.
-        // It is recommended to simplify this logic significantly. However, the validation
-        // added above will fix the specific crash you are currently experiencing.
+        // --- 4. Merge Logic (for the target day only) ---
+        var mergedForDay = new List<RestaurantWorkTime>();
+        var dayWorkTimes = listToMerge.OrderBy(x => x.OpenHour).ToList();
 
-        restaurantWorkTimes.Add(workTime);
-        var mergedWorkTimes = new List<WorkTime>();
-        var workTimesToDelete = new List<WorkTime>();
-
-        // Group by day and process each day separately
-        foreach (var dayGroup in restaurantWorkTimes.GroupBy(x => x.Day))
+        if (dayWorkTimes.Any())
         {
-            var dayWorkTimes = dayGroup.OrderBy(x => x.OpenHour).ToList();
-            if (!dayWorkTimes.Any()) continue;
-
-            var currentMerged = dayWorkTimes.First();
+            var currentOpen = dayWorkTimes.First().OpenHour;
+            var currentClose = dayWorkTimes.First().CloseHour;
 
             for (int i = 1; i < dayWorkTimes.Count; i++)
             {
-                if (dayWorkTimes[i].OpenHour <= currentMerged.CloseHour)
+                var nextWorkTime = dayWorkTimes[i];
+                if (nextWorkTime.OpenHour <= currentClose)
                 {
-                    workTimesToDelete.Add(dayWorkTimes[i]);
-                    if (dayWorkTimes[i].CloseHour > currentMerged.CloseHour)
+                    if (nextWorkTime.CloseHour > currentClose)
                     {
-                        currentMerged.CloseHour = dayWorkTimes[i].CloseHour;
+                        currentClose = nextWorkTime.CloseHour;
                     }
                 }
                 else
                 {
-                    mergedWorkTimes.Add(currentMerged);
-                    currentMerged = dayWorkTimes[i];
+                    mergedForDay.Add(new RestaurantWorkTime
+                    {
+                        Id = Guid.NewGuid(),
+                        Day = timeSlotToAdd.Day,
+                        OpenHour = currentOpen,
+                        CloseHour = currentClose,
+                        RestaurantId = restaurantId
+                    });
+                    currentOpen = nextWorkTime.OpenHour;
+                    currentClose = nextWorkTime.CloseHour;
                 }
             }
-            mergedWorkTimes.Add(currentMerged);
-        }
 
-        var associationsToDelete = await _restaurantWorkTimeRepository
-            .Where(x => x.RestaurantId == restaurantId)
-            .ToListAsync(cancellationToken);
-
-        _restaurantWorkTimeRepository.RemoveRange(associationsToDelete);
-
-        var newAssociations = new List<RestaurantWorkTime>();
-        foreach (var merged in mergedWorkTimes)
-        {
-            newAssociations.Add(new RestaurantWorkTime
+            mergedForDay.Add(new RestaurantWorkTime
             {
                 Id = Guid.NewGuid(),
-                RestaurantId = restaurantId,
-                WorkTimeId = merged.Id // This assumes merged work times are existing entities
-                                       // This part of the logic is complex and may need review
+                Day = timeSlotToAdd.Day,
+                OpenHour = currentOpen,
+                CloseHour = currentClose,
+                RestaurantId = restaurantId
             });
         }
 
-        await _restaurantWorkTimeRepository.AddRangeAsync(newAssociations);
+        // --- 5. Database Update (Targeted) ---
+
+        // Remove only the old work time records for the specific day being updated.
+        if (sameDayWorkTimes.Any())
+        {
+            _restaurantWorkTimeRepository.RemoveRange(sameDayWorkTimes);
+        }
+
+        // Add the new, merged work time records for that day.
+        await _restaurantWorkTimeRepository.AddRangeAsync(mergedForDay);
+
+        // Save all changes in a single transaction.
         await _restaurantWorkTimeRepository.SaveChangesAsync();
 
-        var response = _mapper.Map<List<WorkTimeResponse>>(mergedWorkTimes);
+        // --- 6. Return Response ---
+        // For a complete view, fetch all work times again after the update.
+        var finalWorkTimes = await _restaurantWorkTimeRepository
+            .Where(wt => wt.RestaurantId == restaurantId)
+            .ToListAsync(cancellationToken);
+
+        var response = _mapper.Map<List<WorkTimeResponse>>(finalWorkTimes);
         return Result.Success(response);
     }
 }

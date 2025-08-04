@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetWorkTimesByRestaurantId;
 
-public class GetWorkTimesByRestaurantIdQueryHandler : IQueryHandler<GetWorkTimesByRestaurantIdQuery, Result<IEnumerable<GetWorkTimesByRestaurantIdResponse>>>
+public class GetWorkTimesByRestaurantIdQueryHandler : IQueryHandler<GetWorkTimesByRestaurantIdQuery, Result<IEnumerable<WorkTimeResponse>>>
 {
     private readonly IGenericRepository<RestaurantWorkTime> _restaurantWorkTimeRepository;
     private readonly IMapper _mapper;
@@ -20,17 +20,13 @@ public class GetWorkTimesByRestaurantIdQueryHandler : IQueryHandler<GetWorkTimes
         _mapper = mapper;
     }
 
-    public async Task<Result<IEnumerable<GetWorkTimesByRestaurantIdResponse>>> Handle(GetWorkTimesByRestaurantIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<IEnumerable<WorkTimeResponse>>> Handle(GetWorkTimesByRestaurantIdQuery request, CancellationToken cancellationToken)
     {
         var restaurantWorkTimes = await _restaurantWorkTimeRepository.Where(x => x.RestaurantId == request.RestaurantId)
-            .Include(x => x.WorkTime)
             .ToListAsync(cancellationToken);
 
-        // Select the nested WorkTime objects before mapping
-        var workTimes = restaurantWorkTimes.Select(rwt => rwt.WorkTime);
-
         // Now map the correct collection
-        var result = _mapper.Map<IEnumerable<GetWorkTimesByRestaurantIdResponse>>(workTimes);
+        var result = _mapper.Map<IEnumerable<WorkTimeResponse>>(restaurantWorkTimes);
 
         return Result.Success(result);
     }
