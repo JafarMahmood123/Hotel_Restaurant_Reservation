@@ -3,35 +3,49 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Shared;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantImagesByRestaurantId;
-
-public class GetRestaurantImagesByRestaurantIdQueryHandler : IQueryHandler<GetRestaurantImagesByRestaurantIdQuery, Result<List<string>>>
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantImagesByRestaurantId
 {
-    private readonly IGenericRepository<RestaurantImage> _restaurantImageRepository;
-    private readonly IGenericRepository<Restaurant> _restaurantRepository;
-
-    public GetRestaurantImagesByRestaurantIdQueryHandler(IGenericRepository<RestaurantImage> restaurantImageRepository, IGenericRepository<Restaurant> restaurantRepository)
+    /// <summary>
+    /// Handles the GetRestaurantImagesByRestaurantIdQuery.
+    /// </summary>
+    public class GetRestaurantImagesByRestaurantIdQueryHandler : IQueryHandler<GetRestaurantImagesByRestaurantIdQuery, Result<List<string>>>
     {
-        _restaurantImageRepository = restaurantImageRepository;
-        _restaurantRepository = restaurantRepository;
-    }
+        private readonly IGenericRepository<RestaurantImage> _restaurantImageRepository;
+        private readonly IRestaurantRespository _restaurantRepository;
 
-    public async Task<Result<List<string>>> Handle(GetRestaurantImagesByRestaurantIdQuery request, CancellationToken cancellationToken)
-    {
-        var restaurant = await _restaurantRepository.GetByIdAsync(request.RestaurantId);
-        if (restaurant is null)
+        public GetRestaurantImagesByRestaurantIdQueryHandler(IGenericRepository<RestaurantImage> restaurantImageRepository, IRestaurantRespository restaurantRepository)
         {
-            return Result.Failure<List<string>>(DomainErrors.Restaurant.NotFound(request.RestaurantId));
+            _restaurantImageRepository = restaurantImageRepository;
+            _restaurantRepository = restaurantRepository;
         }
 
-        var images = await _restaurantImageRepository.Where(ei => ei.RestaurantId == request.RestaurantId).ToListAsync(cancellationToken);
-
-        if (!images.Any())
+        /// <summary>
+        /// Handles the request to fetch image URLs for a given restaurant.
+        /// </summary>
+        public async Task<Result<List<string>>> Handle(GetRestaurantImagesByRestaurantIdQuery request, CancellationToken cancellationToken)
         {
-            return Result.Failure<List<string>>(DomainErrors.Restaurant.NoImagesFound);
-        }
+            // First, check if the restaurant exists.
+            var restaurantExists = await _restaurantRepository.GetFirstOrDefaultAsync(r => r.Id == request.RestaurantId);
+            if (restaurantExists == null)
+            {
+                // If not, return a failure result.
+                return Result.Failure<List<string>>(new Error("Restaurant.NotFound", $"The restaurant with ID {request.RestaurantId} was not found."));
+            }
 
-        return Result.Success(images.Select(i => i.Url).ToList());
+            // Fetch all images for the given restaurant ID.
+            var imageUrls = await _restaurantImageRepository
+                .Where(img => img.RestaurantId == request.RestaurantId)
+                .Select(img => img.Url) // Select only the URL property
+                .ToListAsync(cancellationToken);
+
+            // Return a success result with the list of URLs.
+            // If no images are found, this will correctly return an empty list.
+            return Result.Success(imageUrls);
+        }
     }
 }

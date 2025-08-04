@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Hotel_Restaurant_Reservation.Application.Implementation.CurrencyTypes.Queries.GetCurrencyTypesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.RemoveRestaurantImage;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantDishImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadRestaurantImage;
+using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantDishImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetRestaurantImagesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCuisinesToRestaurant;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddCurrencyTypesToRestaurant;
@@ -31,8 +34,10 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Querie
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetWorkTimesByRestaurantId;
 using Hotel_Restaurant_Reservation.Application.Implementation.Tags.Queries.GetTagsByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
+using Hotel_Restaurant_Reservation.Presentation.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -412,17 +417,13 @@ public class RestaurantsController : ApiController
     }
 
     [HttpPost("{restaurantId:guid}/images")]
-    public async Task<IActionResult> UploadRestaurantImages(Guid restaurantId, [FromForm] List<UploadImageRequest> imageFiles, CancellationToken cancellationToken)
+    public async Task<IActionResult> UploadRestaurantImage(Guid restaurantId, [FromForm] UploadImageApiRequest request, CancellationToken cancellationToken)
     {
-        if (imageFiles == null || imageFiles.Count == 0)
-        {
-            return BadRequest("No files were uploaded.");
-        }
-
-        var command = new UploadRestaurantImagesCommand
+        // The command now gets the file from the request model, which solves the Swagger UI issue.
+        var command = new UploadRestaurantImageCommand
         {
             RestaurantId = restaurantId,
-            ImageFiles = imageFiles
+            ImageFile = request.ImageFile
         };
 
         var result = await Sender.Send(command, cancellationToken);
@@ -432,7 +433,8 @@ public class RestaurantsController : ApiController
             return BadRequest(result.Error);
         }
 
-        return Ok(result.Value);
+        // On success, return a JSON object with the image URL.
+        return Ok(new { imageUrl = result.Value });
     }
 
     [HttpGet("{restaurantId:guid}/images")]
@@ -449,6 +451,22 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [HttpDelete("images")] // The route no longer takes an ID in the path
+    public async Task<IActionResult> RemoveRestaurantImage([FromBody] RemoveImageApiRequest request, CancellationToken cancellationToken)
+    {
+        // The command is created from the request body's ImageUrl property
+        var command = new RemoveRestaurantImageCommand(request.ImageUrl);
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            // Handle NotFound or other errors
+            return BadRequest(result.Error);
+        }
+
+        return NoContent(); // 204 No Content is a standard response for a successful deletion.
+    }
+
     [HttpGet("{restaurantId:guid}/dishes")]
     public async Task<IActionResult> GetRestaurantDishesByRestaurnatId(Guid restaurantId, CancellationToken cancellationToken)
     {
@@ -458,6 +476,41 @@ public class RestaurantsController : ApiController
         if (result.IsFailure)
         {
             return NotFound(result.Error);
+        }
+
+        return Ok(result.Value);
+    }
+
+    [HttpPost("{restaurantId:guid}/dishes/{dishId:guid}/image")]
+    public async Task<IActionResult> UploadDishImage(Guid restaurantId, Guid dishId, [FromForm] UploadImageApiRequest removeImageApiRequest, CancellationToken cancellationToken)
+    {
+        var command = new UploadRestaurantDishImageCommand
+        {
+            RestaurantId = restaurantId,
+            DishId = dishId,
+            ImageFile = removeImageApiRequest.ImageFile
+        };
+
+        var result = await Sender.Send(command, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
+        }
+
+        return Ok(new { imageUrl = result.Value });
+    }
+
+    [HttpGet("{restaurantId:guid}/dishes/{dishId:guid}/image")]
+    public async Task<IActionResult> GetDishImage(Guid restaurantId, Guid dishId, CancellationToken cancellationToken)
+    {
+        var query = new GetRestaurantDishImageQuery(restaurantId, dishId);
+
+        var result = await Sender.Send(query, cancellationToken);
+
+        if (result.IsFailure)
+        {
+            return BadRequest(result.Error);
         }
 
         return Ok(result.Value);

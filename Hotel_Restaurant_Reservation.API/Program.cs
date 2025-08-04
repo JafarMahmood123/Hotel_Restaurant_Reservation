@@ -17,6 +17,8 @@ using Hotel_Restaurant_Reservation.Infrastructure.Repositories;
 using Hotel_Restaurant_Reservation.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -144,7 +146,16 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(myAllowSpecificOrigins);
- 
+
+app.UseStaticFiles(); // Serves files from wwwroot
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "wwwroot/images")),
+    RequestPath = "/images"
+});
+
+
 app.UseAuthentication();
 
 app.UseAuthorization();
