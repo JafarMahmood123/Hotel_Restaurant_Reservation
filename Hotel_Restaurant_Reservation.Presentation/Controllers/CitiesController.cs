@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Cities.Queries.GetCityByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -66,6 +67,7 @@ public class CitiesController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddCity([FromBody] AddCityRequest addCityRequest, CancellationToken cancellationToken)
     {
@@ -80,6 +82,7 @@ public class CitiesController : ApiController
         return CreatedAtAction(nameof(GetCityById), new { id = result.Value.Id }, result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCity(Guid id, CancellationToken cancellationToken)
     {
@@ -92,6 +95,7 @@ public class CitiesController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCity(Guid id, [FromBody] UpdateCityRequest request, CancellationToken cancellationToken)
     {

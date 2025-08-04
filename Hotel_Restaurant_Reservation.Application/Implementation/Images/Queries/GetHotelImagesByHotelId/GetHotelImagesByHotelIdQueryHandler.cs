@@ -27,11 +27,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries
 
             var images = await _hotelImageRepository.Where(ei => ei.HotelId == request.HotelId).ToListAsync(cancellationToken);
 
-            if (!images.Any())
-            {
-                return Result.Failure<List<string>>(DomainErrors.Hotel.NoImagesFound);
-            }
-
             return Result.Success(images.Select(i => i.Url).ToList());
         }
     }

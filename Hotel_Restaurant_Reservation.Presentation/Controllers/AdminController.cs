@@ -1,6 +1,7 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Implementation.Admins.Commands.AddAdmin;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -11,6 +12,7 @@ public class AdminController : ApiController
     {
     }
 
+    [Authorize(Roles ="Admin")]
     [HttpPost]
     public async Task<IActionResult> AddAdmin([FromBody] AddAdminRequest request, CancellationToken cancellationToken)
     {

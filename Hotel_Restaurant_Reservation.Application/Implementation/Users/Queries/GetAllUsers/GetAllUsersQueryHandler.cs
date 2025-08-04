@@ -9,17 +9,27 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.
 public class GetAllUsersQueryHandler : IQueryHandler<GetAllUsersQuery, Result<IEnumerable<UserResponse>>>
 {
     private readonly IGenericRepository<User> _userRepository;
+    private readonly IGenericRepository<Role> _roleRepository;
     private readonly IMapper _mapper;
 
-    public GetAllUsersQueryHandler(IGenericRepository<User> userRepository, IMapper mapper)
+    public GetAllUsersQueryHandler(IGenericRepository<User> userRepository, IGenericRepository<Role> roleRepository,
+        IMapper mapper)
     {
         _userRepository = userRepository;
+        _roleRepository = roleRepository;
         _mapper = mapper;
     }
 
     public async Task<Result<IEnumerable<UserResponse>>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
     {
         var users = await _userRepository.GetAllAsync();
+
+        foreach(var user in users)
+        {
+            var role = await _roleRepository.GetByIdAsync(user.RoleId);
+
+            user.Role = role;
+        }
 
         var usersResponses = _mapper.Map<IEnumerable<UserResponse>>(users);
 

@@ -10,6 +10,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantBookings.Queries.GetRestaurantBookingsByCustomerId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -23,6 +24,7 @@ public class RestaurantBookingsController : ApiController
         this._mapper = mapper;
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPost]
     public async Task<IActionResult> AddRestaurantBooking([FromBody] AddRestaurantBookingRequest addRestaurantBookingRequest
         , CancellationToken cancellationToken)
@@ -37,6 +39,7 @@ public class RestaurantBookingsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpGet("customer/{customerId:guid}")]
     public async Task<IActionResult> GetRestaurantBookingByCustomerId(Guid customerId, CancellationToken cancellationToken)
     {
@@ -50,6 +53,7 @@ public class RestaurantBookingsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("restaurant/{restaurantId:guid}")]
     public async Task<IActionResult> GetAllRestaurantBookingsByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
     {
@@ -62,6 +66,7 @@ public class RestaurantBookingsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPost]
     [Route("{bookingId:guid}")]
     public async Task<IActionResult> AddDishesToBooking(Guid bookingId, AddBookingDishesRequest addBookingDishesRequest,
@@ -74,6 +79,7 @@ public class RestaurantBookingsController : ApiController
         return Ok(bookingResponeses);
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteRestaurantBooking(Guid id, CancellationToken cancellationToken)
     {
@@ -86,6 +92,7 @@ public class RestaurantBookingsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateRestaurantBooking(Guid id, [FromBody] UpdateRestaurantBookingRequest request, CancellationToken cancellationToken)
     {
@@ -98,6 +105,7 @@ public class RestaurantBookingsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpDelete("{bookingId:guid}/dishes")]
     public async Task<IActionResult> DeleteDishesFromBooking(Guid bookingId, [FromBody] DeleteBookingDishesRequest request, CancellationToken cancellationToken)
     {
@@ -110,6 +118,7 @@ public class RestaurantBookingsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPut("{bookingId:guid}/dishes")]
     public async Task<IActionResult> UpdateBookingDishes(Guid bookingId, [FromBody] UpdateBookingDishesRequest request, CancellationToken cancellationToken)
     {
@@ -122,6 +131,7 @@ public class RestaurantBookingsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPost("pay")]
     public async Task<IActionResult> PayForBooking([FromBody] PayRestaurantBookingRequest payForBookingRequest, CancellationToken cancellationToken)
     {

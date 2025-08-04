@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queri
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReviews.Queries.GetHotelReviewById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -17,6 +18,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("AddReview")]
         public async Task<IActionResult> AddHotelReview([FromBody] AddHotelReviewRequest addHotelReviewRequest, CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteHotelReview(Guid id, CancellationToken cancellationToken)
         {
@@ -41,6 +44,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateHotelReview(Guid id, [FromBody] UpdateHotelReviewRequest request, CancellationToken cancellationToken)
         {
@@ -78,6 +82,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("hotel/{hotelId:guid}")]
         public async Task<IActionResult> GetAllHotelReviewsByHotelId(Guid hotelId, CancellationToken cancellationToken)
         {
@@ -90,6 +95,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("user/{userId:guid}")]
         public async Task<IActionResult> GetAllHotelReviewsByUserId(Guid userId, CancellationToken cancellationToken)
         {

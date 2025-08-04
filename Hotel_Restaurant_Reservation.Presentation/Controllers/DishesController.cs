@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Dishes.Queries.GetDishesWithPricesByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -14,6 +15,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddDish([FromBody] AddDishRequest addDishRequest, CancellationToken cancellationToken)
         {
@@ -28,6 +30,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteDish(Guid id, CancellationToken cancellationToken)
         {

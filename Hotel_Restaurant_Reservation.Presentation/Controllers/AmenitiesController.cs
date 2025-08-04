@@ -5,6 +5,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries.
 using Hotel_Restaurant_Reservation.Application.Implementation.Amenities.Queries.GetAmenityById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -15,6 +16,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles ="Admin")]
         [HttpPost]
         public async Task<IActionResult> AddAmenity([FromBody] AddAmenityRequest addAmenityRequest, CancellationToken cancellationToken)
         {
@@ -28,6 +30,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteAmenity(Guid id, CancellationToken cancellationToken)
         {
@@ -40,6 +43,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateAmenity(Guid id, [FromBody] UpdateAmenityRequest request, CancellationToken cancellationToken)
         {

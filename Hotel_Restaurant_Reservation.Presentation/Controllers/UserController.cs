@@ -10,6 +10,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetA
 using Hotel_Restaurant_Reservation.Application.Implementation.Users.Queries.GetUserById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ public class UserController : ApiController
     {
     }
 
+    [Authorize(Roles = "Admin, Customer")]
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetUserById(Guid id, CancellationToken cancellationToken)
     {
@@ -35,6 +37,7 @@ public class UserController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
     {
@@ -78,6 +81,7 @@ public class UserController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin, Customer")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserRequest request, CancellationToken cancellationToken)
     {
@@ -90,6 +94,7 @@ public class UserController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin, Customer")]
     [HttpPost("ChangePassword")]
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordRequest changePasswordRequest, CancellationToken cancellationToken)
     {
@@ -103,6 +108,7 @@ public class UserController : ApiController
         return Ok();
     }
 
+    [Authorize(Roles = "Admin, Customer")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteUser(Guid id, CancellationToken cancellationToken)
     {
@@ -117,6 +123,7 @@ public class UserController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPost("{userId:guid}/images")]
     public async Task<IActionResult> UploadUserImages(Guid userId, [FromForm] List<UploadImageRequest> imageFiles, CancellationToken cancellationToken)
     {

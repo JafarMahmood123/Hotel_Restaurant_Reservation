@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.
 using Hotel_Restaurant_Reservation.Application.Implementation.Countries.Queries.GetCountryByName;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -53,6 +54,7 @@ public class CountriesController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddCountry([FromBody] AddCountryRequest addCountryRequest, CancellationToken cancellationToken)
     {
@@ -67,6 +69,7 @@ public class CountriesController : ApiController
         return CreatedAtAction(nameof(GetCountryById), new { id = result.Value.Id }, result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteCountry(Guid id, CancellationToken cancellationToken)
     {
@@ -79,6 +82,7 @@ public class CountriesController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateCountry(Guid id, [FromBody] UpdateCountryRequest request, CancellationToken cancellationToken)
     {

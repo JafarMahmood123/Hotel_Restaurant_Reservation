@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries.
 using Hotel_Restaurant_Reservation.Application.Implementation.MealTypes.Queries.GetAllMealTypesByRestaurantId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -14,6 +15,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddMealType([FromBody] AddMealTypeRequest addMealTypeRequest, CancellationToken cancellationToken)
         {

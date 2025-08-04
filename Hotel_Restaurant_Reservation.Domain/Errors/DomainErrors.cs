@@ -269,6 +269,10 @@ public static class DomainErrors
         public static Error NotFound(Guid roomId) => new(
             "Room.NotFound",
             $"The room with the ID '{roomId}' was not found.");
+
+        public static Error NumberAlreadyExists => new(
+            "Room.NumberAlreadyExists",
+            $"The room number is already assigned to another room.");
     }
 
     public static class RoomType

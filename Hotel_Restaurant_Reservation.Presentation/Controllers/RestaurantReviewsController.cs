@@ -4,6 +4,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantReviews.
 using Hotel_Restaurant_Reservation.Application.Implementation.RestaurantReviews.Queries.GetAllRestaurantReviewsByUserId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -15,6 +16,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost("AddReview")]
         public async Task<IActionResult> AddReview([FromBody] AddRestaurantReviewRequest addRestaurantReviewRequest, CancellationToken cancellationToken)
         {
@@ -40,6 +42,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("restaurant/{restaurantId:guid}")]
         public async Task<IActionResult> GetAllRestaurantReviewsByRestaurantId(Guid restaurantId, CancellationToken cancellationToken)
         {
@@ -52,6 +55,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("user/{userId:guid}")]
         public async Task<IActionResult> GetAllRestaurantReviewsByUserId(Guid userId, CancellationToken cancellationToken)
         {

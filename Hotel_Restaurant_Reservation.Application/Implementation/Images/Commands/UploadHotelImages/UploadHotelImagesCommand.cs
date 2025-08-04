@@ -1,10 +1,17 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Domain.Shared;
+using Hotel_Restaurant_Reservation.Presentation.ApiModels;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadHotelImages;
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadHotelImage;
 
-public class UploadHotelImagesCommand : ICommand<Result<List<string>>>
+public class UploadHotelImageCommand : ICommand<Result<string>>
 {
+    public UploadHotelImageCommand(Guid hotelId, UploadImageApiRequest uploadImageApiRequest)
+    {
+        HotelId = hotelId;
+        this.uploadImageApiRequest = uploadImageApiRequest;
+    }
+
     public Guid HotelId { get; set; }
-    public List<UploadImageRequest> ImageFiles { get; set; }
+    public UploadImageApiRequest uploadImageApiRequest { get; set; }
 }

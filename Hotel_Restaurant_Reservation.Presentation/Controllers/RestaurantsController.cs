@@ -84,6 +84,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddRestaurant([FromBody] AddRestaurantRequest restaurantAddRequest, CancellationToken cancellationToken)
     {
@@ -98,6 +99,7 @@ public class RestaurantsController : ApiController
         return CreatedAtAction(nameof(GetRestaurantById), new { id = result.Value.Id }, result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{id:guid}")]
     public async Task<IActionResult> DeleteRestaurant(Guid id, CancellationToken cancellationToken)
@@ -112,6 +114,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     [Route("{id:guid}")]
     public async Task<IActionResult> UpdateRestaurant([FromRoute] Guid id, [FromBody] UpdateRestaurantRequest restaurantUpdateRequest,
@@ -125,6 +128,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/cuisines/{cuisineId:guid}")]
     public async Task<IActionResult> AddCuisineToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid cuisineId,
@@ -140,6 +144,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/cuisines/{cuisineId:guid}")]
     public async Task<IActionResult> RemoveCuisinesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid cuisineId,
@@ -169,6 +174,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/currencyTypes")]
     public async Task<IActionResult> AddCurrencyTypesToRestaurant([FromRoute] Guid restaurantId,
@@ -184,6 +190,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/currencyTypes")]
     public async Task<IActionResult> RemoveCurrencyTypesFromRestaurant([FromRoute] Guid restaurantId,
@@ -213,6 +220,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/dishes")]
     public async Task<IActionResult> AddDishesWithPricesToRestaurant([FromRoute] Guid restaurantId,
@@ -228,6 +236,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/dishes/{dishId:guid}")]
     public async Task<IActionResult> RemoveDishFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid dishId,
@@ -243,6 +252,7 @@ public class RestaurantsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut]
     [Route("{restaurantId:guid}/dishes/{dishId:guid}")]
     public async Task<IActionResult> UpdateRestaurantDish([FromRoute] Guid restaurantId, [FromRoute] Guid dishId,
@@ -258,6 +268,7 @@ public class RestaurantsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/features/{featureId:guid}")]
     public async Task<IActionResult> AddFeaturesToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid featureId, CancellationToken cancellationToken)
@@ -272,7 +283,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/features/{featureId:guid}")]
     public async Task<IActionResult> RemoveFeaturesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid featureId,
@@ -297,7 +308,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/mealTypes/{mealTypeId:guid}")]
     public async Task<IActionResult> AddMealTypesToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid mealTypeId, CancellationToken cancellationToken)
@@ -312,6 +323,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/mealTypes/{mealTypeId:guid}")]
     public async Task<IActionResult> RemoveMealTypesFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid mealTypeId,
@@ -337,6 +349,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/tags/{tagId:guid}")]
     public async Task<IActionResult> AddTagsToRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid tagId, CancellationToken cancellationToken)
@@ -351,6 +364,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("{restaurantId:guid}/tags/{tagId:guid}")]
     public async Task<IActionResult> RemoveTagFromRestaurant([FromRoute] Guid restaurantId, [FromRoute] Guid tagId
@@ -378,6 +392,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [Route("{restaurantId:guid}/workTimes")]
     public async Task<IActionResult> AddWorkTimeToRestaurant([FromRoute] Guid restaurantId, [FromBody] AddWorkTimesToRestaurantRequest request
@@ -393,6 +408,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete]
     [Route("workTimes/{workTimeId:guid}")]
     public async Task<IActionResult> RemoveWorkTimeTFromRestaurant([FromRoute] Guid workTimeId, CancellationToken cancellationToken)
@@ -416,6 +432,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{restaurantId:guid}/images")]
     public async Task<IActionResult> UploadRestaurantImage(Guid restaurantId, [FromForm] UploadImageApiRequest request, CancellationToken cancellationToken)
     {
@@ -451,6 +468,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("images")] // The route no longer takes an ID in the path
     public async Task<IActionResult> RemoveRestaurantImage([FromBody] RemoveImageApiRequest request, CancellationToken cancellationToken)
     {
@@ -481,6 +499,7 @@ public class RestaurantsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{restaurantId:guid}/dishes/{dishId:guid}/image")]
     public async Task<IActionResult> UploadDishImage(Guid restaurantId, Guid dishId, [FromForm] UploadImageApiRequest removeImageApiRequest, CancellationToken cancellationToken)
     {

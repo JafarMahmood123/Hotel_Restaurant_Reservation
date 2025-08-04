@@ -3,6 +3,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.RoomTypes.Commands
 using Hotel_Restaurant_Reservation.Application.Implementation.RoomTypes.Queries.GetAllRoomTypes;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -37,6 +38,7 @@ public class RoomTypesController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost("{description}")]
     public async Task<IActionResult> AddRoomType([FromRoute] string description, CancellationToken cancellationToken)
     {

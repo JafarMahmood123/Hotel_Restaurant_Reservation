@@ -9,4 +9,5 @@ public class UserResponse
     public DateOnly BirthDate { get; set; }
     public int Age { get; set; }
     public string RoleName { get; set; }
+    public Guid LocationId { get; set; }
 }

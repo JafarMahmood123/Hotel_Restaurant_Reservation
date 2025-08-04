@@ -11,6 +11,7 @@ public class HotelRestaurantDbContext : DbContext
     }
     public DbSet<Hotel> Hotels { get; set; }
     public DbSet<Room> Rooms { get; set; }
+    public DbSet<RoomImage> RoomImages { get; set; }
     public DbSet<RoomAmenity> RoomAmenities { get; set; }
     public DbSet<RoomType> RoomTypes { get; set; }
     public DbSet<PropertyType> PropertyTypes { get; set; }

@@ -30,6 +30,8 @@ public class Room
 
     public virtual RoomType RoomType { get; set; }
 
+    public virtual ICollection<RoomImage> RoomImages { get; set; }
+
     public Room()
     {
         RoomAmenities = new HashSet<RoomAmenity>();

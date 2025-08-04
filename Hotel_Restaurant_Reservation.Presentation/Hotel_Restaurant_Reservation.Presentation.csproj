@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Hotel_Restaurant_Reservation.Application\Hotel_Restaurant_Reservation.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Filters\" />
-  </ItemGroup>
-
 </Project>

@@ -2,6 +2,7 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.Features.Queries.GetAllFeatures;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -13,6 +14,7 @@ public class FeaturesController : ApiController
     {
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddFeature([FromBody] AddFeatureRequest addFeatureRequest, CancellationToken cancellationToken)
     {

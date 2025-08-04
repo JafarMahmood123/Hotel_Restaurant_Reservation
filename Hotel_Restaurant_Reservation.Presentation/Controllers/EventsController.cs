@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Events.Queries.Get
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetEventImages;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -16,6 +17,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> AddEvent([FromBody] AddEventRequest addEventRequest, CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEvent(Guid id, CancellationToken cancellationToken)
         {
@@ -43,6 +46,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateEvent(Guid id, [FromBody] UpdateEventRequest request, CancellationToken cancellationToken)
         {

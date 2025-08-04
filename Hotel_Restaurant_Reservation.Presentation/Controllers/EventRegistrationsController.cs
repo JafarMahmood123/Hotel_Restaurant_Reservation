@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.EventRegistrations
 using Hotel_Restaurant_Reservation.Application.Implementation.EventRegistrations.Queries.GetEventRegistrationById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -17,6 +18,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<IActionResult> AddEventRegistration([FromBody] AddEventRegistrationRequest addEventRegistrationRequest, CancellationToken cancellationToken)
         {
@@ -30,6 +32,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteEventRegistration(Guid id, CancellationToken cancellationToken)
         {
@@ -44,6 +47,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateEventRegistration(Guid id, [FromBody] UpdateEventRegistrationRequest request, CancellationToken cancellationToken)
         {
@@ -56,6 +60,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet]
         public async Task<IActionResult> GetAllEventRegistrations(CancellationToken cancellationToken)
         {
@@ -68,6 +73,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id:guid}")]
         [ActionName(nameof(GetEventRegistrationById))]
         public async Task<IActionResult> GetEventRegistrationById(Guid id, CancellationToken cancellationToken)
@@ -81,6 +87,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("customer/{customerId:guid}")]
         public async Task<IActionResult> GetAllEventRegistrationsByCustomerId(Guid customerId, CancellationToken cancellationToken)
         {
@@ -93,6 +100,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("event/{eventId:guid}")]
         public async Task<IActionResult> GetAllEventRegistrationsByEventId(Guid eventId, CancellationToken cancellationToken)
         {

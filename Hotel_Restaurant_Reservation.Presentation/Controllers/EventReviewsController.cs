@@ -2,10 +2,11 @@
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Commands.DeleteEventReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Commands.UpdateEventReview;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetAllEventReviews;
-using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetEventReviewById;
 using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetAllEventReviewsByEventId;
+using Hotel_Restaurant_Reservation.Application.Implementation.EventReviews.Queries.GetEventReviewById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -16,6 +17,7 @@ public class EventReviewsController : ApiController
     {
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPost("AddReview")]
     public async Task<IActionResult> AddEventReview([FromBody] AddEventReviewRequest addEventReviewRequest, CancellationToken cancellationToken)
     {
@@ -28,6 +30,7 @@ public class EventReviewsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteEventReview(Guid id, CancellationToken cancellationToken)
     {
@@ -40,6 +43,7 @@ public class EventReviewsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Customer")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateEventReview(Guid id, [FromBody] UpdateEventReviewRequest request, CancellationToken cancellationToken)
     {
@@ -77,6 +81,7 @@ public class EventReviewsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpGet("event/{eventId:guid}")]
     public async Task<IActionResult> GetAllEventReviewsByEventId(Guid eventId, CancellationToken cancellationToken)
     {

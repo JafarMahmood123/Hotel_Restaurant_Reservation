@@ -6,6 +6,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.
 using Hotel_Restaurant_Reservation.Application.Implementation.HotelReservations.Queries.GetHotelReservationById;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers
@@ -16,6 +17,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         {
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPost]
         public async Task<IActionResult> AddHotelReservation([FromBody] AddHotelReservationRequest addHotelReservationRequest, CancellationToken cancellationToken)
         {
@@ -29,6 +31,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> DeleteHotelReservation(Guid id, CancellationToken cancellationToken)
         {
@@ -43,6 +46,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateHotelReservation(Guid id, [FromBody] UpdateHotelReservationRequest request, CancellationToken cancellationToken)
         {
@@ -55,6 +59,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("customer/{customerId:guid}")]
         public async Task<IActionResult> GetAllHotelReservationsByCustomerId(Guid customerId, CancellationToken cancellationToken)
         {
@@ -67,6 +72,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet("hotel/{hotelId:guid}")]
         public async Task<IActionResult> GetAllHotelReservationsByHotelId(Guid hotelId, CancellationToken cancellationToken)
         {
@@ -79,6 +85,7 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
             return Ok(result.Value);
         }
 
+        [Authorize(Roles = "Customer")]
         [HttpGet("{id:guid}")]
         [ActionName(nameof(GetHotelReservationById))]
         public async Task<IActionResult> GetHotelReservationById(Guid id, CancellationToken cancellationToken)

@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Que
 using Hotel_Restaurant_Reservation.Application.Implementation.LocalLocations.Queries.GetLocalLocationsByCityId;
 using Hotel_Restaurant_Reservation.Presentation.Abstractions;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Hotel_Restaurant_Reservation.Presentation.Controllers;
@@ -17,6 +18,7 @@ public class LocalLocationsController : ApiController
     {
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public async Task<IActionResult> AddLocalLocation([FromBody] AddLocalLocationRequest addlocalLocationRequest, CancellationToken cancellationToken)
     {
@@ -31,6 +33,7 @@ public class LocalLocationsController : ApiController
         return Ok(result.Value);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> DeleteLocalLocation(Guid id, CancellationToken cancellationToken)
     {
@@ -43,6 +46,7 @@ public class LocalLocationsController : ApiController
         return NoContent();
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> UpdateLocalLocation(Guid id, [FromBody] UpdateLocalLocationRequest request, CancellationToken cancellationToken)
     {

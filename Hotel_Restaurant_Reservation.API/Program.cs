@@ -107,6 +107,7 @@ builder.Services.AddScoped<IGenericRepository<HotelReview>, GenericRepository<Ho
 builder.Services.AddScoped<IGenericRepository<EventReview>, GenericRepository<EventReview>>();
 builder.Services.AddScoped<IGenericRepository<Role>, GenericRepository<Role>>();
 builder.Services.AddScoped<IGenericRepository<HotelAmenityPrice>, GenericRepository<HotelAmenityPrice>>();
+builder.Services.AddScoped<IGenericRepository<RoomImage>, GenericRepository<RoomImage>>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 
 builder.Services.AddScoped<IGenericRepository<UserImage>, GenericRepository<UserImage>>();
