@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     [DbContext(typeof(HotelRestaurantDbContext))]
-    [Migration("20250805105751_AddMappingEntities")]
-    partial class AddMappingEntities
+    [Migration("20250805212037_AddMappingTables")]
+    partial class AddMappingTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1159,40 +1159,40 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Mappings.RestaurantMapping", b =>
                 {
-                    b.Property<Guid>("RestaurantId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("RestaurantId1")
+                    b.Property<Guid>("RestaurantId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("YelpBusinessId")
+                    b.Property<string>("YelpRestaurantId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("RestaurantId");
+                    b.HasKey("Id");
 
-                    b.HasIndex("RestaurantId1");
+                    b.HasIndex("RestaurantId");
 
                     b.ToTable("RestaurantMappings");
                 });
 
             modelBuilder.Entity("Hotel_Restaurant_Reservation.Domain.Mappings.UserMapping", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserId1")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("YelpUserId")
+                    b.Property<string>("RecommendationUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("UserId1");
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserMappings");
                 });
@@ -1760,7 +1760,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.Restaurant", "Restaurant")
                         .WithMany()
-                        .HasForeignKey("RestaurantId1")
+                        .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1771,7 +1771,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 {
                     b.HasOne("Hotel_Restaurant_Reservation.Domain.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

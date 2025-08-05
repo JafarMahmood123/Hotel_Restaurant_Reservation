@@ -5,10 +5,10 @@ namespace Hotel_Restaurant_Reservation.Domain.Mappings;
 
 public class RestaurantMapping
 {
-    [Key]
+    public Guid Id { get; set; }
+
     public Guid RestaurantId { get; set; }
 
-    [Required]
     public string YelpBusinessId { get; set; }
 
     public virtual Restaurant Restaurant { get; set; }

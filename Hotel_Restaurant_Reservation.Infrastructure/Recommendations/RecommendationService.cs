@@ -8,7 +8,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Recommendations;
 public class RecommendationService : IRecommendationService
 {
     private readonly HttpClient _httpClient;
-    private readonly string _baseRecommendationUrl = "https://0445d2146f40.ngrok-free.app";
+    private readonly string _baseRecommendationUrl = "https://367268605b3d.ngrok-free.app";
 
     public RecommendationService(IHttpClientFactory httpClientFactory)
     {

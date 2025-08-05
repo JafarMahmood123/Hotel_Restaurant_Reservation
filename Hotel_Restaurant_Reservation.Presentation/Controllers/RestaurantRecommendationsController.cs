@@ -12,18 +12,22 @@ public class RestaurantRecommendationsController : ApiController
     {
     }
 
-    [Authorize(Roles = "Customer")]
+    //[Authorize(Roles = "Customer")]
     [HttpGet]
     [Route("{userId}")]
-    public async Task<IActionResult> GetRecommendedRestaurants(string userId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetRecommendedRestaurants(
+        CancellationToken cancellationToken,
+    string userId,
+    [FromQuery] int page = 1,
+    [FromQuery] int pageSize = 10)
     {
-        var query = new GetRecommendedRestaurantsBasedOnUserIdQuery(userId);
+        var query = new GetRecommendedRestaurantsBasedOnUserIdQuery(userId, page, pageSize);
 
-        var restult = await Sender.Send(query, cancellationToken);
+        var result = await Sender.Send(query, cancellationToken);
 
-        if (restult.IsFailure)
-            return BadRequest(restult.Error);
+        if (result.IsFailure)
+            return BadRequest(result.Error);
 
-        return Ok(restult.Value);
+        return Ok(result.Value);
     }
 }

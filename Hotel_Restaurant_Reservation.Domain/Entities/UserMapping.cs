@@ -5,10 +5,10 @@ namespace Hotel_Restaurant_Reservation.Domain.Mappings;
 
 public class UserMapping
 {
-    [Key]
+    public Guid Id { get; set; }
+
     public Guid UserId { get; set; }
 
-    [Required]
     public string YelpUserId { get; set; }
 
     public virtual User User { get; set; }

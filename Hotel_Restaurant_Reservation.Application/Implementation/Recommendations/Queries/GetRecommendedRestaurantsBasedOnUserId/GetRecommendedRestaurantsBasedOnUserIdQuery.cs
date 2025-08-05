@@ -4,12 +4,16 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Recommendations.Queries.GetRecommendedRestaurantsBasedOnUserId;
 
-public class GetRecommendedRestaurantsBasedOnUserIdQuery : IQuery<Result<IEnumerable<RestaurantResponse>>>
+public class GetRecommendedRestaurantsBasedOnUserIdQuery : IQuery<Result<PagedResult<RestaurantResponse>>>
 {
-    public GetRecommendedRestaurantsBasedOnUserIdQuery(string userId)
+    public GetRecommendedRestaurantsBasedOnUserIdQuery(string userId, int page, int pageSize)
     {
         UserId = userId;
+        Page = page;
+        PageSize = pageSize;
     }
 
     public string UserId { get; }
+    public int Page { get; }
+    public int PageSize { get; }
 }

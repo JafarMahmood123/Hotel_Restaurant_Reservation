@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddMappingEntities : Migration
+    public partial class AddMappingTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,16 +15,16 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "RestaurantMappings",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    YelpBusinessId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RestaurantId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    YelpRestaurantId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RestaurantMappings", x => x.RestaurantId);
+                    table.PrimaryKey("PK_RestaurantMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RestaurantMappings_Restaurants_RestaurantId1",
-                        column: x => x.RestaurantId1,
+                        name: "FK_RestaurantMappings_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
                         principalTable: "Restaurants",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -34,30 +34,30 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Migrations
                 name: "UserMappings",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    YelpUserId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    RecommendationUserId = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserMappings", x => x.UserId);
+                    table.PrimaryKey("PK_UserMappings", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserMappings_Users_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_UserMappings_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_RestaurantMappings_RestaurantId1",
+                name: "IX_RestaurantMappings_RestaurantId",
                 table: "RestaurantMappings",
-                column: "RestaurantId1");
+                column: "RestaurantId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserMappings_UserId1",
+                name: "IX_UserMappings_UserId",
                 table: "UserMappings",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />

@@ -1,12 +1,11 @@
 ﻿// YelpDataSeeder.cs
-// This version fixes the Foreign Key constraint violation by using navigation
-// properties to explicitly define entity relationships for Entity Framework.
-
 using Bogus;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Mappings;
-using Hotel_Restaurant_Reservation.Infrastructure; // Your DbContext's namespace
+using Hotel_Restaurant_Reservation.Infrastructure;
+// --- C H A N G E: Added using statement for PasswordHasher ---
+using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System;
@@ -69,6 +68,8 @@ namespace Hotel_Restaurant_Reservation.Seed
     {
         private readonly HotelRestaurantDbContext _context;
         private readonly Faker _faker;
+        // --- C H A N G E: Added a field for the PasswordHasher ---
+        private readonly PasswordHasher _passwordHasher;
         private readonly Dictionary<string, Country> _countries = new Dictionary<string, Country>();
         private readonly Dictionary<string, City> _cities = new Dictionary<string, City>();
         private readonly Dictionary<string, Cuisine> _cuisines = new Dictionary<string, Cuisine>();
@@ -80,6 +81,8 @@ namespace Hotel_Restaurant_Reservation.Seed
         {
             _context = context;
             _faker = new Faker();
+            // --- C H A N G E: Instantiated the PasswordHasher ---
+            _passwordHasher = new PasswordHasher();
         }
 
         public async Task SeedRestaurantsAsync(string businessFilePath, int maxRecords = 1000)
@@ -129,12 +132,10 @@ namespace Hotel_Restaurant_Reservation.Seed
                     };
                     _restaurants.TryAdd(yelpBusiness.BusinessId, restaurant);
 
-                    // CORRECTED LOGIC: Assign the full restaurant object to the navigation property.
-                    // This explicitly tells EF Core about the relationship.
                     var restaurantMapping = new RestaurantMapping
                     {
                         YelpBusinessId = yelpBusiness.BusinessId,
-                        Restaurant = restaurant // Assign the object, not the ID
+                        Restaurant = restaurant
                     };
                     newRestaurantMappings.Add(restaurantMapping);
 
@@ -161,8 +162,6 @@ namespace Hotel_Restaurant_Reservation.Seed
 
             Console.WriteLine($"Processed {newRestaurantMappings.Count} restaurants. Saving to database...");
 
-            // By adding the mappings, EF Core's change tracker will discover
-            // the new restaurants, locations, cuisines, etc., through their navigation properties.
             await _context.AddRangeAsync(newRestaurantMappings);
             await _context.AddRangeAsync(newRestaurantCuisines);
             await _context.AddRangeAsync(newRestaurantTags);
@@ -200,11 +199,13 @@ namespace Hotel_Restaurant_Reservation.Seed
 
                         if (isNewUser)
                         {
-                            // CORRECTED LOGIC: Assign the full user object.
+                            // --- C H A N G E: Modified UserMapping creation to fit new entity structure ---
                             var userMapping = new UserMapping
                             {
+                                Id = Guid.NewGuid(), // Explicitly create a new Id for the mapping record
+                                UserId = user.Id,    // Set the foreign key
                                 YelpUserId = yelpReview.UserId,
-                                User = user // Assign the object, not the ID
+                                User = user          // Assign the navigation property
                             };
                             newUserMappings.Add(userMapping);
                         }
@@ -263,14 +264,21 @@ namespace Hotel_Restaurant_Reservation.Seed
         private async Task<User> GetOrCreateUserAsync(string yelpUserId, Guid roleId)
         {
             if (_users.TryGetValue(yelpUserId, out var user)) return user;
+
             var location = await _context.Locations.FirstAsync();
+
+            // --- C H A N G E: Hash the default password ---
+            var plainPassword = "12345";
+            var hashedPassword = _passwordHasher.Hash(plainPassword);
+
             user = new User
             {
                 Id = Guid.NewGuid(),
                 FirstName = _faker.Name.FirstName(),
                 LastName = _faker.Name.LastName(),
                 Email = _faker.Internet.Email(),
-                HashedPassword = "seeded_password_placeholder",
+                // --- C H A N G E: Assign the hashed password ---
+                HashedPassword = hashedPassword,
                 BirthDate = DateOnly.FromDateTime(_faker.Person.DateOfBirth),
                 Age = _faker.Random.Int(18, 70),
                 RoleId = roleId,
