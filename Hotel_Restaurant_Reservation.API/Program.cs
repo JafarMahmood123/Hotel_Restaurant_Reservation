@@ -8,7 +8,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Infrastructure;
-using Hotel_Restaurant_Reservation.Infrastructure.Authentication;
+using Hotel_Restaurant_Reservation.Infrastructure.Authentication; // Your JwtOptions is here
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Hotel_Restaurant_Reservation.Infrastructure.Payment;
 using Hotel_Restaurant_Reservation.Infrastructure.Recommendations;
@@ -21,6 +21,13 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// --- THIS IS THE FIX ---
+// This line tells the application to find the "Jwt" section in your appsettings.json
+// and use it to configure the JwtOptions class. This makes the values available
+// to your JwtProvider through dependency injection.
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("Jwt"));
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(Hotel_Restaurant_Reservation.Application.AssemplyReference).Assembly);
@@ -41,24 +48,22 @@ builder.Services.AddAuthentication(options =>
 {
     options.TokenValidationParameters = new TokenValidationParameters
     {
-        // These values must EXACTLY MATCH the ones used to create the token
         ValidateIssuer = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"], // e.g., "https://your-api.com"
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
 
         ValidateAudience = true,
-        ValidAudience = builder.Configuration["Jwt:Audience"], // e.g., "https://your-app.com"
+        ValidAudience = builder.Configuration["Jwt:Audience"],
 
-        ValidateLifetime = true, // Checks for token expiration
+        ValidateLifetime = true,
 
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]))
     };
 });
 
 
 var myAllowSpecificOrigins = "AllowAll";
 
-// Add the CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(myAllowSpecificOrigins,
@@ -72,7 +77,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-// Add services to the container.
 builder.Services.AddHttpClient();
 
 builder.Services.AddControllers()
@@ -86,7 +90,7 @@ builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelRestaurantReservation"));
 });
 
-// Corrected and cleaned up service registrations
+// Service registrations...
 builder.Services.AddScoped<IHotelRepository, HotelRepository>();
 builder.Services.AddScoped<IGenericRepository<Hotel>, GenericRepository<Hotel>>();
 builder.Services.AddScoped<IGenericRepository<Restaurant>, GenericRepository<Restaurant>>();
@@ -127,7 +131,6 @@ builder.Services.AddScoped<IGenericRepository<Role>, GenericRepository<Role>>();
 builder.Services.AddScoped<IGenericRepository<HotelAmenityPrice>, GenericRepository<HotelAmenityPrice>>();
 builder.Services.AddScoped<IGenericRepository<RoomImage>, GenericRepository<RoomImage>>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
-
 builder.Services.AddScoped<IGenericRepository<UserImage>, GenericRepository<UserImage>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantImage>, GenericRepository<RestaurantImage>>();
 builder.Services.AddScoped<IGenericRepository<HotelImage>, GenericRepository<HotelImage>>();
@@ -139,25 +142,16 @@ builder.Services.AddScoped<IGenericRepository<RoomAmenity>, GenericRepository<Ro
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();
 builder.Services.AddScoped<IRecommendationService, RecommendationService>();
-
-builder.Services.AddValidatorsFromAssemblyContaining<AddRestaurantValidator>();
-
-
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
-//builder.Services.AddScoped<DataSeeder>();
-builder.Services.AddScoped<IPayPalService, PayPalService>();
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    //var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
     var dbContext = scope.ServiceProvider.GetRequiredService<HotelRestaurantDbContext>();
     await dbContext.Database.MigrateAsync();
-    //await seeder.SeedAsync();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -165,20 +159,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(myAllowSpecificOrigins);
-
-app.UseStaticFiles(); // Serves files from wwwroot
+app.UseStaticFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
     FileProvider = new PhysicalFileProvider(
            Path.Combine(builder.Environment.ContentRootPath, "wwwroot/images")),
     RequestPath = "/images"
 });
-
-
 app.UseAuthentication();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

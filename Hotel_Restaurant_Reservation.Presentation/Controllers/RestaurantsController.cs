@@ -53,19 +53,52 @@ public class RestaurantsController : ApiController
 
 
     [HttpGet]
-    public async Task<IActionResult> GetAllRestaurants(Guid? tagId, Guid? featureId, Guid? cuisineId, Guid? countryId,
-        Guid? cityId, Guid? localLocationId, Guid? dishId, Guid? mealTypeId, CancellationToken cancellationToken,
-        double? minPrice = 0, double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
+    public async Task<IActionResult> GetAllRestaurants(
+            CancellationToken cancellationToken,
+            // Pagination parameters with default values
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+
+            // Existing filter parameters
+            [FromQuery] Guid? tagId = null,
+            [FromQuery] Guid? featureId = null,
+            [FromQuery] Guid? cuisineId = null,
+            [FromQuery] Guid? countryId = null,
+            [FromQuery] Guid? cityId = null,
+            [FromQuery] Guid? localLocationId = null,
+            [FromQuery] Guid? dishId = null,
+            [FromQuery] Guid? mealTypeId = null,
+            [FromQuery] double? minPrice = 0,
+            [FromQuery] double? maxPrice = double.MaxValue,
+            [FromQuery] double? minStarRating = 0,
+            [FromQuery] double? maxStarRating = 5)
     {
+        // Pass the pagination parameters to the query constructor
         var query = new GetAllRestaurantsQuery(
-        tagId, featureId, cuisineId, dishId, mealTypeId,
-        countryId, cityId, localLocationId,
-        minPrice, maxPrice, minStarRating, maxStarRating);
+            page,
+            pageSize,
+            tagId,
+            featureId,
+            cuisineId,
+            dishId,
+            mealTypeId,
+            countryId,
+            cityId,
+            localLocationId,
+            minPrice,
+            maxPrice,
+            minStarRating,
+            maxStarRating);
 
-        var result = await Sender.Send(query);
+        var result = await Sender.Send(query, cancellationToken);
+
         if (result.IsFailure)
+        {
+            // It's better to return the error object for the client to inspect
             return BadRequest(result.Error);
+        }
 
+        // This will now correctly return the PagedResult object as JSON
         return Ok(result.Value);
     }
 

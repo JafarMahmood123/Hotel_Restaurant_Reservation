@@ -2,71 +2,85 @@
 using Hotel_Restaurant_Reservation.Application.Abstractions.Messaging;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Shared;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
-namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants;
-
-public class GetAllRestaurantsQueryHandler
-    : IQueryHandler<GetAllRestaurantsQuery, Result<List<RestaurantResponse>>>
+namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants
 {
-    private readonly IRestaurantRespository _restaurantRepository;
-    private readonly IMapper _mapper;
-
-    public GetAllRestaurantsQueryHandler(
-        IRestaurantRespository restaurantRepository,
-        IMapper mapper)
+    /// <summary>
+    /// Handles the retrieval and pagination of restaurants based on filter criteria.
+    /// This handler leverages IQueryable for optimal database performance.
+    /// </summary>
+    public class GetAllRestaurantsQueryHandler
+        : IQueryHandler<GetAllRestaurantsQuery, Result<PagedResult<RestaurantResponse>>>
     {
-        _restaurantRepository = restaurantRepository;
-        _mapper = mapper;
-    }
+        private readonly IRestaurantRespository _restaurantRepository;
+        private readonly IMapper _mapper;
 
-    public async Task<Result<List<RestaurantResponse>>> Handle(
-        GetAllRestaurantsQuery request,
-        CancellationToken cancellationToken)
-    {
-        try
+        public GetAllRestaurantsQueryHandler(
+            IRestaurantRespository restaurantRepository,
+            IMapper mapper)
         {
-            // Validate price range
-            //if (request.MinPrice > request.MaxPrice)
-            //{
-            //    return Result.Failure<List<RestaurantResponse>>(
-            //        DomainErrors.Restaurant.InvalidPriceRange);
-            //}
-
-            //// Validate star rating range
-            //if (request.MinStarRating > request.MaxStarRating)
-            //{
-            //    return Result.Failure<List<RestaurantResponse>>(
-            //        DomainErrors.Restaurant.InvalidStarRatingRange);
-            //}
-
-            var restaurants = await _restaurantRepository.GetFilteredRestaurantsAsync(
-                request.TagId,
-                request.FeatureId,
-                request.CuisineId,
-                request.DishId,
-                request.MealTypeId,
-                request.CountryId,
-                request.CityId,
-                request.LocalLocationId,
-                request.MinPrice,
-                request.MaxPrice,
-                request.MinStarRating,
-                request.MaxStarRating);
-
-            if (restaurants == null || !restaurants.Any())
-            {
-                return Result.Failure<List<RestaurantResponse>>(
-                    DomainErrors.Restaurant.NotFoundForFilters);
-            }
-
-            // Map to response DTOs
-            var response = _mapper.Map<List<RestaurantResponse>>(restaurants);
-            return Result.Success(response);
+            _restaurantRepository = restaurantRepository;
+            _mapper = mapper;
         }
-        catch (Exception ex)
+
+        public async Task<Result<PagedResult<RestaurantResponse>>> Handle(
+            GetAllRestaurantsQuery request,
+            CancellationToken cancellationToken)
         {
-            return Result.Failure<List<RestaurantResponse>>(
-                new Error("Restaurant.QueryError", $"Error retrieving restaurants: {ex.Message}"));
+            try
+            {
+                // 1. Get the base IQueryable from the repository. No database call is made here.
+                var restaurantsQuery = _restaurantRepository.GetFilteredRestaurantsQuery(
+                    request.TagId,
+                    request.FeatureId,
+                    request.CuisineId,
+                    request.DishId,
+                    request.MealTypeId,
+                    request.CountryId,
+                    request.CityId,
+                    request.LocalLocationId,
+                    request.MinPrice,
+                    request.MaxPrice,
+                    request.MinStarRating,
+                    request.MaxStarRating);
+
+                // 2. Get the total count for pagination metadata.
+                // This executes a fast `SELECT COUNT(*)` query on the filtered set.
+                var totalCount = await restaurantsQuery.CountAsync(cancellationToken);
+
+                // 3. Apply pagination to the IQueryable. This modifies the SQL query
+                //    to use OFFSET and FETCH (or equivalent) for efficient data retrieval.
+                var pagedRestaurants = await restaurantsQuery
+                    .Skip((request.Page - 1) * request.PageSize)
+                    .Take(request.PageSize)
+                    .ToListAsync(cancellationToken); // This executes the final query to get only the items for the current page.
+
+                // 4. Map the results to the response DTO
+                var responseItems = _mapper.Map<List<RestaurantResponse>>(pagedRestaurants);
+
+                // 5. Create the PagedResult object.
+                // By passing totalCount and pageSize here, the TotalPages property
+                // in your PagedResult class will be calculated automatically.
+                var pagedResult = new PagedResult<RestaurantResponse>(
+                    responseItems,
+                    request.Page,
+                    request.PageSize,
+                    totalCount);
+
+                return Result.Success(pagedResult);
+            }
+            catch (Exception ex)
+            {
+                // Return a failure result if any exception occurs during the process.
+                return Result.Failure<PagedResult<RestaurantResponse>>(
+                    new Error("Restaurant.QueryError", $"An error occurred while retrieving restaurants: {ex.Message}"));
+            }
         }
     }
 }

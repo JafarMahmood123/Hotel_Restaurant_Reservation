@@ -42,51 +42,105 @@ public class RestaurantRepository : IRestaurantRespository
         return hotelRestaurantDbContext.Restaurants.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<Restaurant>?> GetFilteredRestaurantsAsync(Guid? tagId, Guid? featureId, Guid? cuisineId,
-        Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0,
-        double? maxPrice = double.MaxValue, double? minStarRating = 0,double? maxStarRating = 5)
+    public IQueryable<Restaurant> GetFilteredRestaurantsQuery(Guid? tagId, Guid? featureId, Guid? cuisineId,
+            Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0,
+            double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
     {
-        IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants;
+        // Start with the base query including all related entities needed for filtering.
+        IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants
+            .Include(r => r.RestaurantTags)
+            .Include(r => r.RestaurantFeatures)
+            .Include(r => r.RestaurantCuisines)
+            .Include(r => r.RestaurantDishPrices)
+            .Include(r => r.RestaurantMealTypes)
+            .Include(r => r.Location)
+                .ThenInclude(l => l.CityLocalLocations);
 
-        if (tagId is not null)
+        if (tagId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.RestaurantTags);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.RestaurantTags.Where(tag => tag.TagId == tagId).Any());
+                restaurant.RestaurantTags.Any(tag => tag.TagId == tagId));
+        }
 
-        if (featureId is not null)
+        if (featureId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.RestaurantFeatures);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.RestaurantFeatures.Where(feature => feature.FeatureId == featureId).Any());
+                restaurant.RestaurantFeatures.Any(feature => feature.FeatureId == featureId));
+        }
 
-        if (cuisineId is not null)
+        if (cuisineId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.RestaurantCuisines);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.RestaurantCuisines.Where(cuisine => cuisine.CuisineId == cuisineId).Any());
+                restaurant.RestaurantCuisines.Any(cuisine => cuisine.CuisineId == cuisineId));
+        }
 
-        if (dishId is not null)
+        if (dishId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.RestaurantDishPrices);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.RestaurantDishPrices.Where(dish => dish.DishId == dishId).Any());
+                restaurant.RestaurantDishPrices.Any(dish => dish.DishId == dishId));
+        }
 
-        if (mealTypeId is not null)
+        if (mealTypeId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.RestaurantMealTypes);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.RestaurantMealTypes.Where(mealType => mealType.MealTypeId == mealTypeId).Any());
+                restaurant.RestaurantMealTypes.Any(mealType => mealType.MealTypeId == mealTypeId));
+        }
 
-        if (countryId is not null)
+        if (countryId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.Location).ThenInclude(x=>x.CountryId);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.Location.CountryId == countryId);
+                restaurant.Location.CountryId == countryId);
+        }
 
-        if (cityId is not null)
+        if (cityId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.Location).ThenInclude(x => x.CityLocalLocations);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.Location.CityLocalLocations.CityId == cityId);
+                restaurant.Location.CityLocalLocations.CityId == cityId);
+        }
 
-        if(localLocationId is not null)
+        if (localLocationId.HasValue)
+        {
+            restaurantsQuery.Include(x => x.Location).ThenInclude(x=>x.CityLocalLocations);
+
             restaurantsQuery = restaurantsQuery.Where(restaurant =>
-            restaurant.Location.CityLocalLocations.LocalLocationId == localLocationId);
+                restaurant.Location.CityLocalLocations.LocalLocationId == localLocationId);
+        }
 
+        if (minPrice.HasValue)
+        {
+            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MinPrice >= minPrice);
+        }
 
-        restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MinPrice >= minPrice && restaurant.MaxPrice <= maxPrice);
+        if (maxPrice.HasValue)
+        {
+            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MaxPrice <= maxPrice);
+        }
 
-        restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.StarRating >= minStarRating && restaurant.StarRating <= maxStarRating);
+        if (minStarRating.HasValue)
+        {
+            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.StarRating >= minStarRating);
+        }
 
+        if (maxStarRating.HasValue)
+        {
+            restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.StarRating <= maxStarRating);
+        }
 
-        return await restaurantsQuery.ToListAsync();
+        return restaurantsQuery;
     }
 
     public async Task<Restaurant?> GetFirstOrDefaultAsync(Expression<Func<Restaurant, bool>> predicate)
