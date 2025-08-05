@@ -38,17 +38,24 @@ public class UserController : ApiController
     }
 
     [Authorize(Roles = "Admin")]
-    [HttpGet]
-    public async Task<IActionResult> GetAllUser(CancellationToken cancellationToken)
+    [HttpGet] 
+    public async Task<IActionResult> GetAllUser(
+        CancellationToken cancellationToken,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
-        var query = new GetAllUsersQuery();
+        // Pass the pagination parameters from the request to the query
+        var query = new GetAllUsersQuery(page, pageSize);
+
         var result = await Sender.Send(query, cancellationToken);
 
         if (result.IsFailure)
         {
-            return NotFound(result.Error);
+            // Use BadRequest or another appropriate status code for query failures
+            return BadRequest(result.Error);
         }
 
+        // The result.Value will be the PagedResult<UserResponse> object
         return Ok(result.Value);
     }
 
