@@ -1,4 +1,5 @@
 ﻿using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hotel_Restaurant_Reservation.Infrastructure;
@@ -26,6 +27,8 @@ public class HotelRestaurantDbContext : DbContext
     public DbSet<Restaurant> Restaurants { get; set; }
     public DbSet<RestaurantCuisine> RestaurantCuisines { get; set; }
     public DbSet<RestaurantFeature> RestaurantFeatures { get; set; }
+    public DbSet<UserMapping> UserMappings { get; set; }
+    public DbSet<RestaurantMapping> RestaurantMappings { get; set; }
     public DbSet<RestaurantMealType> RestaurantMealTypes { get; set; }
     public DbSet<RestaurantDish> RestaurantDishPrices { get; set; }
     public DbSet<RestaurantTag> RestaurantTags { get; set; }

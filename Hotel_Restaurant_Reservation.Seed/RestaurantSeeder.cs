@@ -1,774 +1,372 @@
-﻿//using CsvHelper;
-//using Hotel_Restaurant_Reservation.Domain.Entities;
-//using Hotel_Restaurant_Reservation.Domain.Enums;
-//using Hotel_Restaurant_Reservation.Infrastructure;
-//using Hotel_Restaurant_Reservation.Seed.Fields;
-//using Microsoft.Data.SqlClient;
-//using Microsoft.EntityFrameworkCore;
-//using System.Diagnostics.Metrics;
-//using System.Globalization;
-//using System.Text.Json;
-
-//namespace Hotel_Restaurant_Reservation.Seed;
-
-//internal static class RestaurantSeeder
-//{
-//    public static string Path;
-
-//    private static HotelRestaurantDbContext hotelRestaurantDbContext = new DesignTimeDbContextFactory().
-//        CreateDbContext([]);
-
-//    private static int recordNumber = 0;
-
-//    private static int NumberOfErrors = 0;
-//    public async static void Insert()
-//    {
-
-//        if (Path is null)
-//            throw new Exception("Path to the files is null.");
-
-//        using (var reader = new StreamReader(Path))
-//        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-//        {
-
-//            var records = csv.GetRecords<dynamic>();
-
-//            foreach (var record in records)
-//            {
-//                recordNumber++;
-
-//                Restaurant restaurant = new Restaurant();
-
-//                Country country = new Country();
-//                City city = new City();
-//                Location location = new Location();
-//                LocalLocation localLocation = new LocalLocation();
-
-//                CityLocalLocations cityLocalLocations = new CityLocalLocations();
-
-//                CurrencyType currencyType = new CurrencyType();
-
-
-
-//                try
-//                {
-//                    GenerateCountry(country);
-//                    GenerateCity(record, city, country);
-//                    GenerateLocalLocation(record, localLocation, city, cityLocalLocations);
-//                    GenerateLocation(country, cityLocalLocations, location);
-//                    GenerateRestaurant(record, restaurant, location);
-//                    GenerateRestaurantCurrencyType(restaurant,currencyType);
-
-//                    var options = new JsonSerializerOptions
-//                    {
-//                        PropertyNameCaseInsensitive = true
-//                    };
-
-//                    GenerateWorkTimes(record, restaurant, options);
-//                    GenerateFeatures(record, restaurant);
-//                    GenerateTags(record, restaurant);
-//                    GenerateCuisines(record, restaurant);
-//                    GenerateMealTypes(record, restaurant);
-//                    GenerateDishes(record, restaurant);
-
-//                }
-//                catch (Exception ex)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    NumberOfErrors++;
-//                    Console.WriteLine(ex.Message);
-//                }
-//            }
-//        }
-
-//        Console.WriteLine("The number of total errors = " + NumberOfErrors);
-//    }
-
-//    private static void GenerateRestaurantCurrencyType(Restaurant restaurant, CurrencyType currencyType)
-//    {
-//        string currencyName = "Dolar";
-
-//        var existingCurrencyType = hotelRestaurantDbContext.CurrencyTypes.FirstOrDefault(x => x.CurrencyCode == currencyName);
-//        if (existingCurrencyType is not null)
-//        {
-//            currencyType.Id = existingCurrencyType.Id;
-//            currencyType.CurrencyCode = existingCurrencyType.CurrencyCode;
-//        }
-//        else
-//        {
-//            currencyType.Id = Guid.NewGuid();
-//            currencyType.CurrencyCode = currencyName;
-
-//            hotelRestaurantDbContext.CurrencyTypes.Add(currencyType);
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-
-
-//        var restaurantCurrencType = new RestaurantCurrencyType()
-//        {
-//            Id = Guid.NewGuid(),
-//            CurrencyTypeId = currencyType.Id,
-//            RestaurantId = restaurant.Id
-//        };
-
-//        hotelRestaurantDbContext.RestaurantCurrencyTypes.Add(restaurantCurrencType);
-
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-
-//    private static void GenerateDishes(dynamic record, Restaurant restaurant)
-//    {
-//        string dishesInJson = record.DISHS_WITH_PRICES;
-//        dishesInJson = dishesInJson.Replace("'", "\"");
-
-//        if (dishesInJson is null)
-//            throw new Exception("Work Times Is Null.");
-
-//        Dictionary<string, string> dishesFeilds =
-//            JsonSerializer.Deserialize<Dictionary<string, string>>(dishesInJson);
-
-
-//        List<KeyValuePair<string, string>> dishesWithPrices = dishesFeilds.ToList();
-
-//        foreach (KeyValuePair<string, string> item in dishesWithPrices)
-//        {
-//            string name = item.Key;
-//            double price = double.Parse(item.Value.Replace("$", ""));
-//            Dish dish = new Dish()
-//            {
-//                Id = Guid.NewGuid(),
-//                Name = item.Key,
-//            };
-
-//            var existingDish = hotelRestaurantDbContext.Dishes.FirstOrDefault(x => x.Name == name);
-//            if (existingDish is not null)
-//            {
-//                dish.Id = existingDish.Id;
-//                dish.Name = existingDish.Name;
-//            }
-
-//            else
-//            {
-//                hotelRestaurantDbContext.Dishes.Add(dish);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-
-//            RestaurantDish restaurantDishPrice = new RestaurantDish()
-//            {
-//                Price = price,
-//                RestaurantId = restaurant.Id,
-//                DishId = dish.Id
-//            };
-
-
-//            hotelRestaurantDbContext.RestaurantDishPrices.Add(restaurantDishPrice);
-
-//            try
-//            {
-//                hotelRestaurantDbContext.SaveChanges();
-//            }
-//            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//            {
-//                Console.WriteLine("##################################################################");
-//                Console.WriteLine("Error at record " + recordNumber);
-//                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//            }
-//        }
-//    }
-
-//    private static void GenerateMealTypes(dynamic record, Restaurant restaurant)
-//    {
-//        string mealTypesInJson = record.MEAL_TYPES;
-//        mealTypesInJson = mealTypesInJson.Replace("'", "\"");
-
-//        if (mealTypesInJson is null)
-//            throw new Exception("Meal Types Is Null.");
-
-//        List<string> mealTypeStrings = JsonSerializer.Deserialize<List<string>>(mealTypesInJson);
-//        List<MealTypeFeild> meatTypeFeilds = mealTypeStrings.Select(f => new MealTypeFeild(f)).ToList();
-
-
-//        for (int i = 0; i < meatTypeFeilds.Count; i++)
-//        {
-//            string name = meatTypeFeilds[i].Name;
-
-//            MealType mealType = new MealType()
-//            {
-//                Id = Guid.NewGuid(),
-//                Name = meatTypeFeilds[i].Name,
-//            };
-
-//            var existingMealType = hotelRestaurantDbContext.MealTypes.FirstOrDefault(x => x.Name == name);
-//            if (existingMealType is not null)
-//            {
-//                mealType.Id = existingMealType.Id;
-//                mealType.Name = existingMealType.Name;
-//            }
-
-//            else
-//            {
-//                hotelRestaurantDbContext.MealTypes.Add(mealType);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-
-//            RestaurantMealType restaurantMealType = new RestaurantMealType()
-//            {
-//                Id= Guid.NewGuid(),
-//                MealTypeId = mealType.Id,
-//                RestaurantId = restaurant.Id
-//            };
-
-//            hotelRestaurantDbContext.RestaurantMealTypes.Add(restaurantMealType);
-
-//            try
-//            {
-//                hotelRestaurantDbContext.SaveChanges();
-//            }
-//            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//            {
-//                Console.WriteLine("##################################################################");
-//                Console.WriteLine("Error at record " + recordNumber);
-//                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//            }
-//        }
-//    }
-
-//    private static void GenerateCuisines(dynamic record, Restaurant restaurant)
-//    {
-//        string cuisinesInJson = record.CUISINES;
-//        cuisinesInJson = cuisinesInJson.Replace("'", "\"");
-
-//        if (cuisinesInJson is null)
-//            throw new Exception("Cuisine Is Null.");
-
-//        List<string> cuisineStrings = JsonSerializer.Deserialize<List<string>>(cuisinesInJson);
-//        List<CuisineFeild> cuisineFeilds = cuisineStrings.Select(f => new CuisineFeild(f)).ToList();
-
-
-//        for (int i = 0; i < cuisineFeilds.Count; i++)
-//        {
-//            Cuisine cuisine = new Cuisine()
-//            {
-//                Id = Guid.NewGuid(),
-//                Name = cuisineFeilds[i].Name,
-//            };
-
-//            string name = cuisineFeilds[i].Name;
-
-//            var existingCuisine = hotelRestaurantDbContext.Cuisines.FirstOrDefault(x => x.Name == name);
-//            if (existingCuisine is not null)
-//            {
-//                cuisine.Id  = existingCuisine.Id;
-//                cuisine.Name = existingCuisine.Name;
-//            }
-//            else
-//            {
-//                hotelRestaurantDbContext.Add(cuisine);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-
-//            RestaurantCuisine restaurantCuisine = new RestaurantCuisine()
-//            {
-//                Id = Guid.NewGuid(),
-//                CuisineId = cuisine.Id,
-//                RestaurantId = restaurant.Id
-//            };
-
-//            hotelRestaurantDbContext.RestaurantCuisines.Add(restaurantCuisine);
-//            try
-//            {
-//                hotelRestaurantDbContext.SaveChanges();
-//            }
-//            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//            {
-//                Console.WriteLine("##################################################################");
-//                Console.WriteLine("Error at record " + recordNumber);
-//                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//            }
-//        }
-//    }
-
-//    private static void GenerateTags(dynamic record, Restaurant restaurant)
-//    {
-//        string tagsInJson = record.REVIEW_TAGS;
-//        tagsInJson = tagsInJson.Replace("'", "\"");
-
-//        if (tagsInJson is null)
-//            throw new Exception("Tags Is Null.");
-
-//        List<string> tagStrings = JsonSerializer.Deserialize<List<string>>(tagsInJson);
-//        List<TagFeild> tagFeilds = tagStrings.Select(f => new TagFeild(f)).ToList();
-
-
-//        for (int i = 0; i < tagFeilds.Count; i++)
-//        {
-//            Tag tag = new Tag()
-//            {
-//                Id = Guid.NewGuid(),
-//                Name = tagFeilds[i].Name,
-//            };
-
-//            string name = tagFeilds[i].Name;
-
-//            var existingTag = hotelRestaurantDbContext.Tags.FirstOrDefault(x => x.Name == name);
-//            if (existingTag is not null)
-//            {
-//                tag.Id = existingTag.Id;
-//                tag.Name = existingTag.Name;
-//            }
-
-//            else
-//            {
-//                hotelRestaurantDbContext.Tags.Add(tag);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-
-//            RestaurantTag restaurantTag = new RestaurantTag()
-//            {
-//                Id = Guid.NewGuid(),
-//                TagId = tag.Id,
-//                RestaurantId = restaurant.Id
-//            };
-
-//            hotelRestaurantDbContext.RestaurantTags.Add(restaurantTag);
-
-//            try
-//            {
-//                hotelRestaurantDbContext.SaveChanges();
-//            }
-//            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//            {
-//                Console.WriteLine("##################################################################");
-//                Console.WriteLine("Error at record " + recordNumber);
-//                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//            }
-//        }
-//    }
-
-//    private static void GenerateFeatures(dynamic record, Restaurant restaurant)
-//    {
-//        string FeaturesInJson = record.FEATURES;
-//        FeaturesInJson = FeaturesInJson.Replace("'", "\"");
-
-//        if (FeaturesInJson is null)
-//            throw new Exception("Features Is Null.");
-
-//        List<string> featureStrings = JsonSerializer.Deserialize<List<string>>(FeaturesInJson);
-//        List<FeatureFeild> featureFeilds = featureStrings.Select(f => new FeatureFeild(f)).ToList();
-
-
-//        for (int i = 0; i < featureFeilds.Count; i++)
-//        {
-
-//            string name = featureFeilds[i].Name;
-//            Feature feature = new Feature()
-//            {
-//                Id = Guid.NewGuid(),
-//                Name = name,
-//            };
-
-//            var existingFeature = hotelRestaurantDbContext.Features.FirstOrDefault(x => x.Name == name);
-//            if (existingFeature is not null)
-//            {
-//                feature.Id = existingFeature.Id;
-//                feature.Name = existingFeature.Name;
-//            }
-
-//            else
-//            {
-//                hotelRestaurantDbContext.Features.Add(feature);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-
-//            RestaurantFeature restaurantFeature = new RestaurantFeature()
-//            {
-//                Id = Guid.NewGuid(),
-//                FeatureId = feature.Id,
-//                RestaurantId = restaurant.Id
-//            };
-
-//            hotelRestaurantDbContext.RestaurantFeatures.Add(restaurantFeature);
-//            try
-//            {
-//                hotelRestaurantDbContext.SaveChanges();
-//            }
-//            catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//            {
-//                Console.WriteLine("##################################################################");
-//                Console.WriteLine("Error at record " + recordNumber);
-//                Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//            }
-//        }
-//    }
-
-//    private static void GenerateWorkTimes(dynamic record, Restaurant restaurant, JsonSerializerOptions options)
-//    {
-//        string workTimesInJson = record.HOURS;
-//        workTimesInJson = workTimesInJson.Replace("'", "\"");
-
-//        if (workTimesInJson is null)
-//            throw new Exception("Work Times Is Null.");
-
-//        List<List<WorkTimeField>> workTimeFeilds =
-//            JsonSerializer.Deserialize<List<List<WorkTimeField>>>(workTimesInJson, options);
-
-
-//        for (int i = 0; i < workTimeFeilds.Count; i++)
-//        {
-//            foreach (WorkTimeField workTimeField in workTimeFeilds[i])
-//            {
-//                TimeOnly openHour = TimeOnly.Parse(workTimeField.OpenHours);
-//                TimeOnly closeHour = TimeOnly.Parse(workTimeField.CloseHours);
-//                //DayOfWeek day = (DayOfWeek)i;
-
-
-//                WorkTime workTime = new WorkTime()
-//                {
-//                    Id = Guid.NewGuid(),
-//                    //Day = day,
-//                    OpenHour = openHour,
-//                    CloseHour = closeHour,
-//                };
-
-//                var existingWorkTime = hotelRestaurantDbContext.WorkTimes.FirstOrDefault(x => /*x.Day == day &&*/ x.OpenHour == openHour
-//                && x.CloseHour == closeHour);
-
-//                if (existingWorkTime is not null)
-//                {
-//                    workTime.Id = existingWorkTime.Id;
-//                    workTime.Day = existingWorkTime.Day;
-//                    workTime.OpenHour = existingWorkTime.OpenHour;
-//                    workTime.CloseHour = existingWorkTime.CloseHour;
-//                }
-
-//                else
-//                {
-//                    hotelRestaurantDbContext.WorkTimes.Add(workTime);
-//                    try
-//                    {
-//                        hotelRestaurantDbContext.SaveChanges();
-//                    }
-//                    catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                    {
-//                        Console.WriteLine("##################################################################");
-//                        Console.WriteLine("Error at record " + recordNumber);
-//                        Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                        Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                        Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                    }
-//                }
-
-//                RestaurantWorkTime restaurantWorkTime = new RestaurantWorkTime()
-//                {
-//                    Id = Guid.NewGuid(),
-//                    WorkTimeId = workTime.Id,
-//                    RestaurantId = restaurant.Id
-//                };
-
-//                hotelRestaurantDbContext.RestaurantWorkTimes.Add(restaurantWorkTime);
-//                try
-//                {
-//                    hotelRestaurantDbContext.SaveChanges();
-//                }
-//                catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//                {
-//                    Console.WriteLine("##################################################################");
-//                    Console.WriteLine("Error at record " + recordNumber);
-//                    Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//                    Console.WriteLine($"Error Message: {sqlEx.Message}");
-//                    Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//                }
-//            }
-//        }
-//    }
-
-//    private static void GenerateRestaurant(dynamic record, Restaurant restaurant, Location location)
-//    {
-//        string name = record.NAME;
-//        string url = record.RESTAURANT_URL;
-//        string pictureUrl = record.PICTURE;
-//        double starRating = Double.Parse(record.RATING);
-//        string description = record.DESCRIPTION;
-//        double latitude = Double.Parse(record.LATITUDE);
-//        double longitude = Double.Parse(record.LONGITUDE);
-//        int numberOfTables = int.Parse(record.TABLES_NUMBER);
-//        RestaurantPriceLevel priceLevel = record.PRICE_LEVEL;
-//        double minPrice = Double.Parse(record.MIN_PRICE);
-//        double maxPrice = Double.Parse(record.MAX_PRICE);
-//        Guid locationId = location.Id;
-
-
-//        var existingHotel = hotelRestaurantDbContext.Restaurants.FirstOrDefault(x => x.Name == name && x.Url == url
-//        && x.PictureUrl == pictureUrl && x.StarRating == starRating && x.Description == description
-//        && x.Latitude == latitude && x.Longitude == longitude
-//        && x.NumberOfTables == numberOfTables && x.LocationId == location.Id);
-//        if (existingHotel is not null)
-//        {
-//            restaurant.Id = existingHotel.Id;
-//            restaurant.Name = existingHotel.Name;
-//            restaurant.Url = existingHotel.Url;
-//            restaurant.PictureUrl = existingHotel.PictureUrl;
-//            restaurant.StarRating = existingHotel.StarRating;
-//            restaurant.Description = existingHotel.Description;
-//            restaurant.Latitude = existingHotel.Latitude;
-//            restaurant.Longitude = existingHotel.Longitude;
-//            restaurant.NumberOfTables = existingHotel.NumberOfTables;
-//            restaurant.PriceLevel = existingHotel.PriceLevel;
-//            restaurant.MinPrice = existingHotel.MinPrice;
-//            restaurant.MaxPrice = existingHotel.MaxPrice;
-//            restaurant.LocationId = existingHotel.LocationId;
-//        }
-
-//        restaurant.Id = Guid.NewGuid();
-//        restaurant.Name = name;
-//        restaurant.Url = url;
-//        restaurant.PictureUrl = pictureUrl;
-//        restaurant.StarRating = starRating;
-//        restaurant.Description = description;
-//        restaurant.Latitude = latitude;
-//        restaurant.Longitude = longitude;
-//        restaurant.NumberOfTables = numberOfTables;
-//        restaurant.PriceLevel = priceLevel;
-//        restaurant.MinPrice = minPrice;
-//        restaurant.MaxPrice = maxPrice;
-//        restaurant.LocationId = locationId;
-
-//        hotelRestaurantDbContext.Restaurants.Add(restaurant);
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-
-//    private static void GenerateLocation(Country country, CityLocalLocations cityLocalLocations, Location location)
-//    {
-//        var existingLocation = hotelRestaurantDbContext.Locations.FirstOrDefault(x => x.CountryId == country.Id
-//        && x.CityLocalLocationsId == cityLocalLocations.Id);
-
-//        if (existingLocation is not null)
-//        {
-//            location.Id = existingLocation.Id;
-//            location.CountryId = existingLocation.CountryId;
-//            location.CityLocalLocationsId = cityLocalLocations.Id;
-//            return;
-//        }
-
-//        location.Id = Guid.NewGuid();
-//        location.CountryId = country.Id;
-//        location.CityLocalLocationsId = cityLocalLocations.Id;
-
-//        hotelRestaurantDbContext.Add(location);
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-
-//    private static void GenerateLocalLocation(dynamic record, LocalLocation localLocation, City city,
-//        CityLocalLocations cityLocalLocations)
-//    {
-//        string name = record.GENERAL_LOCATION;
-
-//        var existingLocalLocation = hotelRestaurantDbContext.LocalLocations.FirstOrDefault(x => x.Name == name);
-//        if (existingLocalLocation is not null)
-//        {
-//            localLocation.Id = existingLocalLocation.Id;
-//            localLocation.Name = existingLocalLocation.Name;
-//        }
-
-//        else
-//        {
-//            localLocation.Id = Guid.NewGuid();
-//            localLocation.Name = record.GENERAL_LOCATION;
-
-//            hotelRestaurantDbContext.LocalLocations.Add(localLocation);
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-
-//        var existingCityLocalLocation = hotelRestaurantDbContext.CityLocalLocations.FirstOrDefault(x => x.CityId == city.Id
-//        && x.LocalLocationId == localLocation.Id);
-
-//        if (existingCityLocalLocation is not null)
-//        {
-//            cityLocalLocations.Id= existingCityLocalLocation.Id;
-//            cityLocalLocations.CityId= existingCityLocalLocation.CityId;
-//            cityLocalLocations.LocalLocationId= existingCityLocalLocation.LocalLocationId;
-//            return;
-//        }
-
-
-//        cityLocalLocations.Id = Guid.NewGuid();
-//        cityLocalLocations.CityId= city.Id;
-//        cityLocalLocations.LocalLocationId = localLocation.Id;
-
-//        hotelRestaurantDbContext.CityLocalLocations.Add(cityLocalLocations);
-
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-
-//    private static void GenerateCity(dynamic record, City city, Country country)
-//    {
-//        string name = record.DESTINATION;
-
-//        var existingCity = hotelRestaurantDbContext.Cities.FirstOrDefault(x => x.Name == name);
-//        if (existingCity is not null)
-//        {
-//            city.Id = existingCity.Id;
-//            city.Name = existingCity.Name;
-//            city.CountryId = country.Id;
-//            return;
-//        }
-
-//        city.Id = Guid.NewGuid();
-//        city.Name = record.DESTINATION;
-//        city.CountryId = country.Id;
-
-//        hotelRestaurantDbContext.Cities.Add(city);
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-
-//    private static void GenerateCountry(Country country)
-//    {
-//        string countryName = string.Empty;
-
-//        var existingCountry = hotelRestaurantDbContext.Countries.FirstOrDefault(x => x.Name == countryName);
-//        if (existingCountry is not null)
-//        {
-//            country.Id = existingCountry.Id;
-//            countryName = existingCountry.Name;
-//            return;
-//        }
-
-//        country.Id = Guid.NewGuid();
-//        country.Name = string.Empty;
-
-//        hotelRestaurantDbContext.Countries.Add(country);
-//        try
-//        {
-//            hotelRestaurantDbContext.SaveChanges();
-//        }
-//        catch (DbUpdateException ex) when (ex.InnerException is SqlException sqlEx)
-//        {
-//            Console.WriteLine("##################################################################");
-//            Console.WriteLine("Error at record " + recordNumber);
-//            Console.WriteLine($"SQL Error Number: {sqlEx.Number}");
-//            Console.WriteLine($"Error Message: {sqlEx.Message}");
-//            Console.WriteLine($"Line Number: {sqlEx.LineNumber}");
-//        }
-//    }
-//}
+﻿// YelpDataSeeder.cs
+// This version fixes the Foreign Key constraint violation by using navigation
+// properties to explicitly define entity relationships for Entity Framework.
+
+using Bogus;
+using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Enums;
+using Hotel_Restaurant_Reservation.Domain.Mappings;
+using Hotel_Restaurant_Reservation.Infrastructure; // Your DbContext's namespace
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Hotel_Restaurant_Reservation.Seed
+{
+    #region Yelp Deserialization Classes
+    public class YelpBusiness
+    {
+        [JsonProperty("business_id")]
+        public string BusinessId { get; set; }
+        [JsonProperty("name")]
+        public string Name { get; set; }
+        [JsonProperty("address")]
+        public string Address { get; set; }
+        [JsonProperty("city")]
+        public string City { get; set; }
+        [JsonProperty("state")]
+        public string State { get; set; }
+        [JsonProperty("postal_code")]
+        public string PostalCode { get; set; }
+        [JsonProperty("latitude")]
+        public double? Latitude { get; set; }
+        [JsonProperty("longitude")]
+        public double? Longitude { get; set; }
+        [JsonProperty("stars")]
+        public double Stars { get; set; }
+        [JsonProperty("review_count")]
+        public int ReviewCount { get; set; }
+        [JsonProperty("categories")]
+        public string Categories { get; set; }
+        [JsonProperty("hours")]
+        public Dictionary<string, string> Hours { get; set; }
+        [JsonProperty("attributes")]
+        public Dictionary<string, object> Attributes { get; set; }
+    }
+
+    public class YelpReview
+    {
+        [JsonProperty("review_id")]
+        public string ReviewId { get; set; }
+        [JsonProperty("user_id")]
+        public string UserId { get; set; }
+        [JsonProperty("business_id")]
+        public string BusinessId { get; set; }
+        [JsonProperty("stars")]
+        public double Stars { get; set; }
+        [JsonProperty("date")]
+        public DateTime Date { get; set; }
+        [JsonProperty("text")]
+        public string Text { get; set; }
+    }
+    #endregion
+
+    public class YelpDataSeeder
+    {
+        private readonly HotelRestaurantDbContext _context;
+        private readonly Faker _faker;
+        private readonly Dictionary<string, Country> _countries = new Dictionary<string, Country>();
+        private readonly Dictionary<string, City> _cities = new Dictionary<string, City>();
+        private readonly Dictionary<string, Cuisine> _cuisines = new Dictionary<string, Cuisine>();
+        private readonly Dictionary<string, Tag> _tags = new Dictionary<string, Tag>();
+        private readonly Dictionary<string, User> _users = new Dictionary<string, User>();
+        private readonly Dictionary<string, Restaurant> _restaurants = new Dictionary<string, Restaurant>();
+
+        public YelpDataSeeder(HotelRestaurantDbContext context)
+        {
+            _context = context;
+            _faker = new Faker();
+        }
+
+        public async Task SeedRestaurantsAsync(string businessFilePath, int maxRecords = 1000)
+        {
+            Console.WriteLine("Starting to seed restaurants and mappings...");
+            if (await _context.Restaurants.AnyAsync())
+            {
+                Console.WriteLine("Restaurants table already contains data. Skipping restaurant seeding.");
+                var existingMappings = await _context.RestaurantMappings.Include(rm => rm.Restaurant).Take(maxRecords).ToListAsync();
+                foreach (var mapping in existingMappings) { _restaurants.TryAdd(mapping.YelpBusinessId, mapping.Restaurant); }
+                return;
+            }
+
+            var newRestaurantMappings = new List<RestaurantMapping>();
+            var newRestaurantCuisines = new List<RestaurantCuisine>();
+            var newRestaurantTags = new List<RestaurantTag>();
+            var newRestaurantWorkTimes = new List<RestaurantWorkTime>();
+
+            using (var reader = new StreamReader(businessFilePath))
+            {
+                string line;
+                int count = 0;
+                while ((line = reader.ReadLine()) != null && count < maxRecords)
+                {
+                    var yelpBusiness = JsonConvert.DeserializeObject<YelpBusiness>(line);
+                    if (string.IsNullOrEmpty(yelpBusiness.Categories) || !yelpBusiness.Categories.ToLower().Contains("restaurant")) continue;
+
+                    var location = await GetOrCreateLocationAsync(yelpBusiness);
+                    var priceLevel = GetPriceLevel(yelpBusiness.Attributes);
+                    var (minPrice, maxPrice) = GetPriceRange(priceLevel);
+
+                    var restaurant = new Restaurant
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = yelpBusiness.Name,
+                        Description = $"A popular restaurant in {yelpBusiness.City} known for its vibrant atmosphere.",
+                        Url = _faker.Internet.Url(),
+                        PictureUrl = _faker.Image.PicsumUrl(),
+                        StarRating = yelpBusiness.Stars,
+                        Latitude = yelpBusiness.Latitude ?? 0,
+                        Longitude = yelpBusiness.Longitude ?? 0,
+                        NumberOfTables = _faker.Random.Int(10, 50),
+                        PriceLevel = priceLevel,
+                        MinPrice = minPrice,
+                        MaxPrice = maxPrice,
+                        LocationId = location.Id
+                    };
+                    _restaurants.TryAdd(yelpBusiness.BusinessId, restaurant);
+
+                    // CORRECTED LOGIC: Assign the full restaurant object to the navigation property.
+                    // This explicitly tells EF Core about the relationship.
+                    var restaurantMapping = new RestaurantMapping
+                    {
+                        YelpBusinessId = yelpBusiness.BusinessId,
+                        Restaurant = restaurant // Assign the object, not the ID
+                    };
+                    newRestaurantMappings.Add(restaurantMapping);
+
+                    var categories = yelpBusiness.Categories.Split(',').Select(c => c.Trim()).ToList();
+                    foreach (var categoryName in categories)
+                    {
+                        var cuisine = await GetOrCreateCuisineAsync(categoryName);
+                        newRestaurantCuisines.Add(new RestaurantCuisine { Id = Guid.NewGuid(), Restaurant = restaurant, Cuisine = cuisine });
+                        var tag = await GetOrCreateTagAsync(categoryName);
+                        newRestaurantTags.Add(new RestaurantTag { Id = Guid.NewGuid(), Restaurant = restaurant, Tag = tag });
+                    }
+
+                    if (yelpBusiness.Hours != null)
+                    {
+                        foreach (var hour in yelpBusiness.Hours)
+                        {
+                            var workTime = ParseWorkTime(hour.Key, hour.Value, restaurant.Id);
+                            if (workTime != null) newRestaurantWorkTimes.Add(workTime);
+                        }
+                    }
+                    count++;
+                }
+            }
+
+            Console.WriteLine($"Processed {newRestaurantMappings.Count} restaurants. Saving to database...");
+
+            // By adding the mappings, EF Core's change tracker will discover
+            // the new restaurants, locations, cuisines, etc., through their navigation properties.
+            await _context.AddRangeAsync(newRestaurantMappings);
+            await _context.AddRangeAsync(newRestaurantCuisines);
+            await _context.AddRangeAsync(newRestaurantTags);
+            await _context.AddRangeAsync(newRestaurantWorkTimes);
+
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Finished seeding restaurants and their mappings.");
+        }
+
+        public async Task SeedReviewsAsync(string reviewFilePath, int maxRecords = 5000)
+        {
+            Console.WriteLine("Starting to seed reviews and user mappings...");
+            var newReviews = new List<RestaurantReview>();
+            var newUserMappings = new List<UserMapping>();
+
+            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Customer");
+            if (userRole == null)
+            {
+                userRole = new Role { Id = Guid.NewGuid(), Name = "Customer" };
+                _context.Roles.Add(userRole);
+                await _context.SaveChangesAsync();
+            }
+
+            using (var reader = new StreamReader(reviewFilePath))
+            {
+                string line;
+                int count = 0;
+                while ((line = reader.ReadLine()) != null && count < maxRecords)
+                {
+                    var yelpReview = JsonConvert.DeserializeObject<YelpReview>(line);
+                    if (_restaurants.TryGetValue(yelpReview.BusinessId, out var restaurant))
+                    {
+                        bool isNewUser = !_users.ContainsKey(yelpReview.UserId);
+                        var user = await GetOrCreateUserAsync(yelpReview.UserId, userRole.Id);
+
+                        if (isNewUser)
+                        {
+                            // CORRECTED LOGIC: Assign the full user object.
+                            var userMapping = new UserMapping
+                            {
+                                YelpUserId = yelpReview.UserId,
+                                User = user // Assign the object, not the ID
+                            };
+                            newUserMappings.Add(userMapping);
+                        }
+
+                        var review = new RestaurantReview
+                        {
+                            Id = Guid.NewGuid(),
+                            Restaurant = restaurant,
+                            User = user,
+                            ReviewDateTime = yelpReview.Date,
+                            Description = yelpReview.Text,
+                            CustomerStarRating = yelpReview.Stars,
+                            CustomerServiceStarRating = Math.Clamp(_faker.Random.Double(yelpReview.Stars - 1, yelpReview.Stars + 1), 1, 5),
+                            CustomerFoodStarRating = Math.Clamp(_faker.Random.Double(yelpReview.Stars - 0.5, yelpReview.Stars + 0.5), 1, 5)
+                        };
+                        newReviews.Add(review);
+                        count++;
+                    }
+                }
+            }
+
+            Console.WriteLine($"Processed {newReviews.Count} reviews for {newUserMappings.Count} new users. Saving to database...");
+            await _context.AddRangeAsync(newUserMappings);
+            await _context.AddRangeAsync(newReviews);
+            await _context.SaveChangesAsync();
+            Console.WriteLine("Finished seeding reviews and user mappings.");
+        }
+
+        #region Helper Methods
+        private async Task<Cuisine> GetOrCreateCuisineAsync(string name)
+        {
+            if (_cuisines.TryGetValue(name, out var cuisine)) return cuisine;
+            cuisine = await _context.Cuisines.FirstOrDefaultAsync(c => c.Name == name);
+            if (cuisine == null)
+            {
+                cuisine = new Cuisine { Id = Guid.NewGuid(), Name = name };
+                _context.Cuisines.Add(cuisine);
+            }
+            _cuisines.TryAdd(name, cuisine);
+            return cuisine;
+        }
+
+        private async Task<Tag> GetOrCreateTagAsync(string name)
+        {
+            if (_tags.TryGetValue(name, out var tag)) return tag;
+            tag = await _context.Tags.FirstOrDefaultAsync(t => t.Name == name);
+            if (tag == null)
+            {
+                tag = new Tag { Id = Guid.NewGuid(), Name = name };
+                _context.Tags.Add(tag);
+            }
+            _tags.TryAdd(name, tag);
+            return tag;
+        }
+
+        private async Task<User> GetOrCreateUserAsync(string yelpUserId, Guid roleId)
+        {
+            if (_users.TryGetValue(yelpUserId, out var user)) return user;
+            var location = await _context.Locations.FirstAsync();
+            user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = _faker.Name.FirstName(),
+                LastName = _faker.Name.LastName(),
+                Email = _faker.Internet.Email(),
+                HashedPassword = "seeded_password_placeholder",
+                BirthDate = DateOnly.FromDateTime(_faker.Person.DateOfBirth),
+                Age = _faker.Random.Int(18, 70),
+                RoleId = roleId,
+                LocationId = location.Id
+            };
+            _users.TryAdd(yelpUserId, user);
+            return user;
+        }
+
+        private async Task<Location> GetOrCreateLocationAsync(YelpBusiness business)
+        {
+            if (!_countries.TryGetValue("United States", out var country))
+            {
+                country = await _context.Countries.FirstOrDefaultAsync(c => c.Name == "United States");
+                if (country == null)
+                {
+                    country = new Country { Id = Guid.NewGuid(), Name = "United States" };
+                    _context.Countries.Add(country);
+                }
+                _countries.Add("United States", country);
+            }
+
+            if (!_cities.TryGetValue(business.City, out var city))
+            {
+                city = await _context.Cities.FirstOrDefaultAsync(c => c.Name == business.City && c.CountryId == country.Id);
+                if (city == null)
+                {
+                    city = new City { Id = Guid.NewGuid(), Name = business.City, CountryId = country.Id };
+                    _context.Cities.Add(city);
+                }
+                _cities.Add(business.City, city);
+            }
+
+            var localLocationName = $"{business.City} Downtown";
+            var localLocation = await _context.LocalLocations.FirstOrDefaultAsync(l => l.Name == localLocationName);
+            if (localLocation == null)
+            {
+                localLocation = new LocalLocation { Id = Guid.NewGuid(), Name = localLocationName };
+                _context.LocalLocations.Add(localLocation);
+            }
+
+            var cityLocalLocation = await _context.CityLocalLocations.FirstOrDefaultAsync(cl => cl.CityId == city.Id && cl.LocalLocationId == localLocation.Id);
+            if (cityLocalLocation == null)
+            {
+                cityLocalLocation = new CityLocalLocations { Id = Guid.NewGuid(), CityId = city.Id, LocalLocationId = localLocation.Id };
+                _context.CityLocalLocations.Add(cityLocalLocation);
+            }
+
+            var location = new Location { Id = Guid.NewGuid(), CountryId = country.Id, CityLocalLocationsId = cityLocalLocation.Id };
+            _context.Locations.Add(location);
+
+            return location;
+        }
+
+        private RestaurantPriceLevel GetPriceLevel(Dictionary<string, object> attributes)
+        {
+            if (attributes != null && attributes.TryGetValue("RestaurantsPriceRange2", out var priceObj))
+            {
+                switch (priceObj.ToString())
+                {
+                    case "1": return RestaurantPriceLevel.Low;
+                    case "2": return RestaurantPriceLevel.Medium;
+                    case "3": return RestaurantPriceLevel.High;
+                    case "4": return RestaurantPriceLevel.Luxury;
+                }
+            }
+            return RestaurantPriceLevel.Medium;
+        }
+
+        private (double min, double max) GetPriceRange(RestaurantPriceLevel level)
+        {
+            return level switch
+            {
+                RestaurantPriceLevel.Low => (_faker.Random.Double(5, 10), _faker.Random.Double(11, 20)),
+                RestaurantPriceLevel.Medium => (_faker.Random.Double(20, 35), _faker.Random.Double(36, 50)),
+                RestaurantPriceLevel.High => (_faker.Random.Double(50, 70), _faker.Random.Double(71, 100)),
+                RestaurantPriceLevel.Luxury => (_faker.Random.Double(100, 150), _faker.Random.Double(151, 300)),
+                _ => (20, 50)
+            };
+        }
+
+        private RestaurantWorkTime ParseWorkTime(string day, string hours, Guid restaurantId)
+        {
+            try
+            {
+                var parts = hours.Split('-');
+                if (parts.Length != 2) return null;
+                var openHour = TimeOnly.Parse(parts[0]);
+                var closeHour = TimeOnly.Parse(parts[1]);
+                return new RestaurantWorkTime { Id = Guid.NewGuid(), Day = day, OpenHour = openHour, CloseHour = closeHour, RestaurantId = restaurantId };
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+        }
+        #endregion
+    }
+}

@@ -1,5 +1,4 @@
 using FluentValidation;
-using Hotel_Restaurant_Reservation.API.OptionsSetup;
 using Hotel_Restaurant_Reservation.Application.Abstractions.JwtProvider;
 using Hotel_Restaurant_Reservation.Application.Abstractions.PasswordHasher;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Payment;
@@ -18,7 +17,8 @@ using Hotel_Restaurant_Reservation.Infrastructure.Storage;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.OpenApi.Models;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,6 +29,30 @@ builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(Hotel_Restaurant_Reservation.Presentation.AssemplyReference).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(Hotel_Restaurant_Reservation.Application.AssemplyReference).Assembly);
+});
+
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        // These values must EXACTLY MATCH the ones used to create the token
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // e.g., "https://your-api.com"
+
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"], // e.g., "https://your-app.com"
+
+        ValidateLifetime = true, // Checks for token expiration
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
 });
 
 
@@ -56,12 +80,6 @@ builder.Services.AddControllers()
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
-
-builder.Services.ConfigureOptions<JwtOptionsSetup>();
-
-builder.Services.ConfigureOptions<JwtBearerOptionsSetup>();
 
 builder.Services.AddDbContext<HotelRestaurantDbContext>(options =>
 {
