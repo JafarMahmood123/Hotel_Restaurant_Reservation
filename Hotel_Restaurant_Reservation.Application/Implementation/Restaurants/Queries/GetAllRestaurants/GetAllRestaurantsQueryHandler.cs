@@ -11,10 +11,6 @@ using System.Threading.Tasks;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants
 {
-    /// <summary>
-    /// Handles the retrieval and pagination of restaurants based on filter criteria.
-    /// This handler leverages IQueryable for optimal database performance.
-    /// </summary>
     public class GetAllRestaurantsQueryHandler
         : IQueryHandler<GetAllRestaurantsQuery, Result<PagedResult<RestaurantResponse>>>
     {
@@ -35,8 +31,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
         {
             try
             {
-                // 1. Get the base IQueryable from the repository. No database call is made here.
+                // --- C H A N G E: Pass the new SubName property to the filtering method ---
                 var restaurantsQuery = _restaurantRepository.GetFilteredRestaurantsQuery(
+                    request.SubName,
                     request.TagId,
                     request.FeatureId,
                     request.CuisineId,
@@ -50,23 +47,15 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
                     request.MinStarRating,
                     request.MaxStarRating);
 
-                // 2. Get the total count for pagination metadata.
-                // This executes a fast `SELECT COUNT(*)` query on the filtered set.
                 var totalCount = await restaurantsQuery.CountAsync(cancellationToken);
 
-                // 3. Apply pagination to the IQueryable. This modifies the SQL query
-                //    to use OFFSET and FETCH (or equivalent) for efficient data retrieval.
                 var pagedRestaurants = await restaurantsQuery
                     .Skip((request.Page - 1) * request.PageSize)
                     .Take(request.PageSize)
-                    .ToListAsync(cancellationToken); // This executes the final query to get only the items for the current page.
+                    .ToListAsync(cancellationToken);
 
-                // 4. Map the results to the response DTO
                 var responseItems = _mapper.Map<List<RestaurantResponse>>(pagedRestaurants);
 
-                // 5. Create the PagedResult object.
-                // By passing totalCount and pageSize here, the TotalPages property
-                // in your PagedResult class will be calculated automatically.
                 var pagedResult = new PagedResult<RestaurantResponse>(
                     responseItems,
                     request.Page,
@@ -77,7 +66,6 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
             }
             catch (Exception ex)
             {
-                // Return a failure result if any exception occurs during the process.
                 return Result.Failure<PagedResult<RestaurantResponse>>(
                     new Error("Restaurant.QueryError", $"An error occurred while retrieving restaurants: {ex.Message}"));
             }

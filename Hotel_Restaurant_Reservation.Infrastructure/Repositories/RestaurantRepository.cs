@@ -1,6 +1,6 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
-using Hotel_Restaurant_Reservation.Infrastructure; // Ensure this namespace is correct for your DbContext
+using Hotel_Restaurant_Reservation.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -15,65 +15,72 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
             this.hotelRestaurantDbContext = hotelRestaurantDbContext;
         }
 
-        /// <summary>
-        /// Returns the base IQueryable for the Restaurant entity.
-        /// This is used for building more complex queries (e.g., with pagination)
-        /// before executing them against the database.
-        /// </summary>
         public IQueryable<Restaurant> GetAllQuery()
         {
             return hotelRestaurantDbContext.Restaurants.AsQueryable();
         }
 
-        public IQueryable<Restaurant> GetFilteredRestaurantsQuery(Guid? tagId, Guid? featureId, Guid? cuisineId,
+        public IQueryable<Restaurant> GetFilteredRestaurantsQuery(string? subName, Guid? tagId, Guid? featureId, Guid? cuisineId,
             Guid? dishId, Guid? mealTypeId, Guid? countryId, Guid? cityId, Guid? localLocationId, double? minPrice = 0,
             double? maxPrice = double.MaxValue, double? minStarRating = 0, double? maxStarRating = 5)
         {
-            // Start with the base query including all related entities needed for filtering.
-            IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants
-                .Include(r => r.RestaurantTags)
-                .Include(r => r.RestaurantFeatures)
-                .Include(r => r.RestaurantCuisines)
-                .Include(r => r.RestaurantDishPrices)
-                .Include(r => r.RestaurantMealTypes)
-                .Include(r => r.Location)
-                    .ThenInclude(l => l.CityLocalLocations);
+            IQueryable<Restaurant> restaurantsQuery = hotelRestaurantDbContext.Restaurants;
 
-            // The .Include() calls inside the if blocks were redundant and incorrect, so they have been removed.
-            // The filtering logic below works correctly with the Includes defined above.
             if (tagId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.RestaurantTags);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.RestaurantTags.Any(tag => tag.TagId == tagId));
+            }
 
             if (featureId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.RestaurantFeatures);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.RestaurantFeatures.Any(feature => feature.FeatureId == featureId));
+            }
 
             if (cuisineId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.RestaurantCuisines);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.RestaurantCuisines.Any(cuisine => cuisine.CuisineId == cuisineId));
+            }
 
             if (dishId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.RestaurantDishPrices);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.RestaurantDishPrices.Any(dish => dish.DishId == dishId));
+            }
 
             if (mealTypeId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.RestaurantMealTypes);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.RestaurantMealTypes.Any(mealType => mealType.MealTypeId == mealTypeId));
+            }
 
             if (countryId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.Location);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.Location.CountryId == countryId);
+            }
 
             if (cityId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.Location).ThenInclude(l => l.CityLocalLocations);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.Location.CityLocalLocations.CityId == cityId);
+            }
 
             if (localLocationId.HasValue)
+            {
+                restaurantsQuery = restaurantsQuery.Include(r => r.Location).ThenInclude(l => l.CityLocalLocations);
                 restaurantsQuery = restaurantsQuery.Where(restaurant =>
                     restaurant.Location.CityLocalLocations.LocalLocationId == localLocationId);
-
-
+            }
 
             if (minPrice.HasValue)
                 restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.MinPrice >= minPrice);
@@ -86,6 +93,11 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
 
             if (maxStarRating.HasValue)
                 restaurantsQuery = restaurantsQuery.Where(restaurant => restaurant.StarRating <= maxStarRating);
+
+            if (!string.IsNullOrWhiteSpace(subName))
+            {
+                restaurantsQuery = restaurantsQuery.Where(r => r.Name.Contains(subName));
+            }
 
             return restaurantsQuery;
         }
@@ -144,8 +156,6 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
             if (existingRestaurant == null)
                 return null;
 
-            // This is a simple assignment; for a more robust update,
-            // consider using AutoMapper or manually updating properties.
             existingRestaurant = entity;
 
             return existingRestaurant;

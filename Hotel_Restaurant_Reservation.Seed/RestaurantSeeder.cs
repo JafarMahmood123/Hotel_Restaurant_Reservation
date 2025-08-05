@@ -4,7 +4,6 @@ using Hotel_Restaurant_Reservation.Domain.Entities;
 using Hotel_Restaurant_Reservation.Domain.Enums;
 using Hotel_Restaurant_Reservation.Domain.Mappings;
 using Hotel_Restaurant_Reservation.Infrastructure;
-// --- C H A N G E: Added using statement for PasswordHasher ---
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -68,7 +67,6 @@ namespace Hotel_Restaurant_Reservation.Seed
     {
         private readonly HotelRestaurantDbContext _context;
         private readonly Faker _faker;
-        // --- C H A N G E: Added a field for the PasswordHasher ---
         private readonly PasswordHasher _passwordHasher;
         private readonly Dictionary<string, Country> _countries = new Dictionary<string, Country>();
         private readonly Dictionary<string, City> _cities = new Dictionary<string, City>();
@@ -81,17 +79,31 @@ namespace Hotel_Restaurant_Reservation.Seed
         {
             _context = context;
             _faker = new Faker();
-            // --- C H A N G E: Instantiated the PasswordHasher ---
             _passwordHasher = new PasswordHasher();
         }
 
-        public async Task SeedRestaurantsAsync(string businessFilePath, int maxRecords = 1000)
+        // --- C H A N G E: New public method to seed essential users and roles ---
+        public async Task SeedInitialUsersAsync()
+        {
+            Console.WriteLine("Seeding initial users (Admins)...");
+            await SeedAdmin();
+
+            // Ensure customer role exists
+            if (!await _context.Roles.AnyAsync(r => r.Name == "Customer"))
+            {
+                _context.Roles.Add(new Role { Id = Guid.NewGuid(), Name = "Customer" });
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Created 'Customer' role.");
+            }
+        }
+
+        public async Task SeedRestaurantsAsync(string businessFilePath, int? maxRecords = null)
         {
             Console.WriteLine("Starting to seed restaurants and mappings...");
             if (await _context.Restaurants.AnyAsync())
             {
                 Console.WriteLine("Restaurants table already contains data. Skipping restaurant seeding.");
-                var existingMappings = await _context.RestaurantMappings.Include(rm => rm.Restaurant).Take(maxRecords).ToListAsync();
+                var existingMappings = await _context.RestaurantMappings.Include(rm => rm.Restaurant).ToListAsync();
                 foreach (var mapping in existingMappings) { _restaurants.TryAdd(mapping.YelpBusinessId, mapping.Restaurant); }
                 return;
             }
@@ -105,7 +117,7 @@ namespace Hotel_Restaurant_Reservation.Seed
             {
                 string line;
                 int count = 0;
-                while ((line = reader.ReadLine()) != null && count < maxRecords)
+                while ((line = reader.ReadLine()) != null && (!maxRecords.HasValue || count < maxRecords))
                 {
                     var yelpBusiness = JsonConvert.DeserializeObject<YelpBusiness>(line);
                     if (string.IsNullOrEmpty(yelpBusiness.Categories) || !yelpBusiness.Categories.ToLower().Contains("restaurant")) continue;
@@ -171,25 +183,20 @@ namespace Hotel_Restaurant_Reservation.Seed
             Console.WriteLine("Finished seeding restaurants and their mappings.");
         }
 
-        public async Task SeedReviewsAsync(string reviewFilePath, int maxRecords = 5000)
+        public async Task SeedReviewsAsync(string reviewFilePath, int? maxRecords = null)
         {
             Console.WriteLine("Starting to seed reviews and user mappings...");
             var newReviews = new List<RestaurantReview>();
             var newUserMappings = new List<UserMapping>();
 
-            var userRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Customer");
-            if (userRole == null)
-            {
-                userRole = new Role { Id = Guid.NewGuid(), Name = "Customer" };
-                _context.Roles.Add(userRole);
-                await _context.SaveChangesAsync();
-            }
+            // --- C H A N G E: Role creation is moved to SeedInitialUsersAsync ---
+            var userRole = await _context.Roles.FirstAsync(r => r.Name == "Customer");
 
             using (var reader = new StreamReader(reviewFilePath))
             {
                 string line;
                 int count = 0;
-                while ((line = reader.ReadLine()) != null && count < maxRecords)
+                while ((line = reader.ReadLine()) != null && (!maxRecords.HasValue || count < maxRecords))
                 {
                     var yelpReview = JsonConvert.DeserializeObject<YelpReview>(line);
                     if (_restaurants.TryGetValue(yelpReview.BusinessId, out var restaurant))
@@ -199,13 +206,12 @@ namespace Hotel_Restaurant_Reservation.Seed
 
                         if (isNewUser)
                         {
-                            // --- C H A N G E: Modified UserMapping creation to fit new entity structure ---
                             var userMapping = new UserMapping
                             {
-                                Id = Guid.NewGuid(), // Explicitly create a new Id for the mapping record
-                                UserId = user.Id,    // Set the foreign key
+                                Id = Guid.NewGuid(),
+                                UserId = user.Id,
                                 YelpUserId = yelpReview.UserId,
-                                User = user          // Assign the navigation property
+                                User = user
                             };
                             newUserMappings.Add(userMapping);
                         }
@@ -235,6 +241,77 @@ namespace Hotel_Restaurant_Reservation.Seed
         }
 
         #region Helper Methods
+
+        // --- C H A N G E: Implemented the SeedAdmin method ---
+        private async Task SeedAdmin()
+        {
+            try
+            {
+                // 1. Ensure "Admin" role exists
+                var adminRole = await _context.Roles.FirstOrDefaultAsync(r => r.Name == "Admin");
+                if (adminRole == null)
+                {
+                    adminRole = new Role { Id = Guid.NewGuid(), Name = "Admin" };
+                    _context.Roles.Add(adminRole);
+                    await _context.SaveChangesAsync();
+                    Console.WriteLine("Created 'Admin' role.");
+                }
+
+                // 2. Check if any admin users already exist
+                if (await _context.Users.AnyAsync(u => u.RoleId == adminRole.Id))
+                {
+                    Console.WriteLine("Admin users already exist. Skipping admin seeding.");
+                    return;
+                }
+
+                // 3. Define and create admin users
+                Console.WriteLine("Creating admin users...");
+                var hashedPassword = _passwordHasher.Hash("12345");
+                var location = await _context.Locations.FirstOrDefaultAsync();
+                if (location == null)
+                {
+                    Console.WriteLine("No locations found. Cannot create admin users without a default location.");
+                    return;
+                }
+
+                var admins = new List<User>
+                {
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstName = "Admin",
+                        LastName = "User",
+                        Email = "admin@example.com",
+                        HashedPassword = hashedPassword,
+                        BirthDate = new DateOnly(1990, 1, 1),
+                        Age = 34,
+                        RoleId = adminRole.Id,
+                        LocationId = location.Id
+                    },
+                    new User
+                    {
+                        Id = Guid.NewGuid(),
+                        FirstName = "Super",
+                        LastName = "Admin",
+                        Email = "superadmin@example.com",
+                        HashedPassword = hashedPassword,
+                        BirthDate = new DateOnly(1985, 5, 10),
+                        Age = 39,
+                        RoleId = adminRole.Id,
+                        LocationId = location.Id
+                    }
+                };
+
+                await _context.Users.AddRangeAsync(admins);
+                await _context.SaveChangesAsync();
+                Console.WriteLine("Successfully seeded admin users.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while seeding admins: {ex.Message}");
+            }
+        }
+
         private async Task<Cuisine> GetOrCreateCuisineAsync(string name)
         {
             if (_cuisines.TryGetValue(name, out var cuisine)) return cuisine;
@@ -265,9 +342,18 @@ namespace Hotel_Restaurant_Reservation.Seed
         {
             if (_users.TryGetValue(yelpUserId, out var user)) return user;
 
-            var location = await _context.Locations.FirstAsync();
+            var location = await _context.Locations.FirstOrDefaultAsync();
+            if (location == null)
+            {
+                var country = new Country { Id = Guid.NewGuid(), Name = "Default Country" };
+                var city = new City { Id = Guid.NewGuid(), Name = "Default City", CountryId = country.Id };
+                var localLocation = new LocalLocation { Id = Guid.NewGuid(), Name = "Default Local" };
+                var cityLocalLocation = new CityLocalLocations { Id = Guid.NewGuid(), City = city, LocalLocation = localLocation };
+                location = new Location { Id = Guid.NewGuid(), Country = country, CityLocalLocations = cityLocalLocation };
+                _context.Add(location);
+                await _context.SaveChangesAsync();
+            }
 
-            // --- C H A N G E: Hash the default password ---
             var plainPassword = "12345";
             var hashedPassword = _passwordHasher.Hash(plainPassword);
 
@@ -277,7 +363,6 @@ namespace Hotel_Restaurant_Reservation.Seed
                 FirstName = _faker.Name.FirstName(),
                 LastName = _faker.Name.LastName(),
                 Email = _faker.Internet.Email(),
-                // --- C H A N G E: Assign the hashed password ---
                 HashedPassword = hashedPassword,
                 BirthDate = DateOnly.FromDateTime(_faker.Person.DateOfBirth),
                 Age = _faker.Random.Int(18, 70),
@@ -290,18 +375,21 @@ namespace Hotel_Restaurant_Reservation.Seed
 
         private async Task<Location> GetOrCreateLocationAsync(YelpBusiness business)
         {
-            if (!_countries.TryGetValue("United States", out var country))
+            string countryName = !string.IsNullOrWhiteSpace(business.State) ? business.State : "Unknown";
+
+            if (!_countries.TryGetValue(countryName, out var country))
             {
-                country = await _context.Countries.FirstOrDefaultAsync(c => c.Name == "United States");
+                country = await _context.Countries.FirstOrDefaultAsync(c => c.Name == countryName);
                 if (country == null)
                 {
-                    country = new Country { Id = Guid.NewGuid(), Name = "United States" };
+                    country = new Country { Id = Guid.NewGuid(), Name = countryName };
                     _context.Countries.Add(country);
                 }
-                _countries.Add("United States", country);
+                _countries.Add(countryName, country);
             }
 
-            if (!_cities.TryGetValue(business.City, out var city))
+            string cityKey = $"{business.City}-{country.Id}";
+            if (!_cities.TryGetValue(cityKey, out var city))
             {
                 city = await _context.Cities.FirstOrDefaultAsync(c => c.Name == business.City && c.CountryId == country.Id);
                 if (city == null)
@@ -309,7 +397,7 @@ namespace Hotel_Restaurant_Reservation.Seed
                     city = new City { Id = Guid.NewGuid(), Name = business.City, CountryId = country.Id };
                     _context.Cities.Add(city);
                 }
-                _cities.Add(business.City, city);
+                _cities.Add(cityKey, city);
             }
 
             var localLocationName = $"{business.City} Downtown";

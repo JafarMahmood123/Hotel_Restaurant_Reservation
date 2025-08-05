@@ -57,7 +57,7 @@ public class Program
             var seeder = new YelpDataSeeder(dbContext);
 
             // First, seed the restaurants and their mappings.
-            await seeder.SeedRestaurantsAsync(businessFilePath, maxRecords: 1000);
+            await seeder.SeedRestaurantsAsync(businessFilePath);
 
             // Second, seed the users and reviews, which depend on the restaurants.
             await seeder.SeedReviewsAsync(reviewFilePath, maxRecords: 5000);

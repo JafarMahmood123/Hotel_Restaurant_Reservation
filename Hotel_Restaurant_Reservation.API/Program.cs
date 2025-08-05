@@ -7,6 +7,7 @@ using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Application.Abstractions.Storage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Commands.AddRestaurant;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Domain.Mappings;
 using Hotel_Restaurant_Reservation.Infrastructure;
 using Hotel_Restaurant_Reservation.Infrastructure.Authentication; // Your JwtOptions is here
 using Hotel_Restaurant_Reservation.Infrastructure.PasswordHasher;
@@ -138,6 +139,8 @@ builder.Services.AddScoped<IGenericRepository<EventImage>, GenericRepository<Eve
 builder.Services.AddScoped<IGenericRepository<HotelReservationPayment>, GenericRepository<HotelReservationPayment>>();
 builder.Services.AddScoped<IGenericRepository<RestaurantBookingPayment>, GenericRepository<RestaurantBookingPayment>>();
 builder.Services.AddScoped<IGenericRepository<EventRegistrationPayment>, GenericRepository<EventRegistrationPayment>>();
+builder.Services.AddScoped<IGenericRepository<UserMapping>, GenericRepository<UserMapping>>();
+builder.Services.AddScoped<IGenericRepository<RestaurantMapping>, GenericRepository<RestaurantMapping>>();
 builder.Services.AddScoped<IGenericRepository<RoomAmenity>, GenericRepository<RoomAmenity>>();
 builder.Services.AddScoped<IFileStorageService, FileStorageService>();
 builder.Services.AddScoped<IPayPalService, PayPalService>();

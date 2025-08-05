@@ -3,12 +3,13 @@ using Hotel_Restaurant_Reservation.Domain.Shared;
 
 namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Queries.GetAllRestaurants
 {
-    // The return type is now a PagedResult of RestaurantResponse
     public class GetAllRestaurantsQuery : IQuery<Result<PagedResult<RestaurantResponse>>>
     {
         public GetAllRestaurantsQuery(
             int page = 1,
             int pageSize = 10,
+            // --- C H A N G E: Added subName parameter ---
+            string subName = null,
             Guid? tagId = null,
             Guid? featureId = null,
             Guid? cuisineId = null,
@@ -22,11 +23,11 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
             double? minStarRating = 0,
             double? maxStarRating = 5)
         {
-            // Add pagination properties
             Page = page;
             PageSize = pageSize;
+            // --- C H A N G E: Assigned subName to the new property ---
+            SubName = subName;
 
-            // Existing filter properties
             TagId = tagId;
             FeatureId = featureId;
             CuisineId = cuisineId;
@@ -44,8 +45,9 @@ namespace Hotel_Restaurant_Reservation.Application.Implementation.Restaurants.Qu
         // Pagination Properties
         public int Page { get; }
         public int PageSize { get; }
+        public string SubName { get; }
 
-        // Filter Properties
+        // Existing Filter Properties
         public Guid? TagId { get; }
         public Guid? FeatureId { get; }
         public Guid? CuisineId { get; }

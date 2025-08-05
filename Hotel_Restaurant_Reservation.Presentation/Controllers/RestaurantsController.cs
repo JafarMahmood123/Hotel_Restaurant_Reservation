@@ -54,29 +54,32 @@ public class RestaurantsController : ApiController
 
     [HttpGet]
     public async Task<IActionResult> GetAllRestaurants(
-            CancellationToken cancellationToken,
-            // Pagination parameters with default values
-            [FromQuery] int page = 1,
-            [FromQuery] int pageSize = 10,
+        CancellationToken cancellationToken,
+        // Pagination parameters
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
 
-            // Existing filter parameters
-            [FromQuery] Guid? tagId = null,
-            [FromQuery] Guid? featureId = null,
-            [FromQuery] Guid? cuisineId = null,
-            [FromQuery] Guid? countryId = null,
-            [FromQuery] Guid? cityId = null,
-            [FromQuery] Guid? localLocationId = null,
-            [FromQuery] Guid? dishId = null,
-            [FromQuery] Guid? mealTypeId = null,
-            [FromQuery] double? minPrice = 0,
-            [FromQuery] double? maxPrice = double.MaxValue,
-            [FromQuery] double? minStarRating = 0,
-            [FromQuery] double? maxStarRating = 5)
+        // --- C H A N G E: Added subName filter parameter ---
+        [FromQuery] string subName = null,
+
+        // Existing filter parameters
+        [FromQuery] Guid? tagId = null,
+        [FromQuery] Guid? featureId = null,
+        [FromQuery] Guid? cuisineId = null,
+        [FromQuery] Guid? countryId = null,
+        [FromQuery] Guid? cityId = null,
+        [FromQuery] Guid? localLocationId = null,
+        [FromQuery] Guid? dishId = null,
+        [FromQuery] Guid? mealTypeId = null,
+        [FromQuery] double? minPrice = 0,
+        [FromQuery] double? maxPrice = double.MaxValue,
+        [FromQuery] double? minStarRating = 0,
+        [FromQuery] double? maxStarRating = 5)
     {
-        // Pass the pagination parameters to the query constructor
         var query = new GetAllRestaurantsQuery(
             page,
             pageSize,
+            subName,
             tagId,
             featureId,
             cuisineId,
@@ -94,13 +97,12 @@ public class RestaurantsController : ApiController
 
         if (result.IsFailure)
         {
-            // It's better to return the error object for the client to inspect
             return BadRequest(result.Error);
         }
 
-        // This will now correctly return the PagedResult object as JSON
         return Ok(result.Value);
     }
+
 
     [HttpGet]
     [Route("{id:guid}")]

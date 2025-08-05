@@ -6,6 +6,7 @@ namespace Hotel_Restaurant_Reservation.Application.Abstractions.Repositories
     public interface IRestaurantRespository : IGenericRepository<Restaurant>
     {
         IQueryable<Restaurant> GetFilteredRestaurantsQuery(
+            string subName,
             Guid? tagId,
             Guid? featureId,
             Guid? cuisineId,
