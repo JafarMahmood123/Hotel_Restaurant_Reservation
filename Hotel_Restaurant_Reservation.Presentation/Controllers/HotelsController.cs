@@ -7,10 +7,8 @@ using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.Up
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Commands.UpdateHotelAmenity;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAllHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetAmenitiesByHotelId;
-using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetFilteredHotels;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetHotelById;
 using Hotel_Restaurant_Reservation.Application.Implementation.Hotels.Queries.GetRoomsByHotelId;
-using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.RemoveHotelImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Commands.UploadHotelImage;
 using Hotel_Restaurant_Reservation.Application.Implementation.Images.Queries.GetHotelImagesByHotelId;
@@ -113,49 +111,43 @@ namespace Hotel_Restaurant_Reservation.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllHotel(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAllHotels(
+            CancellationToken cancellationToken,
+            // Pagination parameters with default values
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10,
+
+            // Filter parameters with default null values
+            [FromQuery] Guid? countryId = null,
+            [FromQuery] Guid? cityId = null,
+            [FromQuery] Guid? localLocationId = null,
+            [FromQuery] Guid? propertyTypeId = null,
+            [FromQuery] Guid? amenityId = null,
+            [FromQuery] double? minPrice = 0,
+            [FromQuery] double? maxPrice = double.MaxValue,
+            [FromQuery] double? minStarRate = 0,
+            [FromQuery] double? maxStarRate = 5)
         {
-            var query = new GetAllHotelsQuery();
+            var query = new GetAllHotelsQuery(
+                page,
+                pageSize,
+                countryId,
+                cityId,
+                localLocationId,
+                propertyTypeId,
+                amenityId,
+                minPrice,
+                maxPrice,
+                minStarRate,
+                maxStarRate);
+
             var result = await Sender.Send(query, cancellationToken);
 
             if (result.IsFailure)
             {
-                return NotFound(result.Error);
+                return BadRequest(result.Error);
             }
 
-            return Ok(result.Value);
-        }
-
-        [HttpGet("filter")]
-        public async Task<IActionResult> GetFilteredHotels(
-            [FromQuery] Guid? countryId,
-            [FromQuery] Guid? cityId,
-            [FromQuery] Guid? localLocationId,
-            [FromQuery] Guid? propertyTypeId,
-            [FromQuery] Guid? amenityId,
-            [FromQuery] double? minPrice,
-            [FromQuery] double? maxPrice,
-            [FromQuery] double? minStarRate,
-            [FromQuery] double? maxStarRate,
-            CancellationToken cancellationToken)
-        {
-            var query = new GetFilteredHotelsQuery
-            {
-                CountryId = countryId,
-                CityId = cityId,
-                LocalLocationId = localLocationId,
-                PropertyTypeId = propertyTypeId,
-                AmenityId = amenityId,
-                MinPrice = minPrice,
-                MaxPrice = maxPrice,
-                MinStarRate = minStarRate,
-                MaxStarRate = maxStarRate
-            };
-            var result = await Sender.Send(query, cancellationToken);
-            if (result.IsFailure)
-            {
-                return NotFound(result.Error);
-            }
             return Ok(result.Value);
         }
 

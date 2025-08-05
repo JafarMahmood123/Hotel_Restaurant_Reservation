@@ -1,6 +1,9 @@
 ﻿using Hotel_Restaurant_Reservation.Application.Abstractions.Repositories;
 using Hotel_Restaurant_Reservation.Domain.Entities;
+using Hotel_Restaurant_Reservation.Infrastructure; // Namespace for your DbContext
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
@@ -14,19 +17,22 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
             _hotelRestaurantDbContext = hotelRestaurantDbContext;
         }
 
-        public async Task<IEnumerable<Hotel>?> GetFilteredHotelsAsync(
-            Guid? countryId,
-            Guid? cityId,
-            Guid? localLocationId,
-            Guid? propertyTypeId,
-            Guid? amenityId,
-            double? minPrice,
-            double? maxPrice,
-            double? minStarRate,
-            double? maxStarRate)
+        /// <summary>
+        /// Builds a filterable query for Hotels.
+        /// NOTE: This method is now only responsible for applying WHERE clauses.
+        /// The caller is responsible for adding any necessary .Include() statements
+        /// before executing the query.
+        /// </summary>
+        public IQueryable<Hotel> GetFilteredHotelsQuery(
+            Guid? countryId = null, Guid? cityId = null, Guid? localLocationId = null, Guid? propertyTypeId = null,
+            Guid? amenityId = null, double? minPrice = null, double? maxPrice = null, double? minStarRate = null, double? maxStarRate = null)
         {
+            // Start with the base DbSet. No .Include() statements are used here.
             IQueryable<Hotel> hotelsQuery = _hotelRestaurantDbContext.Hotels;
 
+            // Conditionally apply each filter.
+            // These filters will still work because they rely on navigation properties
+            // that EF Core translates into the necessary SQL JOINs.
             if (countryId.HasValue)
                 hotelsQuery = hotelsQuery.Where(h => h.Location.CountryId == countryId);
 
@@ -40,7 +46,7 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
                 hotelsQuery = hotelsQuery.Where(h => h.PropertyTypeId == propertyTypeId);
 
             if (amenityId.HasValue)
-                hotelsQuery = hotelsQuery.Where(h => h.Rooms.Any(r => r.RoomAmenities.Any(ra => ra.AmenityId == amenityId)));
+                hotelsQuery = hotelsQuery.Where(h => h.HotelAmenitiesPrices.Any(a => a.AmenityId == amenityId));
 
             if (minPrice.HasValue)
                 hotelsQuery = hotelsQuery.Where(h => h.MinPrice >= minPrice);
@@ -54,7 +60,8 @@ namespace Hotel_Restaurant_Reservation.Infrastructure.Repositories
             if (maxStarRate.HasValue)
                 hotelsQuery = hotelsQuery.Where(h => h.StarRate <= maxStarRate);
 
-            return await hotelsQuery.ToListAsync();
+            // Return the composed query without executing it.
+            return hotelsQuery;
         }
     }
 }
